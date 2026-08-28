@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="Internal operating report. Your Algorithm LLC.">
+<title>Fleet Cancellation Gap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ─── tokens: complete light palette on bare :root ─────────────────── */
+:root{
+  color-scheme: light;
+  --ground:#f3f4f0;            /* paper, green-grey bias */
+  --card:#fbfbf9;
+  --card-2:#eef0e9;
+  --ink:#16180f;
+  --ink-2:#4c5043;
+  --ink-3:#767a6a;
+  --rule:#d9dcd0;
+  --rule-2:#c3c7b6;
+  --accent:#2f4a34;            /* structural: forest ink */
+  --accent-soft:#e3ebe1;
+
+  --survived:#2a78d6;          /* validated pair, light */
+  --cancelled:#d03b3b;
+  --zip-a:#eb6834;             /* 19001 */
+  --zip-b:#1baf7a;             /* 19111 */
+  --neutral-mark:#a8ad99;      /* tracker-reported / estimate */
+
+  --shadow:0 1px 2px rgba(22,24,15,.06), 0 8px 24px -16px rgba(22,24,15,.18);
+  --measure:66ch;
+  --wide:1040px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#101208;
+    --card:#1a1c17;
+    --card-2:#232619;
+    --ink:#f4f5ee;
+    --ink-2:#bfc3b2;
+    --ink-3:#8b9080;
+    --rule:#2e3226;
+    --rule-2:#3d4232;
+    --accent:#a8c9a8;
+    --accent-soft:#1f2a1d;
+    --survived:#3987e5;
+    --cancelled:#d03b3b;
+    --zip-a:#d95926;
+    --zip-b:#199e70;
+    --neutral-mark:#5c6152;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#101208;
+  --card:#1a1c17;
+  --card-2:#232619;
+  --ink:#f4f5ee;
+  --ink-2:#bfc3b2;
+  --ink-3:#8b9080;
+  --rule:#2e3226;
+  --rule-2:#3d4232;
+  --accent:#a8c9a8;
+  --accent-soft:#1f2a1d;
+  --survived:#3987e5;
+  --cancelled:#d03b3b;
+  --zip-a:#d95926;
+  --zip-b:#199e70;
+  --neutral-mark:#5c6152;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wide); margin:0 auto; padding:0 24px 96px}
+.col{max-width:var(--measure)}
+
+h1,h2,h3,h4{font-family:Bitter,Georgia,serif; text-wrap:balance; margin:0}
+h1{font-size:clamp(2rem,4.6vw,3.1rem); font-weight:700; line-height:1.08; letter-spacing:-.015em}
+h2{font-size:clamp(1.35rem,2.4vw,1.75rem); font-weight:600; line-height:1.2}
+h3{font-size:1.1rem; font-weight:600}
+p{margin:0}
+strong{font-weight:600}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3);
+}
+
+/* ─── header ───────────────────────────────────────────────────────── */
+header{
+  border-bottom:1px solid var(--rule);
+  background:linear-gradient(to bottom,var(--card),var(--ground));
+  padding:56px 0 40px; margin-bottom:44px;
+}
+header .wrap{padding-bottom:0}
+.lede{font-size:1.2rem; color:var(--ink-2); margin-top:20px; max-width:60ch}
+.lede b{color:var(--ink); font-weight:600}
+.meta{
+  display:flex; flex-wrap:wrap; gap:8px 28px; margin-top:28px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.76rem; color:var(--ink-3);
+}
+
+/* ─── scope banner ─────────────────────────────────────────────────── */
+.scope{
+  border:1px solid var(--rule-2); border-left:4px solid var(--cancelled);
+  background:var(--card); border-radius:4px; padding:22px 26px; margin:0 0 52px;
+  box-shadow:var(--shadow);
+}
+.scope h3{margin-bottom:10px; color:var(--ink)}
+.scope p{color:var(--ink-2); max-width:70ch}
+.scope p + p{margin-top:10px}
+
+/* ─── sections ─────────────────────────────────────────────────────── */
+section{margin:0 0 60px}
+.sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:6px}
+.sec-num{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.8rem; font-weight:600;
+  color:var(--accent); flex:none;
+}
+.sec-sub{color:var(--ink-2); margin-top:12px; max-width:var(--measure)}
+
+/* ─── analogy block ────────────────────────────────────────────────── */
+.plain{
+  margin-top:22px; padding:20px 24px; border-radius:4px;
+  background:var(--accent-soft); border:1px solid var(--rule);
+  max-width:72ch;
+}
+.plain .eyebrow{color:var(--accent); margin-bottom:8px; display:block}
+.plain p{color:var(--ink); font-size:1.02rem}
+.plain p + p{margin-top:10px}
+
+/* ─── figure / chart shell ─────────────────────────────────────────── */
+figure{
+  margin:26px 0 0; padding:24px 26px 20px; background:var(--card);
+  border:1px solid var(--rule); border-radius:5px; box-shadow:var(--shadow);
+}
+figcaption{margin-bottom:20px}
+figcaption .t{font-family:Bitter,Georgia,serif; font-weight:600; font-size:1.02rem; display:block}
+figcaption .s{font-size:.86rem; color:var(--ink-3); display:block; margin-top:3px}
+.chart-scroll{overflow-x:auto}
+
+/* ─── horizontal bar rows ──────────────────────────────────────────── */
+.bars{display:flex; flex-direction:column; gap:12px; min-width:420px}
+.row{display:grid; grid-template-columns:132px 1fr; align-items:center; gap:14px}
+.row .lbl{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.78rem;
+  color:var(--ink-2); text-align:right; line-height:1.3;
+}
+.track{position:relative; height:26px; display:flex; align-items:center}
+.track::before{
+  content:""; position:absolute; inset:0 0 0 0; border-left:1px solid var(--rule-2);
+}
+.seg{
+  height:26px; border-radius:0 4px 4px 0; position:relative;
+  display:flex; align-items:center; cursor:default; transition:filter .12s;
+}
+.seg:hover,.seg:focus-visible{filter:brightness(1.08); outline:none}
+.seg:focus-visible{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--accent)}
+.stack{display:flex; gap:2px; align-items:center}
+.stack .seg:not(:last-child){border-radius:0}
+.val{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.82rem; font-weight:600;
+  margin-left:10px; white-space:nowrap; color:var(--ink);
+}
+.val.inside{margin-left:8px; color:#fff}
+.tag{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.74rem;
+  color:var(--ink-3); margin-left:10px; white-space:nowrap;
+}
+.dashed{
+  background:repeating-linear-gradient(135deg,var(--neutral-mark) 0 6px,transparent 6px 12px);
+  border:1px solid var(--neutral-mark);
+}
+
+/* ─── legend ───────────────────────────────────────────────────────── */
+.legend{display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:20px; padding-top:16px; border-top:1px solid var(--rule)}
+.legend span{display:flex; align-items:center; gap:8px; font-size:.82rem; color:var(--ink-2)}
+.sw{width:13px; height:13px; border-radius:3px; flex:none}
+
+/* ─── hero stat ────────────────────────────────────────────────────── */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; margin:32px 0 0}
+.stat{background:var(--card); border:1px solid var(--rule); border-radius:5px; padding:20px 22px; box-shadow:var(--shadow)}
+.stat .n{font-family:Bitter,Georgia,serif; font-size:2.5rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; display:block}
+.stat .k{font-size:.88rem; color:var(--ink-2); margin-top:9px; display:block; line-height:1.4}
+.stat.bad .n{color:var(--cancelled)}
+.stat.ok .n{color:var(--survived)}
+
+/* ─── tables ───────────────────────────────────────────────────────── */
+details{margin-top:18px; border-top:1px solid var(--rule); padding-top:14px}
+summary{
+  cursor:pointer; font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.76rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3);
+}
+summary:hover{color:var(--ink)}
+summary:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+.tw{overflow-x:auto; margin-top:14px}
+table{border-collapse:collapse; width:100%; font-size:.86rem; min-width:400px}
+th,td{text-align:left; padding:7px 12px 7px 0; border-bottom:1px solid var(--rule)}
+th{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); font-weight:500}
+td.n,th.n{text-align:right; font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; padding-right:0}
+
+/* ─── loop diagram ─────────────────────────────────────────────────── */
+.loop{margin-top:26px; overflow-x:auto}
+.loop svg{display:block; min-width:560px; max-width:100%; height:auto}
+
+/* ─── action plan ──────────────────────────────────────────────────── */
+.act{display:flex; flex-direction:column; gap:14px; margin-top:28px}
+.card{
+  background:var(--card); border:1px solid var(--rule); border-radius:5px;
+  padding:20px 24px; box-shadow:var(--shadow); border-left:4px solid var(--rule-2);
+}
+.card.now{border-left-color:var(--cancelled)}
+.card.next{border-left-color:var(--survived)}
+.card-top{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:8px}
+.card-n{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.78rem; font-weight:600; color:var(--ink-3)}
+.card h3{font-size:1.06rem}
+.card p{color:var(--ink-2); font-size:.98rem; max-width:70ch}
+.facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px 20px; margin-top:16px; padding-top:14px; border-top:1px solid var(--rule);
+}
+.fact{font-size:.84rem}
+.fact b{
+  display:block; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.68rem;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); font-weight:500; margin-bottom:2px;
+}
+.fact span{color:var(--ink)}
+.pill{
+  display:inline-block; font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+  padding:3px 9px; border-radius:99px; border:1px solid currentColor;
+}
+.pill.free{color:var(--survived)}
+.pill.gate{color:var(--cancelled)}
+
+/* ─── limits ───────────────────────────────────────────────────────── */
+.limits{background:var(--card-2); border:1px solid var(--rule); border-radius:5px; padding:26px 28px}
+.limits ul{margin:16px 0 0; padding-left:20px; color:var(--ink-2)}
+.limits li{margin-bottom:10px; max-width:74ch}
+.limits li b{color:var(--ink)}
+
+footer{border-top:1px solid var(--rule); margin-top:64px; padding-top:24px; color:var(--ink-3); font-size:.84rem}
+
+/* ─── tooltip ──────────────────────────────────────────────────────── */
+#tip{
+  position:fixed; z-index:50; pointer-events:none; opacity:0; transition:opacity .1s;
+  background:var(--ink); color:var(--ground); padding:7px 11px; border-radius:4px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.76rem; line-height:1.45;
+  max-width:260px; box-shadow:0 6px 20px rgba(0,0,0,.28);
+}
+#tip.on{opacity:1}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+@media (max-width:640px){
+  .row{grid-template-columns:100px 1fr; gap:10px}
+  .row .lbl{font-size:.72rem}
+  body{font-size:16px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="eyebrow">Your Algorithm LLC &middot; fleet diagnostic &middot; 28 Aug 2026</span>
+    <h1>The fleet booked 550 appointments.<br>The tracker reported 281.</h1>
+    <p class="lede">All <b>30 subaccounts</b>, read from Your Algo itself. Across August the fleet created <b>1,884 appointments and cancelled 566 of them</b> &mdash; and because the tracker reports only survivors, none of that cancellation is visible anywhere in the operating record.</p>
+    <div class="meta">
+      <span>SOURCE &nbsp;Your Algo, read-only</span>
+      <span>SCOPE &nbsp;30 subaccounts &middot; 2,704,310 contacts</span>
+      <span>WROTE &nbsp;nothing</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="stats">
+    <div class="stat"><span class="n">1,884</span><span class="k">appointments booked in August</span></div>
+    <div class="stat bad"><span class="n">566</span><span class="k">cancelled &mdash; 30% of everything booked</span></div>
+    <div class="stat ok"><span class="n">1,318</span><span class="k">survived</span></div>
+    <div class="stat bad"><span class="n">212,104</span><span class="k">people have opted out</span></div>
+  </div>
+
+  <section style="margin-top:56px">
+    <div class="sec-head"><span class="sec-num">01</span><h2>The gap is fleet-wide, not one bad account</h2></div>
+    <p class="sec-sub">Week of 23 August. Every tracked subaccount, side by side with what the platform actually created.</p>
+
+    <figure>
+      <figcaption><span class="t">Week of 23 Aug &mdash; reported vs. created vs. kept</span><span class="s">29 subaccounts with a tracker row</span></figcaption>
+      <div class="chart-scroll"><div class="bars">
+        <div class="row"><span class="lbl">tracker<br>reported</span><div class="track"><div class="seg dashed" style="width:51.1%" data-tip="Tracker total across 29 subaccounts&#10;281 leads"></div><span class="val">281</span></div></div>
+        <div class="row"><span class="lbl">platform<br>created</span><div class="track"><div class="seg" style="width:100%;background:var(--survived)" data-tip="550 appointments created&#10;across the same 29 subaccounts"></div><span class="val inside" style="position:absolute;left:8px">550</span></div></div>
+        <div class="row"><span class="lbl">&hellip;still<br>standing</span><div class="track"><div class="stack" style="width:100%">
+          <div class="seg" style="width:58.2%;background:var(--survived)" data-tip="320 survived"></div>
+          <div class="seg" style="width:41.8%;background:var(--cancelled)" data-tip="230 cancelled that week = 42%"></div></div></div></div>
+        <div class="row"><span class="lbl"></span><div class="track" style="height:auto"><span class="tag" style="margin:0">320 survived &nbsp;&middot;&nbsp; 230 cancelled &mdash; a 42% death rate that week</span></div></div>
+      </div></div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--survived)"></i>Survived</span>
+        <span><i class="sw" style="background:var(--cancelled)"></i>Cancelled</span>
+        <span><i class="sw dashed"></i>What the tracker reported</span>
+      </div>
+      <details><summary>Show all 29 subaccounts</summary><div class="tw"><table>
+        <tr><th>Subaccount</th><th class="n">Tracker</th><th class="n">Created</th><th class="n">Survived</th><th class="n">Cancelled</th><th class="n">Gap</th></tr>
+        <tr><td>Flagler Land Management</td><td class="n">3</td><td class="n">26</td><td class="n">10</td><td class="n">16</td><td class="n" style="color:var(--cancelled)">+23</td></tr>
+        <tr><td>Summit Tree &amp; Land</td><td class="n">21</td><td class="n">38</td><td class="n">21</td><td class="n">17</td><td class="n" style="color:var(--cancelled)">+17</td></tr>
+        <tr><td>Holbrook Tree Service</td><td class="n">9</td><td class="n">23</td><td class="n">12</td><td class="n">11</td><td class="n" style="color:var(--cancelled)">+14</td></tr>
+        <tr><td>XD Land Service</td><td class="n">5</td><td class="n">19</td><td class="n">8</td><td class="n">11</td><td class="n" style="color:var(--cancelled)">+14</td></tr>
+        <tr><td>Above_The_Branch_Tier_1</td><td class="n">3</td><td class="n">16</td><td class="n">5</td><td class="n">11</td><td class="n" style="color:var(--cancelled)">+13</td></tr>
+        <tr><td>Harley&#39;s Tree Service Tier 2</td><td class="n">5</td><td class="n">17</td><td class="n">6</td><td class="n">11</td><td class="n" style="color:var(--cancelled)">+12</td></tr>
+        <tr><td>Mustard Seed Lawn &amp; Tree</td><td class="n">14</td><td class="n">26</td><td class="n">13</td><td class="n">13</td><td class="n" style="color:var(--cancelled)">+12</td></tr>
+        <tr><td>Reilly&#39;s Tree &amp; More</td><td class="n">4</td><td class="n">16</td><td class="n">12</td><td class="n">4</td><td class="n" style="color:var(--cancelled)">+12</td></tr>
+        <tr><td>Ranger Tree Care Tier 1</td><td class="n">9</td><td class="n">20</td><td class="n">11</td><td class="n">9</td><td class="n" style="color:var(--cancelled)">+11</td></tr>
+        <tr><td>Walker&#39;s Tree Service</td><td class="n">24</td><td class="n">35</td><td class="n">25</td><td class="n">10</td><td class="n" style="color:var(--cancelled)">+11</td></tr>
+        <tr><td>Cost-Low Tree Service</td><td class="n">7</td><td class="n">18</td><td class="n">8</td><td class="n">10</td><td class="n" style="color:var(--cancelled)">+11</td></tr>
+        <tr><td>GoldPalm</td><td class="n">11</td><td class="n">21</td><td class="n">12</td><td class="n">9</td><td class="n" style="color:var(--cancelled)">+10</td></tr>
+        <tr><td>Top Notch Property Mgmt Tier 3</td><td class="n">6</td><td class="n">16</td><td class="n">6</td><td class="n">10</td><td class="n" style="color:var(--cancelled)">+10</td></tr>
+        <tr><td>AP Property Management</td><td class="n">10</td><td class="n">20</td><td class="n">10</td><td class="n">10</td><td class="n" style="color:var(--cancelled)">+10</td></tr>
+        <tr><td>Above The Branch Tier 2</td><td class="n">8</td><td class="n">17</td><td class="n">7</td><td class="n">10</td><td class="n" style="color:var(--cancelled)">+9</td></tr>
+        <tr><td>Nature Worx</td><td class="n">9</td><td class="n">18</td><td class="n">10</td><td class="n">8</td><td class="n" style="color:var(--cancelled)">+9</td></tr>
+        <tr><td>Limitless</td><td class="n">8</td><td class="n">17</td><td class="n">7</td><td class="n">10</td><td class="n" style="color:var(--cancelled)">+9</td></tr>
+        <tr><td>Tree Masters of Savannah</td><td class="n">18</td><td class="n">27</td><td class="n">18</td><td class="n">9</td><td class="n" style="color:var(--cancelled)">+9</td></tr>
+        <tr><td>Harley&#39;s Tree Service Tier 1</td><td class="n">9</td><td class="n">18</td><td class="n">9</td><td class="n">9</td><td class="n" style="color:var(--cancelled)">+9</td></tr>
+        <tr><td>Top Notch Property Mgmt Tier 1</td><td class="n">7</td><td class="n">15</td><td class="n">9</td><td class="n">6</td><td class="n" style="color:var(--cancelled)">+8</td></tr>
+        <tr><td>Affordable Tree Care of CT</td><td class="n">7</td><td class="n">14</td><td class="n">8</td><td class="n">6</td><td class="n" style="color:var(--cancelled)">+7</td></tr>
+        <tr><td>D&amp;S Tier 1</td><td class="n">4</td><td class="n">9</td><td class="n">5</td><td class="n">4</td><td class="n" style="color:var(--cancelled)">+5</td></tr>
+        <tr><td>Murphy Development Group Tier 1</td><td class="n">8</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n" style="color:var(--cancelled)">+5</td></tr>
+        <tr><td>Integrity Tree</td><td class="n">10</td><td class="n">14</td><td class="n">10</td><td class="n">4</td><td class="n" style="color:var(--cancelled)">+4</td></tr>
+        <tr><td>Southern Stone Land Mgmt</td><td class="n">12</td><td class="n">16</td><td class="n">13</td><td class="n">3</td><td class="n" style="color:var(--cancelled)">+4</td></tr>
+        <tr><td>Wade&#39;s Tree Service</td><td class="n">15</td><td class="n">19</td><td class="n">16</td><td class="n">3</td><td class="n" style="color:var(--cancelled)">+4</td></tr>
+        <tr><td>Life&#39;s Tree Doc</td><td class="n">25</td><td class="n">28</td><td class="n">27</td><td class="n">1</td><td class="n" style="color:var(--cancelled)">+3</td></tr>
+        <tr><td>Mobile Land &amp; Tree</td><td class="n">4</td><td class="n">7</td><td class="n">6</td><td class="n">1</td><td class="n" style="color:var(--cancelled)">+3</td></tr>
+        <tr><td>Top Notch Property Mgmt Tier 2</td><td class="n">6</td><td class="n">7</td><td class="n">6</td><td class="n">1</td><td class="n" style="color:var(--cancelled)">+1</td></tr>
+
+        <tr><td><b>TOTAL</b></td><td class="n"><b>281</b></td><td class="n"><b>550</b></td><td class="n"><b>320</b></td><td class="n"><b>230</b></td><td class="n"><b>+269</b></td></tr>
+      </table></div></details>
+    </figure>
+
+    <div class="plain">
+      <span class="eyebrow">In plain terms</span>
+      <p><strong>All 29 of 29 subaccounts booked more than the tracker reported.</strong> Not most. All of them.</p>
+      <p>The tracker is not broken and nobody is hiding anything &mdash; it reports the number that survives, which is a reasonable thing to bill on. But it means the company has never once seen the 230 appointments that were made and then died that week, and cannot tell a tier that books badly from a tier that books fine and loses them afterwards. Those need opposite fixes.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Every tier, ranked by how many bookings die</h2></div>
+    <p class="sec-sub">August. Bar length is appointments created; the red portion is what was cancelled. The spread runs from 1% to 63%.</p>
+
+    <figure>
+      <figcaption><span class="t">Cancellation rate by subaccount</span><span class="s">1,884 appointments &middot; fleet rate 30% &middot; median tier 33%</span></figcaption>
+      <div class="chart-scroll"><div class="bars">
+          <div class="row"><span class="lbl">Top Notch Property Mgmt Tier 3</span><div class="track"><div class="stack" style="width:13.79%"><div class="seg" style="width:37.50%;background:var(--survived)" data-tip="Top Notch Property Mgmt Tier 3&#10;survived 6 of 16"></div><div class="seg" style="width:62.50%;background:var(--cancelled)" data-tip="Top Notch Property Mgmt Tier 3&#10;cancelled 10 of 16 = 63%&#10;median time to cancel 3.2h"></div></div><span class="val">63%</span><span class="tag">16 booked</span></div></div>
+          <div class="row"><span class="lbl">Limitless</span><div class="track"><div class="stack" style="width:24.14%"><div class="seg" style="width:42.86%;background:var(--survived)" data-tip="Limitless&#10;survived 12 of 28"></div><div class="seg" style="width:57.14%;background:var(--cancelled)" data-tip="Limitless&#10;cancelled 16 of 28 = 57%&#10;median time to cancel 23.7h"></div></div><span class="val">57%</span><span class="tag">28 booked</span></div></div>
+          <div class="row"><span class="lbl">Top Notch Property Mgmt Tier 2</span><div class="track"><div class="stack" style="width:58.62%"><div class="seg" style="width:50.00%;background:var(--survived)" data-tip="Top Notch Property Mgmt Tier 2&#10;survived 34 of 68"></div><div class="seg" style="width:50.00%;background:var(--cancelled)" data-tip="Top Notch Property Mgmt Tier 2&#10;cancelled 34 of 68 = 50%&#10;median time to cancel 23.3h"></div></div><span class="val">50%</span><span class="tag">68 booked</span></div></div>
+          <div class="row"><span class="lbl">Above_The_Branch_Tier_1</span><div class="track"><div class="stack" style="width:37.07%"><div class="seg" style="width:51.16%;background:var(--survived)" data-tip="Above_The_Branch_Tier_1&#10;survived 22 of 43"></div><div class="seg" style="width:48.84%;background:var(--cancelled)" data-tip="Above_The_Branch_Tier_1&#10;cancelled 21 of 43 = 49%&#10;median time to cancel 5.7h"></div></div><span class="val">49%</span><span class="tag">43 booked</span></div></div>
+          <div class="row"><span class="lbl">Holbrook Tree Service</span><div class="track"><div class="stack" style="width:31.90%"><div class="seg" style="width:54.05%;background:var(--survived)" data-tip="Holbrook Tree Service&#10;survived 20 of 37"></div><div class="seg" style="width:45.95%;background:var(--cancelled)" data-tip="Holbrook Tree Service&#10;cancelled 17 of 37 = 46%&#10;median time to cancel 9.0h"></div></div><span class="val">46%</span><span class="tag">37 booked</span></div></div>
+          <div class="row"><span class="lbl">Summit Tree &amp; Land</span><div class="track"><div class="stack" style="width:32.76%"><div class="seg" style="width:55.26%;background:var(--survived)" data-tip="Summit Tree &amp; Land&#10;survived 21 of 38"></div><div class="seg" style="width:44.74%;background:var(--cancelled)" data-tip="Summit Tree &amp; Land&#10;cancelled 17 of 38 = 45%&#10;median time to cancel 6.3h"></div></div><span class="val">45%</span><span class="tag">38 booked</span></div></div>
+          <div class="row"><span class="lbl">Harley&#39;s Tree Service Tier 2</span><div class="track"><div class="stack" style="width:29.31%"><div class="seg" style="width:55.88%;background:var(--survived)" data-tip="Harley&#39;s Tree Service Tier 2&#10;survived 19 of 34"></div><div class="seg" style="width:44.12%;background:var(--cancelled)" data-tip="Harley&#39;s Tree Service Tier 2&#10;cancelled 15 of 34 = 44%&#10;median time to cancel 1.9h"></div></div><span class="val">44%</span><span class="tag">34 booked</span></div></div>
+          <div class="row"><span class="lbl">Ranger Tree Care Tier 1</span><div class="track"><div class="stack" style="width:88.79%"><div class="seg" style="width:58.25%;background:var(--survived)" data-tip="Ranger Tree Care Tier 1&#10;survived 60 of 103"></div><div class="seg" style="width:41.75%;background:var(--cancelled)" data-tip="Ranger Tree Care Tier 1&#10;cancelled 43 of 103 = 42%&#10;median time to cancel 71.3h"></div></div><span class="val">42%</span><span class="tag">103 booked</span></div></div>
+          <div class="row"><span class="lbl">Reilly&#39;s Tree &amp; More</span><div class="track"><div class="stack" style="width:31.03%"><div class="seg" style="width:61.11%;background:var(--survived)" data-tip="Reilly&#39;s Tree &amp; More&#10;survived 22 of 36"></div><div class="seg" style="width:38.89%;background:var(--cancelled)" data-tip="Reilly&#39;s Tree &amp; More&#10;cancelled 14 of 36 = 39%&#10;median time to cancel 92.7h"></div></div><span class="val">39%</span><span class="tag">36 booked</span></div></div>
+          <div class="row"><span class="lbl">Harley&#39;s Tree Service Tier 1</span><div class="track"><div class="stack" style="width:64.66%"><div class="seg" style="width:64.00%;background:var(--survived)" data-tip="Harley&#39;s Tree Service Tier 1&#10;survived 48 of 75"></div><div class="seg" style="width:36.00%;background:var(--cancelled)" data-tip="Harley&#39;s Tree Service Tier 1&#10;cancelled 27 of 75 = 36%&#10;median time to cancel 6.6h"></div></div><span class="val">36%</span><span class="tag">75 booked</span></div></div>
+          <div class="row"><span class="lbl">Flagler Land Management</span><div class="track"><div class="stack" style="width:45.69%"><div class="seg" style="width:64.15%;background:var(--survived)" data-tip="Flagler Land Management&#10;survived 34 of 53"></div><div class="seg" style="width:35.85%;background:var(--cancelled)" data-tip="Flagler Land Management&#10;cancelled 19 of 53 = 36%&#10;median time to cancel 1.0h"></div></div><span class="val">36%</span><span class="tag">53 booked</span></div></div>
+          <div class="row"><span class="lbl">Integrity Tree</span><div class="track"><div class="stack" style="width:55.17%"><div class="seg" style="width:65.63%;background:var(--survived)" data-tip="Integrity Tree&#10;survived 42 of 64"></div><div class="seg" style="width:34.38%;background:var(--cancelled)" data-tip="Integrity Tree&#10;cancelled 22 of 64 = 34%&#10;median time to cancel 4.0h"></div></div><span class="val">34%</span><span class="tag">64 booked</span></div></div>
+          <div class="row"><span class="lbl">AP Property Management</span><div class="track"><div class="stack" style="width:65.52%"><div class="seg" style="width:65.79%;background:var(--survived)" data-tip="AP Property Management&#10;survived 50 of 76"></div><div class="seg" style="width:34.21%;background:var(--cancelled)" data-tip="AP Property Management&#10;cancelled 26 of 76 = 34%&#10;median time to cancel 6.3h"></div></div><span class="val">34%</span><span class="tag">76 booked</span></div></div>
+          <div class="row"><span class="lbl">Above The Branch Tier 2</span><div class="track"><div class="stack" style="width:69.83%"><div class="seg" style="width:66.67%;background:var(--survived)" data-tip="Above The Branch Tier 2&#10;survived 54 of 81"></div><div class="seg" style="width:33.33%;background:var(--cancelled)" data-tip="Above The Branch Tier 2&#10;cancelled 27 of 81 = 33%&#10;median time to cancel 3.8h"></div></div><span class="val">33%</span><span class="tag">81 booked</span></div></div>
+          <div class="row"><span class="lbl">Tree Masters of Savannah</span><div class="track"><div class="stack" style="width:88.79%"><div class="seg" style="width:66.99%;background:var(--survived)" data-tip="Tree Masters of Savannah&#10;survived 69 of 103"></div><div class="seg" style="width:33.01%;background:var(--cancelled)" data-tip="Tree Masters of Savannah&#10;cancelled 34 of 103 = 33%&#10;median time to cancel 16.9h"></div></div><span class="val">33%</span><span class="tag">103 booked</span></div></div>
+          <div class="row"><span class="lbl">Top Notch Property Mgmt Tier 1</span><div class="track"><div class="stack" style="width:60.34%"><div class="seg" style="width:67.14%;background:var(--survived)" data-tip="Top Notch Property Mgmt Tier 1&#10;survived 47 of 70"></div><div class="seg" style="width:32.86%;background:var(--cancelled)" data-tip="Top Notch Property Mgmt Tier 1&#10;cancelled 23 of 70 = 33%&#10;median time to cancel 18.4h"></div></div><span class="val">33%</span><span class="tag">70 booked</span></div></div>
+          <div class="row"><span class="lbl">D&amp;S Tier 1</span><div class="track"><div class="stack" style="width:42.24%"><div class="seg" style="width:69.39%;background:var(--survived)" data-tip="D&amp;S Tier 1&#10;survived 34 of 49"></div><div class="seg" style="width:30.61%;background:var(--cancelled)" data-tip="D&amp;S Tier 1&#10;cancelled 15 of 49 = 31%&#10;median time to cancel 4.4h"></div></div><span class="val">31%</span><span class="tag">49 booked</span></div></div>
+          <div class="row"><span class="lbl">XD Land Service</span><div class="track"><div class="stack" style="width:64.66%"><div class="seg" style="width:70.67%;background:var(--survived)" data-tip="XD Land Service&#10;survived 53 of 75"></div><div class="seg" style="width:29.33%;background:var(--cancelled)" data-tip="XD Land Service&#10;cancelled 22 of 75 = 29%&#10;median time to cancel 2.2h"></div></div><span class="val">29%</span><span class="tag">75 booked</span></div></div>
+          <div class="row"><span class="lbl">Mustard Seed Lawn &amp; Tree</span><div class="track"><div class="stack" style="width:43.10%"><div class="seg" style="width:72.00%;background:var(--survived)" data-tip="Mustard Seed Lawn &amp; Tree&#10;survived 36 of 50"></div><div class="seg" style="width:28.00%;background:var(--cancelled)" data-tip="Mustard Seed Lawn &amp; Tree&#10;cancelled 14 of 50 = 28%&#10;median time to cancel 2.0h"></div></div><span class="val">28%</span><span class="tag">50 booked</span></div></div>
+          <div class="row"><span class="lbl">GoldPalm</span><div class="track"><div class="stack" style="width:72.41%"><div class="seg" style="width:72.62%;background:var(--survived)" data-tip="GoldPalm&#10;survived 61 of 84"></div><div class="seg" style="width:27.38%;background:var(--cancelled)" data-tip="GoldPalm&#10;cancelled 23 of 84 = 27%&#10;median time to cancel 2.3h"></div></div><span class="val">27%</span><span class="tag">84 booked</span></div></div>
+          <div class="row"><span class="lbl">Wade&#39;s Tree Service</span><div class="track"><div class="stack" style="width:63.79%"><div class="seg" style="width:72.97%;background:var(--survived)" data-tip="Wade&#39;s Tree Service&#10;survived 54 of 74"></div><div class="seg" style="width:27.03%;background:var(--cancelled)" data-tip="Wade&#39;s Tree Service&#10;cancelled 20 of 74 = 27%&#10;median time to cancel 75.6h"></div></div><span class="val">27%</span><span class="tag">74 booked</span></div></div>
+          <div class="row"><span class="lbl">Affordable Tree Care of CT</span><div class="track"><div class="stack" style="width:58.62%"><div class="seg" style="width:73.53%;background:var(--survived)" data-tip="Affordable Tree Care of CT&#10;survived 50 of 68"></div><div class="seg" style="width:26.47%;background:var(--cancelled)" data-tip="Affordable Tree Care of CT&#10;cancelled 18 of 68 = 26%&#10;median time to cancel 10.8h"></div></div><span class="val">26%</span><span class="tag">68 booked</span></div></div>
+          <div class="row"><span class="lbl">Southern Stone Land Mgmt</span><div class="track"><div class="stack" style="width:56.90%"><div class="seg" style="width:75.76%;background:var(--survived)" data-tip="Southern Stone Land Mgmt&#10;survived 50 of 66"></div><div class="seg" style="width:24.24%;background:var(--cancelled)" data-tip="Southern Stone Land Mgmt&#10;cancelled 16 of 66 = 24%&#10;median time to cancel 46.3h"></div></div><span class="val">24%</span><span class="tag">66 booked</span></div></div>
+          <div class="row"><span class="lbl">Murphy Development Group Tier 1</span><div class="track"><div class="stack" style="width:76.72%"><div class="seg" style="width:80.90%;background:var(--survived)" data-tip="Murphy Development Group Tier 1&#10;survived 72 of 89"></div><div class="seg" style="width:19.10%;background:var(--cancelled)" data-tip="Murphy Development Group Tier 1&#10;cancelled 17 of 89 = 19%&#10;median time to cancel 98.0h"></div></div><span class="val">19%</span><span class="tag">89 booked</span></div></div>
+          <div class="row"><span class="lbl">Mobile Land &amp; Tree</span><div class="track"><div class="stack" style="width:43.10%"><div class="seg" style="width:82.00%;background:var(--survived)" data-tip="Mobile Land &amp; Tree&#10;survived 41 of 50"></div><div class="seg" style="width:18.00%;background:var(--cancelled)" data-tip="Mobile Land &amp; Tree&#10;cancelled 9 of 50 = 18%&#10;median time to cancel 6.3h"></div></div><span class="val">18%</span><span class="tag">50 booked</span></div></div>
+          <div class="row"><span class="lbl">Walker&#39;s Tree Service</span><div class="track"><div class="stack" style="width:100.00%"><div class="seg" style="width:82.76%;background:var(--survived)" data-tip="Walker&#39;s Tree Service&#10;survived 96 of 116"></div><div class="seg" style="width:17.24%;background:var(--cancelled)" data-tip="Walker&#39;s Tree Service&#10;cancelled 20 of 116 = 17%&#10;median time to cancel 7.2h"></div></div><span class="val">17%</span><span class="tag">116 booked</span></div></div>
+          <div class="row"><span class="lbl">Cost-Low Tree Service</span><div class="track"><div class="stack" style="width:75.86%"><div class="seg" style="width:82.95%;background:var(--survived)" data-tip="Cost-Low Tree Service&#10;survived 73 of 88"></div><div class="seg" style="width:17.05%;background:var(--cancelled)" data-tip="Cost-Low Tree Service&#10;cancelled 15 of 88 = 17%&#10;median time to cancel 2.4h"></div></div><span class="val">17%</span><span class="tag">88 booked</span></div></div>
+          <div class="row"><span class="lbl">Nature Worx</span><div class="track"><div class="stack" style="width:63.79%"><div class="seg" style="width:85.14%;background:var(--survived)" data-tip="Nature Worx&#10;survived 63 of 74"></div><div class="seg" style="width:14.86%;background:var(--cancelled)" data-tip="Nature Worx&#10;cancelled 11 of 74 = 15%&#10;median time to cancel 4.2h"></div></div><span class="val">15%</span><span class="tag">74 booked</span></div></div>
+          <div class="row"><span class="lbl">Life&#39;s Tree Doc</span><div class="track"><div class="stack" style="width:65.52%"><div class="seg" style="width:98.68%;background:var(--survived)" data-tip="Life&#39;s Tree Doc&#10;survived 75 of 76"></div><div class="seg" style="width:1.32%;background:var(--cancelled)" data-tip="Life&#39;s Tree Doc&#10;cancelled 1 of 76 = 1%&#10;median time to cancel 27.0h"></div></div><span class="val">1%</span><span class="tag">76 booked</span></div></div>
+
+      </div></div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--survived)"></i>Survived</span>
+        <span><i class="sw" style="background:var(--cancelled)"></i>Cancelled</span>
+        <span style="color:var(--ink-3)">Mustard Seed Tree &ndash; Alachua is absent: it booked nothing at all in August.</span>
+      </div>
+    </figure>
+
+    <div class="stats" style="margin-top:20px">
+      <div class="stat bad"><span class="n">8</span><span class="k">tiers losing 40% or more</span></div>
+      <div class="stat"><span class="n">17</span><span class="k">tiers losing 30% or more</span></div>
+      <div class="stat ok"><span class="n">6</span><span class="k">tiers under 20%</span></div>
+      <div class="stat"><span class="n">6.3h</span><span class="k">median time from booked to cancelled</span></div>
+    </div>
+
+    <div class="plain">
+      <span class="eyebrow">In plain terms</span>
+      <p>This is the answer to the question you actually asked &mdash; why some subaccounts do well and others don&rsquo;t.</p>
+      <p><strong>It is largely not a booking problem. It is a keeping problem.</strong> Top Notch Tier 3 loses 63% of what it books. Life&rsquo;s Tree Doc loses 1%. They are running the same product.</p>
+      <p>And the timing says these are not homeowners changing their minds: on <strong>19 of 29 tiers the typical cancellation happens within 12 hours of the booking being made</strong>, fleet median 6.3 hours. A real change of heart takes days. Something is creating appointments that get cleaned up almost immediately &mdash; and it is happening on nearly every tier.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Ethan is the best booker you have</h2></div>
+    <p class="sec-sub">Confirmed at fleet scale, not on one account. The AI books nearly three times as much as everything else and loses far less of it.</p>
+
+    <figure>
+      <figcaption><span class="t">Cancellation rate by booking path</span><span class="s">All 1,884 August appointments across 30 subaccounts</span></figcaption>
+      <div class="chart-scroll"><div class="bars">
+        <div class="row"><span class="lbl">Ethan<br><span style="color:var(--ink-3)">the AI</span></span><div class="track"><div class="stack" style="width:100%">
+          <div class="seg" style="width:73.6%;background:var(--survived)" data-tip="Ethan&#10;1,010 survived of 1,372 booked"></div>
+          <div class="seg" style="width:26.4%;background:var(--cancelled)" data-tip="Ethan&#10;362 cancelled of 1,372 = 26%"></div></div><span class="val">26%</span><span class="tag">1,372 booked</span></div></div>
+        <div class="row"><span class="lbl">every<br>other path</span><div class="track"><div class="stack" style="width:37.3%">
+          <div class="seg" style="width:60.2%;background:var(--survived)" data-tip="Other paths&#10;308 survived of 512 booked"></div>
+          <div class="seg" style="width:39.8%;background:var(--cancelled)" data-tip="Other paths&#10;204 cancelled of 512 = 40%"></div></div><span class="val">40%</span><span class="tag">512 booked</span></div></div>
+      </div></div>
+      <div class="legend"><span><i class="sw" style="background:var(--survived)"></i>Survived</span><span><i class="sw" style="background:var(--cancelled)"></i>Cancelled</span></div>
+    </figure>
+
+    <div class="plain">
+      <span class="eyebrow">In plain terms</span>
+      <p>Ethan books <strong>1,372</strong> of the fleet&rsquo;s 1,884 appointments and keeps 74% of them. Every other route books 512 and keeps 60%.</p>
+      <p>If anyone suggests the cancellations are the AI&rsquo;s fault, this is the answer: <strong>turning Ethan off would raise the fleet cancellation rate, not lower it.</strong> The problem is the rule both paths follow, not the one following it best.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>212,104 people have told us to stop</h2></div>
+    <p class="sec-sub">Exact counts, not sampled &mdash; every contact flagged do-not-contact, across 2.7&nbsp;million.</p>
+
+    <figure>
+      <figcaption><span class="t">Opt-out rate &mdash; ten highest</span><span class="s">Fleet average 7.84% &middot; exact counts from the contact records</span></figcaption>
+      <div class="chart-scroll"><div class="bars">
+          <div class="row"><span class="lbl">Harley&#39;s Tree Service Tier 1</span><div class="track"><div class="seg" style="width:100.0%;background:var(--cancelled)" data-tip="Harley&#39;s Tree Service Tier 1&#10;11,633 opted out of 80,775"></div><span class="val">14.4%</span><span class="tag">11,633 people</span></div></div>
+          <div class="row"><span class="lbl">Summit Tree &amp; Land</span><div class="track"><div class="seg" style="width:91.2%;background:var(--cancelled)" data-tip="Summit Tree &amp; Land&#10;6,506 opted out of 49,525"></div><span class="val">13.1%</span><span class="tag">6,506 people</span></div></div>
+          <div class="row"><span class="lbl">D&amp;S Tier 1</span><div class="track"><div class="seg" style="width:84.9%;background:var(--cancelled)" data-tip="D&amp;S Tier 1&#10;7,076 opted out of 57,865"></div><span class="val">12.2%</span><span class="tag">7,076 people</span></div></div>
+          <div class="row"><span class="lbl">Southern Stone Land Mgmt</span><div class="track"><div class="seg" style="width:84.1%;background:var(--cancelled)" data-tip="Southern Stone Land Mgmt&#10;5,310 opted out of 43,856"></div><span class="val">12.1%</span><span class="tag">5,310 people</span></div></div>
+          <div class="row"><span class="lbl">Mustard Seed Tree - Alachua</span><div class="track"><div class="seg" style="width:82.3%;background:var(--cancelled)" data-tip="Mustard Seed Tree - Alachua&#10;7,752 opted out of 65,450"></div><span class="val">11.8%</span><span class="tag">7,752 people</span></div></div>
+          <div class="row"><span class="lbl">Limitless</span><div class="track"><div class="seg" style="width:80.8%;background:var(--cancelled)" data-tip="Limitless&#10;2,961 opted out of 25,456"></div><span class="val">11.6%</span><span class="tag">2,961 people</span></div></div>
+          <div class="row"><span class="lbl">Walker&#39;s Tree Service</span><div class="track"><div class="seg" style="width:78.2%;background:var(--cancelled)" data-tip="Walker&#39;s Tree Service&#10;8,779 opted out of 77,940"></div><span class="val">11.3%</span><span class="tag">8,779 people</span></div></div>
+          <div class="row"><span class="lbl">Integrity Tree</span><div class="track"><div class="seg" style="width:78.0%;background:var(--cancelled)" data-tip="Integrity Tree&#10;10,980 opted out of 97,749"></div><span class="val">11.2%</span><span class="tag">10,980 people</span></div></div>
+          <div class="row"><span class="lbl">Top Notch Property Mgmt Tier 2</span><div class="track"><div class="seg" style="width:77.4%;background:var(--cancelled)" data-tip="Top Notch Property Mgmt Tier 2&#10;5,762 opted out of 51,726"></div><span class="val">11.1%</span><span class="tag">5,762 people</span></div></div>
+          <div class="row"><span class="lbl">Mobile Land &amp; Tree</span><div class="track"><div class="seg" style="width:72.4%;background:var(--cancelled)" data-tip="Mobile Land &amp; Tree&#10;4,173 opted out of 40,010"></div><span class="val">10.4%</span><span class="tag">4,173 people</span></div></div>
+
+      </div></div>
+      <div class="legend"><span><i class="sw" style="background:var(--cancelled)"></i>Share of that subaccount&rsquo;s contacts who opted out</span></div>
+      <details><summary>Show all 30 subaccounts</summary><div class="tw"><table>
+        <tr><th>Subaccount</th><th class="n">Contacts</th><th class="n">Opted out</th><th class="n">Rate</th></tr>
+        <tr><td>Harley&#39;s Tree Service Tier 1</td><td class="n">80,775</td><td class="n">11,633</td><td class="n">14.40%</td></tr>
+        <tr><td>Summit Tree &amp; Land</td><td class="n">49,525</td><td class="n">6,506</td><td class="n">13.14%</td></tr>
+        <tr><td>D&amp;S Tier 1</td><td class="n">57,865</td><td class="n">7,076</td><td class="n">12.23%</td></tr>
+        <tr><td>Southern Stone Land Mgmt</td><td class="n">43,856</td><td class="n">5,310</td><td class="n">12.11%</td></tr>
+        <tr><td>Mustard Seed Tree - Alachua</td><td class="n">65,450</td><td class="n">7,752</td><td class="n">11.84%</td></tr>
+        <tr><td>Limitless</td><td class="n">25,456</td><td class="n">2,961</td><td class="n">11.63%</td></tr>
+        <tr><td>Walker&#39;s Tree Service</td><td class="n">77,940</td><td class="n">8,779</td><td class="n">11.26%</td></tr>
+        <tr><td>Integrity Tree</td><td class="n">97,749</td><td class="n">10,980</td><td class="n">11.23%</td></tr>
+        <tr><td>Top Notch Property Mgmt Tier 2</td><td class="n">51,726</td><td class="n">5,762</td><td class="n">11.14%</td></tr>
+        <tr><td>Mobile Land &amp; Tree</td><td class="n">40,010</td><td class="n">4,173</td><td class="n">10.43%</td></tr>
+        <tr><td>Ranger Tree Care Tier 1</td><td class="n">85,935</td><td class="n">8,928</td><td class="n">10.39%</td></tr>
+        <tr><td>Affordable Tree Care of CT</td><td class="n">77,235</td><td class="n">7,290</td><td class="n">9.44%</td></tr>
+        <tr><td>Above_The_Branch_Tier_1</td><td class="n">83,478</td><td class="n">7,877</td><td class="n">9.44%</td></tr>
+        <tr><td>Top Notch Property Mgmt Tier 1</td><td class="n">73,347</td><td class="n">6,377</td><td class="n">8.69%</td></tr>
+        <tr><td>XD Land Service</td><td class="n">83,498</td><td class="n">7,214</td><td class="n">8.64%</td></tr>
+        <tr><td>Tree Masters of Savannah</td><td class="n">73,734</td><td class="n">6,310</td><td class="n">8.56%</td></tr>
+        <tr><td>Cost-Low Tree Service</td><td class="n">127,546</td><td class="n">10,735</td><td class="n">8.42%</td></tr>
+        <tr><td>Life&#39;s Tree Doc</td><td class="n">125,948</td><td class="n">9,754</td><td class="n">7.74%</td></tr>
+        <tr><td>Wade&#39;s Tree Service</td><td class="n">102,523</td><td class="n">7,916</td><td class="n">7.72%</td></tr>
+        <tr><td>Reilly&#39;s Tree &amp; More</td><td class="n">37,943</td><td class="n">2,646</td><td class="n">6.97%</td></tr>
+        <tr><td>GoldPalm</td><td class="n">168,565</td><td class="n">11,388</td><td class="n">6.76%</td></tr>
+        <tr><td>Flagler Land Management</td><td class="n">87,133</td><td class="n">5,692</td><td class="n">6.53%</td></tr>
+        <tr><td>Harley&#39;s Tree Service Tier 2</td><td class="n">89,996</td><td class="n">5,543</td><td class="n">6.16%</td></tr>
+        <tr><td>Holbrook Tree Service</td><td class="n">39,877</td><td class="n">2,454</td><td class="n">6.15%</td></tr>
+        <tr><td>Mustard Seed Lawn &amp; Tree</td><td class="n">52,036</td><td class="n">3,136</td><td class="n">6.03%</td></tr>
+        <tr><td>Murphy Development Group Tier 1</td><td class="n">134,074</td><td class="n">7,244</td><td class="n">5.40%</td></tr>
+        <tr><td>Above The Branch Tier 2</td><td class="n">183,672</td><td class="n">9,531</td><td class="n">5.19%</td></tr>
+        <tr><td>AP Property Management</td><td class="n">240,715</td><td class="n">12,290</td><td class="n">5.11%</td></tr>
+        <tr><td>Nature Worx</td><td class="n">173,857</td><td class="n">6,861</td><td class="n">3.95%</td></tr>
+        <tr><td>Top Notch Property Mgmt Tier 3</td><td class="n">72,846</td><td class="n">1,986</td><td class="n">2.73%</td></tr>
+
+        <tr><td><b>FLEET</b></td><td class="n"><b>2,704,310</b></td><td class="n"><b>212,104</b></td><td class="n"><b>7.84%</b></td></tr>
+      </table></div></details>
+    </figure>
+
+    <div class="plain">
+      <span class="eyebrow">In plain terms</span>
+      <p>Roughly <strong>one person in thirteen</strong> that Your Algorithm has ever messaged has asked not to be messaged again. On Harley&rsquo;s Tier 1 it is one in seven.</p>
+      <p>Two reasons this matters beyond politeness. It is a <strong>consumable resource</strong> &mdash; every opt-out permanently shrinks a territory that was sold as a territory. And it is the <strong>compliance surface</strong>: 212,104 people is the population that must never be messaged again, and the suppression store meant to guarantee that is recorded as built but empty.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Three things nobody is looking at</h2></div>
+
+    <figure>
+      <figcaption><span class="t">Found while reading the records</span><span class="s">Each one is checkable today</span></figcaption>
+      <div class="tw"><table>
+        <tr><th>What</th><th>Evidence</th><th>Why it matters</th></tr>
+        <tr><td><b>Attendance is not recorded anywhere</b></td><td>1,884 records: 1,318 confirmed, 566 cancelled. Zero <span class="mono">showed</span>. Zero <span class="mono">noshow</span>.</td><td>The platform supports both fields and the whole company uses neither. The ~95% show rate cannot be confirmed or refuted from any record.</td></tr>
+        <tr><td><b>365 appointments have no address</b></td><td>19% of everything booked in August. Ranger Tree Care 33, Life&rsquo;s Tree Doc 30, Harley&rsquo;s Tier 1 27.</td><td>You cannot send a truck to a job with no address. It is also the qualification evidence the $500 minimum rests on.</td></tr>
+        <tr><td><b>One tier is running on nothing</b></td><td>Mustard Seed Tree &ndash; Alachua: 65,450 contacts, 7,752 opted out (11.84%), <b>0 appointments in August</b>.</td><td>A list is being consumed and a territory burned with no output at all. Either it is paused and should stop sending, or it is broken.</td></tr>
+      </table></div>
+    </figure>
+
+    <div class="plain">
+      <span class="eyebrow">And one bright spot worth copying</span>
+      <p><strong>Life&rsquo;s Tree Doc booked 76 appointments in August and lost one.</strong> A 1% cancellation rate against a fleet average of 30%, using the same platform, the same AI and the same script.</p>
+      <p>That is either the single most valuable thing in this report or a recording gap, and it takes one conversation with whoever runs that account to find out which. If it is real, it is the playbook.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>What to do</h2></div>
+    <p class="sec-sub">Ordered. The first three cost nothing and need no approval.</p>
+
+    <div class="act">
+      <div class="card now">
+        <div class="card-top"><span class="card-n">01</span><h3>Ask Life&rsquo;s Tree Doc what they do differently</h3><span class="pill free">no approval needed</span></div>
+        <p>One tier keeps 99% of its bookings while the fleet keeps 70%. Before changing anything anywhere else, find out whether that is a real practice worth copying to 28 other tiers, or a gap in how cancellations get recorded there. Either answer is worth having, and it is one conversation.</p>
+        <div class="facts">
+          <div class="fact"><b>Who</b><span>Justin Hartmann</span></div><div class="fact"><b>By when</b><span>This week</span></div>
+          <div class="fact"><b>Effort</b><span>One call</span></div><div class="fact"><b>Upside</b><span>If real, it is the fix for the other 28</span></div>
+        </div>
+      </div>
+
+      <div class="card now">
+        <div class="card-top"><span class="card-n">02</span><h3>Report created and cancelled as two numbers</h3><span class="pill free">no approval needed</span></div>
+        <p>Every tier reports one net figure, so a 30% fleet cancellation rate is mathematically invisible in the operating record. Two columns and it shows up every morning instead of once, by accident, in a report like this.</p>
+        <div class="facts">
+          <div class="fact"><b>Who</b><span>Joseph Vought</span></div><div class="fact"><b>By when</b><span>This week</span></div>
+          <div class="fact"><b>Watch out</b><span>company.yaml <span class="mono">visible_count_rule</span> specifies the single net number &mdash; record the change as a deliberate policy edit</span></div>
+        </div>
+      </div>
+
+      <div class="card now">
+        <div class="card-top"><span class="card-n">03</span><h3>Read ten cancellations on each of the three worst tiers</h3><span class="pill free">no approval needed</span></div>
+        <p>Top Notch Tier 3 (63%), Limitless (57%) and Top Notch Tier 2 (50%). Every cancellation carries a contact, a timestamp and the full conversation. On 19 of 29 tiers the typical one dies within 12 hours &mdash; reading thirty of them turns the largest number in this report into a named defect.</p>
+        <div class="facts">
+          <div class="fact"><b>Who</b><span>Justin Hartmann</span></div><div class="fact"><b>By when</b><span>This week</span></div>
+          <div class="fact"><b>Effort</b><span>~1 hour</span></div><div class="fact"><b>Risk</b><span>None &mdash; reading only</span></div>
+        </div>
+      </div>
+
+      <div class="card next">
+        <div class="card-top"><span class="card-n">04</span><h3>Settle Mustard Seed &ndash; Alachua</h3><span class="pill gate">territory check</span></div>
+        <p>65,450 contacts, 7,752 already opted out, zero appointments booked in August. Either it is deliberately paused &mdash; in which case stop the sending &mdash; or it is broken and nobody noticed. Both need a decision this week.</p>
+        <div class="facts">
+          <div class="fact"><b>Who</b><span>Joseph Vought</span></div><div class="fact"><b>By when</b><span>Before Sunday&rsquo;s launch</span></div>
+          <div class="fact"><b>Gate</b><span>INV-5 if the territory is reassigned</span></div>
+        </div>
+      </div>
+
+      <div class="card next">
+        <div class="card-top"><span class="card-n">05</span><h3>Require an address before an appointment can exist</h3><span class="pill free">no approval needed</span></div>
+        <p>365 of 1,884 August appointments have none. It is the field the crew needs and the qualification evidence the $500 minimum rests on.</p>
+        <div class="facts">
+          <div class="fact"><b>Who</b><span>Erlyn Mendoza</span></div><div class="fact"><b>By when</b><span>Next two weeks</span></div>
+          <div class="fact"><b>Do not</b><span>Switch off Ethan &mdash; it is the <em>best</em> booker at 26% vs 40%</span></div>
+        </div>
+      </div>
+
+      <div class="card next">
+        <div class="card-top"><span class="card-n">06</span><h3>Confirm attendance is meant to stay unmeasured</h3><span class="pill free">no approval needed</span></div>
+        <p>Zero of 1,884 records use <span class="mono">showed</span> or <span class="mono">noshow</span>. That is a deliberate choice already on record &mdash; attendance was struck from the weekly review on 22 Aug because it changes no decision. Fine. But it means the ~95% show rate stays a spoken figure with no record behind it, and this report can neither support nor challenge it. Confirm that is still the intent.</p>
+        <div class="facts">
+          <div class="fact"><b>Who</b><span>Joseph Vought &amp; Dustin Taylor</span></div><div class="fact"><b>By when</b><span>Next review</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="limits">
+    <span class="eyebrow">What this does not show</span>
+    <ul>
+      <li><b>August only</b> &mdash; appointments created 1&ndash;29 Aug 2026, plus a week-of-23-Aug cut for the tracker comparison. Earlier months were not read.</li>
+      <li><b>Cancelled is not no-show.</b> Policy counts a no-show as delivered. A cancellation is a different event, and most land before the appointment time. Whether they were billable is a definitional question for an owner, not something this report decides.</li>
+      <li><b>Tracker figures</b> come from the Weekly Lead &amp; Appointment Tracker, tab Aug 23 2026, and cover 29 of the 30 subaccounts. Mustard Seed &ndash; Alachua has no tracker row.</li>
+      <li><b>Opt-out counts are exact</b>, queried per subaccount rather than sampled. An earlier sampled figure in the Tier 1 report understated this &mdash; the exact rate for that account is 9.44%, not 5.21%. Use these numbers.</li>
+      <li><b>Delivery and reply rates are still missing.</b> No record holds attendance; message delivery and carrier failure remain unmeasured anywhere in the company, and are still the largest gap in the operating picture.</li>
+      <li><b>Nothing was written.</b> Appointment, conversation and contact reads only, across all 30 subaccounts. No appointment, contact, conversation, tag or message was created, changed or deleted, and no message was sent.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p><b>Source:</b> Your Algo, all 30 configured subaccounts, read 28 Aug 2026 through read-only calls. Appointment records for 1&ndash;29 August; contact and opt-out totals queried exactly per subaccount. Tracker figures from the Weekly Lead &amp; Appointment Tracker. No figure estimated or carried from memory (INV-1).</p>
+  </footer>
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var tip = document.getElementById('tip');
+  var marks = document.querySelectorAll('[data-tip]');
+  function show(e, el){
+    tip.textContent = '';
+    el.getAttribute('data-tip').split('\n').forEach(function(line, i){
+      if (i) tip.appendChild(document.createElement('br'));
+      tip.appendChild(document.createTextNode(line));
+    });
+    tip.classList.add('on');
+    move(e, el);
+  }
+  function move(e, el){
+    var x, y;
+    if (e && e.clientX != null && e.type !== 'focus'){ x = e.clientX + 14; y = e.clientY + 16; }
+    else { var r = el.getBoundingClientRect(); x = r.left + r.width / 2; y = r.bottom + 10; }
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    if (x + w > window.innerWidth - 8) x = window.innerWidth - w - 8;
+    if (y + h > window.innerHeight - 8) y = y - h - 28;
+    tip.style.left = Math.max(8, x) + 'px';
+    tip.style.top  = Math.max(8, y) + 'px';
+  }
+  function hide(){ tip.classList.remove('on'); }
+  marks.forEach(function(el){
+    el.setAttribute('tabindex','0');
+    el.addEventListener('mouseenter', function(e){ show(e, el); });
+    el.addEventListener('mousemove',  function(e){ move(e, el); });
+    el.addEventListener('mouseleave', hide);
+    el.addEventListener('focus', function(e){ show(e, el); });
+    el.addEventListener('blur', hide);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') hide(); });
+})();
+</script>
+</body>
+</html>
