@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="Internal territory yield analysis. Your Algorithm LLC.">
+<title>The Savannah Pattern</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B3%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* host reset, matching the artifact runtime this page was authored against */
+:root{color-scheme:light}
+body{margin:0;font:14px system-ui,sans-serif;background:#f4f6f5}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4f6f5; --surface:#ffffff; --surface-2:#eef1ef; --sunk:#e7ebe9;
+  --ink:#0f1618; --ink-2:#4a575a; --ink-3:#7a8688; --rule:#dde3e1; --rule-2:#c9d2cf;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --good:#0ca30c; --warn:#fab219; --crit:#d03b3b;
+  --quiet:#b4c0bd;
+  --shadow:0 1px 2px rgba(15,22,24,.06),0 8px 24px -16px rgba(15,22,24,.18);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0e1213; --surface:#161c1d; --surface-2:#1c2324; --sunk:#121818;
+    --ink:#eef3f1; --ink-2:#a4b1af; --ink-3:#778482; --rule:#232c2c; --rule-2:#2f3a39;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+    --quiet:#3b4746;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0e1213; --surface:#161c1d; --surface-2:#1c2324; --sunk:#121818;
+  --ink:#eef3f1; --ink-2:#a4b1af; --ink-3:#778482; --rule:#232c2c; --rule-2:#2f3a39;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --quiet:#3b4746;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 24px 96px}
+h1,h2,h3,.ui{font-family:"Libre Franklin",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace;font-variant-numeric:tabular-nums}
+h1{font-size:clamp(34px,5.4vw,54px);line-height:1.04;letter-spacing:-.022em;font-weight:800;margin:0 0 18px;text-wrap:balance}
+h2{font-size:clamp(23px,3vw,30px);line-height:1.15;letter-spacing:-.015em;font-weight:700;margin:0 0 6px;text-wrap:balance}
+h3{font-size:16px;font-weight:700;letter-spacing:-.006em;margin:0 0 8px}
+p{margin:0 0 16px;max-width:68ch}
+a{color:var(--s1)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+header.top{border-bottom:1px solid var(--rule);padding:64px 0 40px;margin-bottom:8px}
+.lede{font-size:20px;line-height:1.5;color:var(--ink-2);max-width:64ch}
+.lede strong{color:var(--ink);font-weight:600}
+.provenance{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:5px 9px}
+section{padding-top:56px;scroll-margin-top:20px}
+section+section{border-top:1px solid var(--rule);margin-top:56px}
+.sub{color:var(--ink-2);font-size:16px;max-width:68ch;margin:0 0 26px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:30px 0 10px}
+.tile{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:16px 18px 15px;box-shadow:var(--shadow)}
+.tile .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+.tile .v{font-family:"Libre Franklin",sans-serif;font-variant-numeric:tabular-nums;font-size:33px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.tile .n{font-size:13.5px;color:var(--ink-2);line-height:1.4;margin-top:8px;font-family:"Libre Franklin",sans-serif}
+.tile.hi{border-left:3px solid var(--s2)}
+.tile .v.up{color:var(--s2)}
+.verdicts{display:grid;gap:12px;margin:26px 0 0}
+.vd{display:grid;grid-template-columns:26px 1fr;gap:14px;background:var(--surface);border:1px solid var(--rule);
+  border-radius:3px;padding:16px 18px;box-shadow:var(--shadow)}
+.vd .mark{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;
+  font-family:"Libre Franklin",sans-serif;color:#fff;margin-top:2px}
+.vd.yes .mark{background:var(--good)}
+.vd.part .mark{background:var(--warn);color:#2a1c00}
+.vd.no .mark{background:var(--crit)}
+.vd h3{margin-bottom:4px;font-size:15.5px}
+.vd p{margin:0;font-size:15px;color:var(--ink-2);max-width:72ch}
+figure{margin:0 0 8px;background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:20px 20px 16px;box-shadow:var(--shadow)}
+figcaption{font-family:"Libre Franklin",sans-serif;font-size:13px;color:var(--ink-2);margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--rule);line-height:1.45}
+.chart-head{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+.chart-title{font-family:"Libre Franklin",sans-serif;font-size:15px;font-weight:700;letter-spacing:-.005em}
+.legend{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.lg{display:inline-flex;align-items:center;gap:6px;font-family:"Libre Franklin",sans-serif;font-size:12.5px;color:var(--ink-2)}
+.sw{width:11px;height:11px;border-radius:2px;flex:none}
+.sw.line{height:3px;width:16px;border-radius:2px}
+.scroller{overflow-x:auto}
+svg{display:block;max-width:100%}
+svg text{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+svg text.lab{font-family:"Libre Franklin",sans-serif}
+.controls{display:flex;flex-wrap:wrap;gap:6px}
+button.seg{font-family:"Libre Franklin",sans-serif;font-size:12.5px;font-weight:500;color:var(--ink-2);
+  background:var(--surface-2);border:1px solid var(--rule);border-radius:2px;padding:6px 11px;cursor:pointer}
+button.seg:hover{color:var(--ink);border-color:var(--rule-2)}
+button.seg[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button.seg:focus-visible,th.sortable:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.tip{position:fixed;z-index:50;pointer-events:none;opacity:0;transition:opacity .1s;
+  background:var(--surface);border:1px solid var(--rule-2);border-radius:3px;box-shadow:var(--shadow);
+  padding:9px 11px;font-family:"Libre Franklin",sans-serif;font-size:12.5px;line-height:1.45;max-width:280px}
+.tip[data-on="1"]{opacity:1}
+.tip .t{font-weight:700;margin-bottom:5px;font-size:13px;color:var(--ink)}
+.tip .r{display:flex;justify-content:space-between;gap:18px;color:var(--ink-2)}
+.tip .r b{color:var(--ink);font-weight:600;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.tbl{width:100%;border-collapse:collapse;font-family:"Libre Franklin",sans-serif;font-size:13.5px}
+.tbl th{text-align:right;font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);padding:0 8px 9px;border-bottom:1px solid var(--rule-2);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left;padding-left:0}
+.tbl th.sortable{cursor:pointer;user-select:none}
+.tbl th.sortable:hover{color:var(--ink)}
+.tbl td{text-align:right;padding:9px 8px;border-bottom:1px solid var(--rule);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl tbody tr:hover td{background:var(--surface-2)}
+.tbl td.name{font-weight:600;white-space:normal;min-width:170px}
+.tbl tr.sav td{background:color-mix(in srgb,var(--s2) 10%,transparent)}
+.tbl tr.sav td.name::after{content:"benchmark";font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--s2);margin-left:8px}
+.note{background:var(--surface-2);border-left:3px solid var(--rule-2);border-radius:0 3px 3px 0;
+  padding:14px 18px;margin:22px 0;font-size:15.5px;color:var(--ink-2)}
+.note strong{color:var(--ink);font-weight:600}
+.note.flag{border-left-color:var(--warn)}
+.limits{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:11px}
+.limits li{display:grid;grid-template-columns:88px 1fr;gap:14px;font-size:15.5px;color:var(--ink-2);max-width:80ch}
+.limits li span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);padding-top:6px}
+.src{font-size:13.5px;color:var(--ink-3);line-height:1.7}
+.src a{color:var(--ink-2)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:8px 28px}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Territory yield analysis &middot; August 2026</p>
+  <h1>The Savannah Pattern</h1>
+  <p class="lede">Tree Masters of Savannah books more appointments per person texted than almost any territory in the fleet, and it does it every week no matter how many times the area is re-run. This pulls the live appointment records for all 30 subaccounts, tests whether that reputation survives contact with the data, works out <strong>what Chatham County actually has</strong> that the weaker territories don't &mdash; and screens every county in the United States for the same profile.</p>
+  <div class="provenance">
+    <span class="tag">30 subaccounts read live</span>
+    <span class="tag">1,889 appointments</span>
+    <span class="tag">2,704,313 contacts</span>
+    <span class="tag">3,144 US counties screened</span>
+    <span class="tag">read-only &middot; nothing written</span>
+  </div>
+</header>
+
+<section id="verdict">
+  <p class="eyebrow">The claim, tested</p>
+  <h2>Half right &mdash; and the half that's wrong is worth more money</h2>
+  <p class="sub">The premise was that Savannah performs, week after week, however often we re-run the area. Three separate claims sit inside that. The records answer each one differently.</p>
+
+  <div class="verdicts">
+    <div class="vd yes"><div class="mark">&#10003;</div><div>
+      <h3>It books at the top of the fleet</h3>
+      <p>104 appointments in August, second-highest of 30 subaccounts &mdash; from the second-<em>smallest</em> contact list of the fourteen subaccounts that booked 70 or more. Per 10,000 people texted it books <b class="mono">14.1</b>, against a fleet median of <b class="mono">8.1</b>. That is 1.7&times; the typical territory.</p>
+    </div></div>
+    <div class="vd yes"><div class="mark">&#10003;</div><div>
+      <h3>It really does turn up every week</h3>
+      <p>14, 41, 22, 27 booked across the four August weeks. No dead week, and only seven subaccounts held a higher floor. Eight had at least one week with nothing at all.</p>
+    </div></div>
+    <div class="vd part"><div class="mark">!</div><div>
+      <h3>But it loses a third of what it books &mdash; exactly like everyone else</h3>
+      <p>34 of 104 cancelled, a <b class="mono">32.7%</b> cancellation rate against a fleet median of 32.9%. Savannah is elite at <em>getting</em> the appointment and completely average at <em>keeping</em> it. Fix that one number and it is the best territory in the company by a distance.</p>
+    </div></div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile hi"><div class="k">Booked / 10k contacts</div><div class="v up">14.1</div><div class="n">Fleet median 8.1 &middot; rank 3 of 30</div></div>
+    <div class="tile hi"><div class="k">Survived / 10k contacts</div><div class="v up">9.5</div><div class="n">Fleet median 5.6 &middot; rank 4 of 30</div></div>
+    <div class="tile"><div class="k">Cancellation rate</div><div class="v">32.7%</div><div class="n">Fleet median 32.9% &middot; rank 14 of 29</div></div>
+    <div class="tile"><div class="k">Opt-out rate</div><div class="v">8.6%</div><div class="n">Fleet median 8.6% &middot; the area is not burnt out</div></div>
+  </div>
+</section>
+
+<section id="weekly">
+  <p class="eyebrow">Consistency</p>
+  <h2>Every week, from a list that keeps getting re-run</h2>
+  <p class="sub">73,735 contacts across ten Chatham County ZIP codes &mdash; a small territory worked repeatedly. If re-running an area exhausted it, the weekly line would decay. It doesn't.</p>
+
+  <figure>
+    <div class="chart-head">
+      <div class="chart-title">Appointments booked per week &mdash; Savannah against the fleet</div>
+      <div class="legend">
+        <span class="lg"><span class="sw" style="background:var(--s2)"></span>Tree Masters of Savannah</span>
+        <span class="lg"><span class="sw" style="background:var(--s1);opacity:.32"></span>Every other subaccount</span>
+        <span class="lg"><span class="sw line" style="background:var(--ink-3)"></span>Fleet median</span>
+      </div>
+    </div>
+    <div class="scroller"><svg id="c-weekly" role="img" aria-label="Weekly appointments booked per subaccount across four August weeks, with Savannah highlighted"></svg></div>
+    <figcaption>Every subaccount's four weeks, booked on the date the appointment was created. Only seven subaccounts held a higher floor week than Savannah's 14.</figcaption>
+  </figure>
+</section>
+
+<section id="rank">
+  <p class="eyebrow">Where it ranks</p>
+  <h2>Yield, not volume, is the honest comparison</h2>
+  <p class="sub">Raw appointment counts reward whoever holds the biggest list. Dividing by contacts asks the real question: how much does this territory give back per person we text? Switch the measure to see how differently the fleet sorts.</p>
+
+  <figure>
+    <div class="chart-head">
+      <div class="chart-title" id="rank-title">Surviving appointments per 10,000 contacts</div>
+      <div class="controls" role="group" aria-label="Choose measure">
+        <button class="seg" data-m="sv10k" aria-pressed="true">Survived / 10k</button>
+        <button class="seg" data-m="bk10k" aria-pressed="false">Booked / 10k</button>
+        <button class="seg" data-m="booked" aria-pressed="false">Booked (raw)</button>
+        <button class="seg" data-m="cx" aria-pressed="false">Cancellation %</button>
+      </div>
+    </div>
+    <div class="scroller"><svg id="c-rank" role="img" aria-label="Subaccounts ranked by the selected measure"></svg></div>
+    <figcaption>Bars are the fleet's 30 live subaccounts. The dashed line is the fleet median. On raw volume Savannah looks second; on yield it is fourth, and on cancellation it is dead average &mdash; three different stories from one month of the same records.</figcaption>
+  </figure>
+
+  <div class="note"><strong>The AI is the better booker here too.</strong> 81% of Savannah's appointments (84 of 104) came from the conversational assistant, and those cancelled at 33%; the 20 booked by other paths cancelled at 30%. Fleet-wide the assistant booked 1,374 with a 26% cancellation rate against 40% for every other path. Switching it off would make the numbers worse, not better.</div>
+</section>
+
+<section id="area">
+  <p class="eyebrow">What the area has</p>
+  <h2>Chatham County is a storm-struck oak forest with houses in it</h2>
+  <p class="sub">Six county-level measures, each indexed against the fleet median territory. Savannah is not special because it is rich &mdash; homes there are worth <em>less</em> than the fleet median. It is special because trees keep falling on things, and there are comparatively few companies to call.</p>
+
+  <figure>
+    <div class="chart-head">
+      <div class="chart-title">Chatham County vs. the median territory the fleet works</div>
+      <div class="legend">
+        <span class="lg"><span class="sw" style="background:var(--s2)"></span>Savannah, as a multiple of the fleet median</span>
+        <span class="lg"><span class="sw line" style="background:var(--ink-3)"></span>Fleet median = 1.0&times;</span>
+      </div>
+    </div>
+    <div class="scroller"><svg id="c-profile" role="img" aria-label="Chatham County indexed against the fleet median territory across six measures"></svg></div>
+    <figcaption>Storm and tree-fall counts are NOAA Storm Events, 2015&ndash;2025, aggregated to county. Home value is Zillow ZHVI, July 2026. Tree firms are landscaping-services establishments from County Business Patterns 2023.</figcaption>
+  </figure>
+
+  <div class="cols">
+    <div>
+      <h3>The canopy is old, big, and failing</h3>
+      <p style="font-size:15.5px;color:var(--ink-2)">Chatham County is about 36% tree canopy, down from 50% in 1992, dominated by live oak. Savannah replanted with live oaks around 120 years ago after the 1893 hurricane, and roughly 15,000 of them are now reaching the end of their lifespan &mdash; the city is already replacing them as they fail. An aging population of very large trees standing over houses is a standing order book for removals and structural pruning, independent of any storm.</p>
+    </div>
+    <div>
+      <h3>And the weather keeps knocking them over</h3>
+      <p style="font-size:15.5px;color:var(--ink-2)">347 damaging-wind events in eleven years, including 47 tropical events &mdash; 7.6&times; the fleet median territory. Matthew, Irma, Dorian, Ian, Idalia, Debby and Helene all reached Chatham. In Helene alone the county reported roughly 240 blocked road sections, 177 downed power lines, and 66 felled trees inside city limits.</p>
+    </div>
+  </div>
+</section>
+
+<section id="drivers">
+  <p class="eyebrow">What actually predicts a good territory</p>
+  <h2>The fleet is a 29-market natural experiment. It disagrees with the obvious answer.</h2>
+  <p class="sub">Same script, same assistant, same offer, 29 different American markets. Correlating each territory's yield against its county's characteristics separates what matters from what only sounds like it should.</p>
+
+  <figure>
+    <div class="chart-head">
+      <div class="chart-title">Correlation with surviving appointments per 10,000 contacts</div>
+      <div class="legend">
+        <span class="lg"><span class="sw" style="background:var(--s1)"></span>Helps yield</span>
+        <span class="lg"><span class="sw" style="background:var(--s2)"></span>Hurts yield</span>
+      </div>
+    </div>
+    <div class="scroller"><svg id="c-corr" role="img" aria-label="Correlation of county characteristics with territory yield"></svg></div>
+    <figcaption>Pearson r across 28 territories with a resolvable county profile. Bars show r; the hollow marker is Spearman rank correlation, which is less sensitive to outliers. Anything inside the shaded band is too weak to act on. Opt-out rate is a symptom, not a lever &mdash; a territory that is being texted hard produces both more bookings and more STOPs, so the two rise together.</figcaption>
+  </figure>
+
+  <div class="note flag"><strong>Home value works backwards.</strong> The single strongest relationship in the fleet is that cheaper markets book better (r&nbsp;=&nbsp;&minus;0.62), not richer ones. Be careful with it: expensive markets in this fleet are also the big saturated metros with the most competing tree companies, so price, market size and competition are tangled together and one month of data cannot pull them apart. It is a reason to stop assuming affluent suburbs are the prize &mdash; not a reason to go chase the poorest counties in America, where a $500 minimum job stops being realistic.</div>
+
+  <figure>
+    <div class="chart-head">
+      <div class="chart-title">Trees falling on property vs. territory yield</div>
+      <div class="legend">
+        <span class="lg"><span class="sw" style="background:var(--s2)"></span>Savannah</span>
+        <span class="lg"><span class="sw" style="background:var(--s1)"></span>Other territories</span>
+        <span class="lg" style="color:var(--ink-3)">bubble size = contact list</span>
+      </div>
+    </div>
+    <div class="scroller"><svg id="c-scatter" role="img" aria-label="Scatter plot of tree-fall events hitting property against surviving appointments per 10,000 contacts"></svg></div>
+    <figcaption>Horizontal axis counts NOAA storm reports whose narrative describes a tree or limb coming down onto a house, roof, vehicle, driveway or power line, per 10,000 residents, 2015&ndash;2025. It is the closest available stand-in for "big trees standing over people's property", and it is the strongest positive predictor found.</figcaption>
+  </figure>
+</section>
+
+<section id="lookalikes">
+  <p class="eyebrow">Where else looks like this</p>
+  <h2>Thirteen unassigned counties with Savannah's shape</h2>
+  <p class="sub">Every US county was scored on distance from Chatham County across seven measures, then filtered to what the fleet has actually proven it can work: home values between $200k and $460k, population 80k&ndash;650k, under 4.5 tree firms per 10,000 residents, and real tree-on-property damage history. Counties already assigned to a contractor were removed.</p>
+
+  <figure>
+    <div class="chart-head">
+      <div class="chart-title">Candidate counties, closest match first</div>
+      <div class="controls" role="group" aria-label="Sort the table">
+        <span class="lg" style="color:var(--ink-3)">click a column to sort</span>
+      </div>
+    </div>
+    <div class="scroller"><table class="tbl" id="t-short">
+      <thead><tr>
+        <th class="sortable" data-k="name">County</th>
+        <th class="sortable" data-k="sim">Match</th>
+        <th class="sortable" data-k="pop">Population</th>
+        <th class="sortable" data-k="zhvi">Home value</th>
+        <th class="sortable" data-k="th">Tree hits /10k</th>
+        <th class="sortable" data-k="trop">Tropical</th>
+        <th class="sortable" data-k="wind">Wind /yr</th>
+        <th class="sortable" data-k="comp">Firms /10k</th>
+        <th class="sortable" data-k="firms">Firms</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <figcaption>Match is a weighted standardised distance from Chatham County &mdash; lower is closer. The Savannah row is shown for reference and is not a candidate.</figcaption>
+  </figure>
+
+  <div class="cols" style="margin-top:26px">
+    <div>
+      <h3>The three to look at first</h3>
+      <p style="font-size:15.5px;color:var(--ink-2)"><strong style="color:var(--ink)">Dorchester and Berkeley Counties, SC</strong> &mdash; the Summerville and Goose Creek side of Charleston. Same coastal live-oak belt, same hurricane corridor (Idalia 2023, Debby 2024), home values within $40k of Savannah's, and 2.3&ndash;3.1 tree firms per 10,000 residents. Charleston County itself fails the screen on price, at $618k. <strong style="color:var(--ink)">Leon County, FL</strong> &mdash; Tallahassee runs about 55% urban tree canopy, close to the highest of any city its size in the country, on top of 47 damaging-wind events a year and the 2024 tornadoes.</p>
+    </div>
+    <div>
+      <h3>One that scores well and shouldn't be trusted yet</h3>
+      <p style="font-size:15.5px;color:var(--ink-2)"><strong style="color:var(--ink)">Bay County, FL</strong> ranks second, but Hurricane Michael destroyed roughly 80% of its canopy in 2018. The storm history that lifts its score is the same event that removed the mature trees the work depends on; replanting since 2025 is still saplings. The screen measures where trees <em>have</em> fallen, which is not always where trees still stand &mdash; verify canopy on the ground before buying that territory.</p>
+    </div>
+  </div>
+</section>
+
+<section id="territory">
+  <p class="eyebrow">Two things found on the way</p>
+  <h2>Worth someone's attention before the next launch</h2>
+  <div class="verdicts">
+    <div class="vd part"><div class="mark">!</div><div>
+      <h3>Six Savannah appointments landed outside the signed ZIP list</h3>
+      <p>The signed marketing list holds ten ZIPs. August appointments also appeared in 31415, 31408, 31407, 31303 and 31324, while 31401 and 31302 produced none. Separately, <span class="mono">territory-map.csv</span> records 31401, 31404, 31407, 31408 and 31415 against a client labelled "Savannah", which may or may not be this same contractor. That is a records question under the territory-integrity rule, not a proven breach &mdash; but it needs resolving before a neighbouring tier is sold.</p>
+    </div></div>
+    <div class="vd part"><div class="mark">!</div><div>
+      <h3>21% of Savannah's appointments carry no address</h3>
+      <p>22 of 104. Fleet-wide the figure is 366 of 1,889. An appointment with no address cannot be routed, cannot be checked against territory, and cannot be counted in any geographic analysis &mdash; including this one.</p>
+    </div></div>
+  </div>
+</section>
+
+<section id="limits">
+  <p class="eyebrow">What this cannot tell you</p>
+  <h2>The honest edges</h2>
+  <ul class="limits">
+    <li><span>One month</span><div>The calendar API returns appointment history from 3 August 2026 onward for these locations. "Week after week" is tested over four weeks, not a year. Everything here should be re-run in a month, when there is twice the data.</div></li>
+    <li><span>n = 29</span><div>Twenty-nine territories is a small sample for correlation. The relationships shown are strong enough to steer a decision about where to look next; none is strong enough to be called a cause.</div></li>
+    <li><span>Tangled</span><div>Home value, market size and competitor density move together across these 29 markets. The data cannot separate their individual contributions.</div></li>
+    <li><span>Proxy</span><div>There is no national county-level tree canopy dataset in the public feeds used here. Storm narratives describing fallen trees are a stand-in, and they under-count places with big trees and calm weather while over-counting places whose trees have already been destroyed.</div></li>
+    <li><span>Not measured</span><div>Attendance. Across all 1,889 August appointments the only statuses in use are confirmed and cancelled &mdash; zero showed, zero no-show, on any subaccount. Nothing here says whether a surviving appointment was actually kept.</div></li>
+    <li><span>Not measured</span><div>Messages sent. Yield is per contact in the database, not per text delivered. Two territories with the same contact count may have been messaged at very different intensities.</div></li>
+  </ul>
+</section>
+
+<section id="sources">
+  <p class="eyebrow">Sources</p>
+  <h2>Where every number came from</h2>
+  <p class="src">
+    <strong style="color:var(--ink-2)">Appointments, contacts and opt-outs</strong> &mdash; read live from all 30 production subaccounts on 29 August 2026 (calendar events and contact search, read-only).<br>
+    <strong style="color:var(--ink-2)">Storm and tree-fall events</strong> &mdash; <a href="https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/">NOAA NCEI Storm Events Database</a>, 2015&ndash;2025, zone events expanded to counties via the <a href="https://www.weather.gov/gis/ZoneCounty">NWS zone-county correlation file</a>.<br>
+    <strong style="color:var(--ink-2)">Home values</strong> &mdash; <a href="https://www.zillow.com/research/data/">Zillow Home Value Index</a>, county level, July 2026.<br>
+    <strong style="color:var(--ink-2)">Population</strong> &mdash; <a href="https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/">US Census Bureau county population estimates</a>, 2024.<br>
+    <strong style="color:var(--ink-2)">Tree and landscaping firms</strong> &mdash; <a href="https://www.census.gov/programs-surveys/cbp.html">County Business Patterns 2023</a>, NAICS 561730.<br>
+    <strong style="color:var(--ink-2)">Savannah canopy and live oaks</strong> &mdash; <a href="https://savannahtree.org/wp-content/uploads/2023/11/Chatham-County-Urban-Tree-Canopy-Assessment.pdf">Chatham County Urban Tree Canopy Assessment</a>; <a href="https://thecurrentga.org/2024/12/17/research-coastal-georgia-is-losing-tree-canopy/">The Current</a>; <a href="https://gardenandgun.com/articles/savannahs-iconic-oaks-are-dying-heres-why-and-what-happens-next/">Garden &amp; Gun</a>; <a href="https://www.wsav.com/news/local-news/many-of-savannahs-iconic-live-oaks-may-be-reaching-the-end-of-their-lifespan/">WSAV</a>.<br>
+    <strong style="color:var(--ink-2)">Helene impact</strong> &mdash; <a href="https://www.chathamcountyga.gov/OurCounty/newsArticle/167e19ca-9d4b-45e3-87f4-a44521a9a116">Chatham County</a>; <a href="https://www.wtoc.com/2024/09/27/recovery-efforts-continue-chatham-county-after-helene-ripped-through-southeast-georgia/">WTOC</a>.<br>
+    <strong style="color:var(--ink-2)">Tallahassee canopy</strong> &mdash; <a href="https://www.talgov.com/Uploads/Public/Documents/place/ufmp2024.pdf">Tallahassee Urban Forest Master Plan</a>. <strong style="color:var(--ink-2)">Panama City canopy loss</strong> &mdash; <a href="https://www.mypanhandle.com/news/local-news/bay-county/panama-city/panama-city-accepts-grants-to-help-re-tree-the-city-after-hurricane-michael/">MyPanhandle</a>.
+  </p>
+</section>
+
+</div>
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script id="data" type="application/json">{"tiers":[{"key":"walkers-tree-service","name":"Walker's Tree Service","county":"Lake County, Florida","booked":116,"surv":96,"canc":20,"cx":17.2,"contacts":77940,"optout":11.27,"bk10k":14.88,"sv10k":12.32,"bw":[27,30,24,35],"sw":[26,25,20,25],"ai":96,"ai_c":15,"oth":20,"oth_c":5,"noaddr":19,"medlag":7.1,"zhvi":370259,"pop":528535,"th":0.94,"tf":1.73,"trop":10.4,"wind":8.3,"comp":4.67,"modeled":true},{"key":"southern-stone-land-mgmt","name":"Southern Stone Land Mgmt","county":"Ware County, Georgia","booked":66,"surv":50,"canc":16,"cx":24.2,"contacts":43856,"optout":12.12,"bk10k":15.05,"sv10k":11.4,"bw":[13,22,15,16],"sw":[11,18,8,13],"ai":55,"ai_c":14,"oth":11,"oth_c":2,"noaddr":9,"medlag":44.7,"zhvi":193309,"pop":70493,"th":8.2,"tf":16.09,"trop":6.3,"wind":11.1,"comp":2.22,"modeled":true},{"key":"mobile-land-and-tree","name":"Mobile Land & Tree","county":"Mobile County, Alabama","booked":50,"surv":40,"canc":10,"cx":20.0,"contacts":40012,"optout":10.44,"bk10k":12.5,"sv10k":10.0,"bw":[11,17,15,7],"sw":[8,12,15,5],"ai":43,"ai_c":8,"oth":7,"oth_c":2,"noaddr":13,"medlag":6.6,"zhvi":235204,"pop":420324,"th":2.27,"tf":3.88,"trop":15.0,"wind":18.6,"comp":2.26,"modeled":true},{"key":"tree-masters-of-savannah","name":"Tree Masters of Savannah","county":"Chatham County, Georgia","booked":104,"surv":70,"canc":34,"cx":32.7,"contacts":73735,"optout":8.56,"bk10k":14.1,"sv10k":9.49,"bw":[14,41,22,27],"sw":[10,30,12,18],"ai":84,"ai_c":28,"oth":20,"oth_c":6,"noaddr":22,"medlag":10.5,"zhvi":337764,"pop":308153,"th":5.69,"tf":9.35,"trop":45.8,"wind":31.0,"comp":3.05,"modeled":true},{"key":"ranger-tree-care-tier-1","name":"Ranger Tree Care Tier 1","county":"Brevard County, Florida","booked":103,"surv":60,"canc":43,"cx":41.7,"contacts":85935,"optout":10.4,"bk10k":11.99,"sv10k":6.98,"bw":[17,24,42,20],"sw":[13,16,20,11],"ai":90,"ai_c":37,"oth":13,"oth_c":6,"noaddr":33,"medlag":71.3,"zhvi":343303,"pop":646379,"th":0.89,"tf":1.14,"trop":29.3,"wind":14.3,"comp":5.3,"modeled":true},{"key":"mustard-seed-lawn-and-tree","name":"Mustard Seed Lawn & Tree","county":"Levy County, Florida","booked":50,"surv":36,"canc":14,"cx":28.0,"contacts":52036,"optout":6.04,"bk10k":9.61,"sv10k":6.92,"bw":[7,8,9,26],"sw":[7,7,9,13],"ai":22,"ai_c":1,"oth":28,"oth_c":13,"noaddr":1,"medlag":2.0,"zhvi":312846,"pop":200534,"th":2.38,"tf":5.01,"trop":9.3,"wind":10.4,"comp":4.71,"modeled":true},{"key":"top-notch-property-mgmt-tier-2","name":"Top Notch Property Mgmt Tier 2","county":"Rutherford County, Tennessee","booked":68,"surv":34,"canc":34,"cx":50.0,"contacts":51726,"optout":11.23,"bk10k":13.15,"sv10k":6.57,"bw":[27,30,4,7],"sw":[16,12,0,6],"ai":53,"ai_c":33,"oth":15,"oth_c":1,"noaddr":13,"medlag":22.9,"zhvi":432767,"pop":412528,"th":3.21,"tf":5.34,"trop":0.1,"wind":19.1,"comp":2.77,"modeled":true},{"key":"affordable-tree-care-of-ct","name":"Affordable Tree Care of CT","county":"Litchfield County, Connecticut (profile n/a \u2014 CT county reorganisation)","booked":68,"surv":50,"canc":18,"cx":26.5,"contacts":77235,"optout":9.44,"bk10k":8.8,"sv10k":6.47,"bw":[11,23,20,14],"sw":[8,17,17,8],"ai":55,"ai_c":13,"oth":13,"oth_c":5,"noaddr":16,"medlag":9.6,"zhvi":null,"pop":null,"th":null,"tf":null,"trop":null,"wind":null,"comp":null,"modeled":false},{"key":"top-notch-property-mgmt-tier-1","name":"Top Notch Property Mgmt Tier 1","county":"Davidson County, Tennessee","booked":70,"surv":47,"canc":23,"cx":32.9,"contacts":73347,"optout":8.7,"bk10k":9.54,"sv10k":6.41,"bw":[30,23,2,15],"sw":[17,20,1,9],"ai":42,"ai_c":17,"oth":28,"oth_c":6,"noaddr":6,"medlag":18.4,"zhvi":444923,"pop":543310,"th":3.87,"tf":6.69,"trop":0.1,"wind":31.9,"comp":2.64,"modeled":true},{"key":"xd-land-service","name":"XD Land Service","county":"Seminole County, Florida","booked":75,"surv":53,"canc":22,"cx":29.3,"contacts":83498,"optout":8.65,"bk10k":8.98,"sv10k":6.35,"bw":[22,14,20,19],"sw":[17,12,16,8],"ai":53,"ai_c":13,"oth":22,"oth_c":9,"noaddr":11,"medlag":2.2,"zhvi":400132,"pop":708054,"th":0.38,"tf":0.73,"trop":6.0,"wind":5.4,"comp":4.76,"modeled":true},{"key":"lifes-tree-doc","name":"Life's Tree Doc","county":"Fulton County, Georgia","booked":77,"surv":76,"canc":1,"cx":1.3,"contacts":125948,"optout":7.75,"bk10k":6.11,"sv10k":6.03,"bw":[7,25,16,29],"sw":[7,25,16,28],"ai":57,"ai_c":0,"oth":20,"oth_c":1,"noaddr":30,"medlag":27.0,"zhvi":382902,"pop":906091,"th":1.07,"tf":2.2,"trop":5.1,"wind":19.8,"comp":2.47,"modeled":true},{"key":"harleys-tree-service-tier-1","name":"Harley's Tree Service Tier 1","county":"Sarasota County, Florida","booked":75,"surv":48,"canc":27,"cx":36.0,"contacts":80775,"optout":14.41,"bk10k":9.29,"sv10k":5.94,"bw":[23,15,19,18],"sw":[14,8,17,9],"ai":59,"ai_c":18,"oth":16,"oth_c":9,"noaddr":27,"medlag":6.6,"zhvi":437476,"pop":549594,"th":0.52,"tf":0.84,"trop":15.3,"wind":5.6,"comp":6.57,"modeled":true},{"key":"cost-low-tree-service","name":"Cost-Low Tree Service","county":"Cobb County, Georgia","booked":90,"surv":75,"canc":15,"cx":16.7,"contacts":127546,"optout":8.42,"bk10k":7.06,"sv10k":5.88,"bw":[9,35,27,19],"sw":[9,30,27,9],"ai":71,"ai_c":5,"oth":19,"oth_c":10,"noaddr":11,"medlag":2.4,"zhvi":388891,"pop":614450,"th":0.98,"tf":1.87,"trop":3.3,"wind":11.4,"comp":3.6,"modeled":true},{"key":"ds-tier-1","name":"D&S Tier 1","county":"White County, Georgia","booked":49,"surv":34,"canc":15,"cx":30.6,"contacts":57865,"optout":12.23,"bk10k":8.47,"sv10k":5.88,"bw":[12,14,14,9],"sw":[10,6,13,5],"ai":40,"ai_c":11,"oth":9,"oth_c":4,"noaddr":14,"medlag":4.4,"zhvi":389472,"pop":160153,"th":2.56,"tf":5.41,"trop":4.0,"wind":8.1,"comp":3.09,"modeled":true},{"key":"reillys-tree-and-more","name":"Reilly's Tree & More","county":"Moore County, North Carolina","booked":36,"surv":22,"canc":14,"cx":38.9,"contacts":37943,"optout":7.0,"bk10k":9.49,"sv10k":5.8,"bw":[0,0,20,16],"sw":[0,0,10,12],"ai":24,"ai_c":12,"oth":12,"oth_c":2,"noaddr":8,"medlag":84.5,"zhvi":370958,"pop":271019,"th":4.5,"tf":5.57,"trop":4.6,"wind":13.5,"comp":3.82,"modeled":true},{"key":"murphy-development-group-tier-1","name":"Murphy Development Group Tier 1","county":"Nassau County, Florida","booked":89,"surv":72,"canc":17,"cx":19.1,"contacts":134074,"optout":5.41,"bk10k":6.64,"sv10k":5.37,"bw":[28,21,27,13],"sw":[23,20,19,10],"ai":81,"ai_c":16,"oth":8,"oth_c":1,"noaddr":14,"medlag":98.0,"zhvi":437100,"pop":595755,"th":1.0,"tf":1.87,"trop":10.0,"wind":12.6,"comp":2.55,"modeled":true},{"key":"wades-tree-service","name":"Wade's Tree Service","county":"Catawba County, North Carolina","booked":74,"surv":54,"canc":20,"cx":27.0,"contacts":102523,"optout":7.73,"bk10k":7.22,"sv10k":5.27,"bw":[9,24,22,19],"sw":[7,17,14,16],"ai":64,"ai_c":19,"oth":10,"oth_c":1,"noaddr":15,"medlag":67.2,"zhvi":294085,"pop":203333,"th":4.03,"tf":4.68,"trop":3.8,"wind":8.3,"comp":4.02,"modeled":true},{"key":"holbrook-tree-service","name":"Holbrook Tree Service","county":"Henry County, Georgia","booked":37,"surv":20,"canc":17,"cx":45.9,"contacts":39877,"optout":6.17,"bk10k":9.28,"sv10k":5.02,"bw":[0,0,14,23],"sw":[0,0,8,12],"ai":16,"ai_c":6,"oth":21,"oth_c":11,"noaddr":1,"medlag":9.0,"zhvi":326594,"pop":353097,"th":1.25,"tf":2.45,"trop":3.8,"wind":8.5,"comp":2.54,"modeled":true},{"key":"limitless","name":"Limitless","county":"Gilmer County, Georgia","booked":28,"surv":12,"canc":16,"cx":57.1,"contacts":25456,"optout":11.64,"bk10k":11.0,"sv10k":4.71,"bw":[0,0,11,17],"sw":[0,0,5,7],"ai":13,"ai_c":7,"oth":15,"oth_c":9,"noaddr":5,"medlag":20.0,"zhvi":441787,"pop":307328,"th":1.83,"tf":3.48,"trop":2.6,"wind":10.3,"comp":3.05,"modeled":true},{"key":"integrity-tree","name":"Integrity Tree","county":"Pinellas County, Florida","booked":64,"surv":42,"canc":22,"cx":34.4,"contacts":97749,"optout":11.23,"bk10k":6.55,"sv10k":4.3,"bw":[9,20,21,14],"sw":[1,12,19,10],"ai":46,"ai_c":19,"oth":18,"oth_c":3,"noaddr":16,"medlag":3.8,"zhvi":375958,"pop":943576,"th":0.61,"tf":0.81,"trop":22.4,"wind":9.7,"comp":4.88,"modeled":true},{"key":"summit-tree-and-land","name":"Summit Tree & Land","county":"Liberty County, Georgia","booked":38,"surv":21,"canc":17,"cx":44.7,"contacts":49525,"optout":13.14,"bk10k":7.67,"sv10k":4.24,"bw":[0,0,0,38],"sw":[0,0,0,21],"ai":0,"ai_c":0,"oth":38,"oth_c":17,"noaddr":0,"medlag":6.3,"zhvi":295309,"pop":130972,"th":3.95,"tf":8.1,"trop":6.7,"wind":10.4,"comp":3.42,"modeled":true},{"key":"flagler-land-management","name":"Flagler Land Management","county":"Flagler County, Florida","booked":53,"surv":34,"canc":19,"cx":35.8,"contacts":87133,"optout":6.55,"bk10k":6.08,"sv10k":3.9,"bw":[0,0,27,26],"sw":[0,0,24,10],"ai":27,"ai_c":3,"oth":26,"oth_c":16,"noaddr":10,"medlag":1.0,"zhvi":417201,"pop":371787,"th":1.33,"tf":2.95,"trop":12.8,"wind":12.8,"comp":5.52,"modeled":true},{"key":"goldpalm","name":"GoldPalm","county":"Hillsborough County, Florida","booked":84,"surv":61,"canc":23,"cx":27.4,"contacts":168565,"optout":6.76,"bk10k":4.98,"sv10k":3.62,"bw":[20,25,18,21],"sw":[17,16,16,12],"ai":64,"ai_c":15,"oth":20,"oth_c":8,"noaddr":17,"medlag":2.3,"zhvi":418945,"pop":1325113,"th":0.5,"tf":0.82,"trop":18.0,"wind":11.8,"comp":3.69,"modeled":true},{"key":"nature-worx","name":"Nature Worx","county":"Scott County, Minnesota","booked":74,"surv":63,"canc":11,"cx":14.9,"contacts":173857,"optout":3.95,"bk10k":4.26,"sv10k":3.62,"bw":[16,21,19,18],"sw":[16,18,19,10],"ai":60,"ai_c":4,"oth":14,"oth_c":7,"noaddr":7,"medlag":4.2,"zhvi":379576,"pop":367038,"th":1.42,"tf":2.99,"trop":0.0,"wind":9.2,"comp":4.53,"modeled":true},{"key":"above-the-branch-tier-2","name":"Above The Branch Tier 2","county":"Bucks County, Pennsylvania","booked":81,"surv":54,"canc":27,"cx":33.3,"contacts":183672,"optout":5.19,"bk10k":4.41,"sv10k":2.94,"bw":[19,27,18,17],"sw":[16,15,16,7],"ai":63,"ai_c":16,"oth":18,"oth_c":11,"noaddr":22,"medlag":3.8,"zhvi":512843,"pop":670272,"th":1.48,"tf":4.04,"trop":1.9,"wind":25.4,"comp":7.23,"modeled":true},{"key":"account-one","name":"Above_The_Branch_Tier_1","county":"Montgomery County, Pennsylvania","booked":43,"surv":22,"canc":21,"cx":48.8,"contacts":83478,"optout":9.44,"bk10k":5.15,"sv10k":2.64,"bw":[7,13,7,16],"sw":[3,8,6,5],"ai":21,"ai_c":9,"oth":22,"oth_c":12,"noaddr":7,"medlag":5.7,"zhvi":427286,"pop":879500,"th":1.22,"tf":3.23,"trop":1.5,"wind":27.1,"comp":4.67,"modeled":true},{"key":"harleys-tree-service-tier-2","name":"Harley's Tree Service Tier 2","county":"Sarasota County, Florida","booked":34,"surv":19,"canc":15,"cx":44.1,"contacts":89996,"optout":6.17,"bk10k":3.78,"sv10k":2.11,"bw":[0,7,10,17],"sw":[0,4,9,6],"ai":20,"ai_c":7,"oth":14,"oth_c":8,"noaddr":8,"medlag":1.9,"zhvi":393382,"pop":461250,"th":0.91,"tf":1.37,"trop":15.1,"wind":8.1,"comp":6.53,"modeled":true},{"key":"ap-property-management","name":"AP Property Management","county":"Hillsborough County, Florida","booked":76,"surv":50,"canc":26,"cx":34.2,"contacts":240715,"optout":5.11,"bk10k":3.16,"sv10k":2.08,"bw":[15,19,22,20],"sw":[9,14,17,10],"ai":55,"ai_c":16,"oth":21,"oth_c":10,"noaddr":11,"medlag":6.1,"zhvi":399543,"pop":1364278,"th":0.45,"tf":0.8,"trop":15.6,"wind":12.6,"comp":3.65,"modeled":true},{"key":"top-notch-property-mgmt-tier-3","name":"Top Notch Property Mgmt Tier 3","county":"Williamson County, Tennessee","booked":17,"surv":7,"canc":10,"cx":58.8,"contacts":72846,"optout":2.73,"bk10k":2.33,"sv10k":0.96,"bw":[0,0,0,17],"sw":[0,0,0,7],"ai":0,"ai_c":0,"oth":17,"oth_c":10,"noaddr":0,"medlag":2.9,"zhvi":630157,"pop":518043,"th":1.7,"tf":3.12,"trop":2.6,"wind":13.6,"comp":3.26,"modeled":true},{"key":"mustard-seed-tree-alachua","name":"Mustard Seed Tree - Alachua","county":"Alachua County, Florida (no appointments to locate)","booked":0,"surv":0,"canc":0,"cx":null,"contacts":65450,"optout":11.84,"bk10k":0.0,"sv10k":0.0,"bw":[0,0,0,0],"sw":[0,0,0,0],"ai":0,"ai_c":0,"oth":0,"oth_c":0,"noaddr":0,"medlag":null,"zhvi":null,"pop":null,"th":null,"tf":null,"trop":null,"wind":null,"comp":null,"modeled":false}],"medians":{"zhvi":389181.5,"pop":489646.5,"th":1.38,"tf":3.06,"trop":6.15,"wind":11.6,"comp":3.67,"contacts":82126.5,"sv10k":5.58,"bk10k":8.07,"cx":33.1,"optout":8.49},"weeks":["Aug 2","Aug 9","Aug 16","Aug 23"],"corr":[["Home value (ZHVI)",-0.62,-0.46],["Market population",-0.37,-0.28],["Tree-falls hitting property /10k",0.47,0.28],["All tree-fall events /10k",0.45,0.28],["Tropical events (11 yr)",0.25,0.18],["Thunderstorm-wind events",0.02,0.08],["Tree firms per 10k pop",-0.33,-0.31],["Contact list size",-0.44,-0.42],["Opt-out rate",0.51,0.53]],"shortlist":[{"name":"Dorchester County, South Carolina","pop":174663,"zhvi":350084,"th":14.03,"tf":15.34,"trop":11,"wind":23.4,"comp":3.09,"firms":54,"sim":3.444},{"name":"Bay County, Florida","pop":199718,"zhvi":344902,"th":6.61,"tf":8.66,"trop":16,"wind":18.6,"comp":3.96,"firms":79,"sim":2.894},{"name":"Berkeley County, South Carolina","pop":264276,"zhvi":376003,"th":7.04,"tf":7.76,"trop":14,"wind":17.5,"comp":2.31,"firms":61,"sim":3.078},{"name":"Sumter County, South Carolina","pop":104776,"zhvi":204805,"th":6.68,"tf":17.75,"trop":14,"wind":19.4,"comp":2.29,"firms":24,"sim":3.15},{"name":"Richland County, South Carolina","pop":430651,"zhvi":245186,"th":3.74,"tf":8.82,"trop":13,"wind":37.8,"comp":2.32,"firms":100,"sim":3.165},{"name":"Leon County, Florida","pop":300488,"zhvi":296441,"th":8.85,"tf":16.57,"trop":10,"wind":46.8,"comp":4.26,"firms":128,"sim":3.48},{"name":"Lexington County, South Carolina","pop":313774,"zhvi":274819,"th":4.81,"tf":10.36,"trop":10,"wind":35.8,"comp":3.57,"firms":112,"sim":3.421},{"name":"Houston County, Alabama","pop":109366,"zhvi":204428,"th":11.61,"tf":20.85,"trop":6,"wind":22.4,"comp":2.29,"firms":25,"sim":3.918},{"name":"Johnston County, North Carolina","pop":249794,"zhvi":344484,"th":6.29,"tf":7.85,"trop":7,"wind":18.0,"comp":3.56,"firms":89,"sim":3.713},{"name":"Nash County, North Carolina","pop":97990,"zhvi":238493,"th":10.21,"tf":12.04,"trop":5,"wind":10.0,"comp":3.57,"firms":35,"sim":3.986},{"name":"Craven County, North Carolina","pop":104167,"zhvi":278188,"th":6.43,"tf":10.46,"trop":5,"wind":12.2,"comp":3.55,"firms":37,"sim":3.94},{"name":"Harnett County, North Carolina","pop":146096,"zhvi":295558,"th":4.86,"tf":6.64,"trop":5,"wind":8.4,"comp":2.74,"firms":40,"sim":3.947},{"name":"Bulloch County, Georgia","pop":85454,"zhvi":280951,"th":3.63,"tf":17.44,"trop":5,"wind":14.2,"comp":3.04,"firms":26,"sim":3.962}],"savannah":{"pop":307336,"zhvi":338312,"th":5.82,"tf":9.53,"trop":47,"wind":31.5,"comp":2.99,"firms":92,"treefall":293,"treehit":179},"fleet":{"booked":1889,"canc":567,"surv":1322,"contacts":2704313,"tiers":30,"ai":1374,"ai_c":362,"oth":515,"oth_c":205}}</script>
+<script>
+(function(){
+"use strict";
+var D=JSON.parse(document.getElementById("data").textContent);
+var SAV="tree-masters-of-savannah";
+var tip=document.getElementById("tip");
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function nice(s){return String(s).replace(/_/g," ").trim();}
+function fmt(n,d){return n==null?"—":Number(n).toLocaleString("en-US",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});}
+function el(t,a,p){var e=document.createElementNS("http://www.w3.org/2000/svg",t);for(var k in a){if(a[k]!=null)e.setAttribute(k,a[k]);}if(p)p.appendChild(e);return e;}
+function showTip(ev,title,rows){
+  tip.innerHTML='<div class="t">'+title+'</div>'+rows.map(function(r){return '<div class="r"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join("");
+  tip.setAttribute("data-on","1");
+  var w=tip.offsetWidth,h=tip.offsetHeight;
+  var x=ev.clientX+14,y=ev.clientY+14;
+  if(x+w>innerWidth-10)x=ev.clientX-w-14;
+  if(y+h>innerHeight-10)y=ev.clientY-h-14;
+  tip.style.left=x+"px";tip.style.top=y+"px";
+}
+function hideTip(){tip.setAttribute("data-on","0");}
+function bind(node,title,rows){
+  node.addEventListener("pointerenter",function(e){showTip(e,title,rows);});
+  node.addEventListener("pointermove",function(e){showTip(e,title,rows);});
+  node.addEventListener("pointerleave",hideTip);
+}
+var median=function(a){var b=a.slice().sort(function(x,y){return x-y;});var m=b.length>>1;return b.length%2?b[m]:(b[m-1]+b[m])/2;};
+
+/* ---------- weekly small-multiple strip ---------- */
+function weekly(){
+  var svg=document.getElementById("c-weekly");svg.innerHTML="";
+  var rows=D.tiers.slice().sort(function(a,b){return Math.min.apply(null,b.bw)-Math.min.apply(null,a.bw);});
+  var W=Math.max(760,Math.min(1000,svg.parentNode.clientWidth||960));
+  var padL=196,padR=16,padT=26,padB=34,rowH=17,gap=3;
+  var H=padT+padB+rows.length*(rowH+gap);
+  var innerW=W-padL-padR, cellW=(innerW-3*10)/4;
+  var max=0;D.tiers.forEach(function(t){t.bw.forEach(function(v){if(v>max)max=v;});});
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  var meds=[0,1,2,3].map(function(i){return median(D.tiers.map(function(t){return t.bw[i];}));});
+  D.weeks.forEach(function(w,i){
+    var x=padL+i*(cellW+10);
+    el("text",{x:x,y:padT-12,"class":"lab","font-size":11,fill:css("--ink-3")},svg).textContent=w;
+    var mx=x+cellW*meds[i]/max;
+    el("line",{x1:mx,x2:mx,y1:padT-4,y2:H-padB+8,stroke:css("--ink-3"),"stroke-width":1.5,"stroke-dasharray":"3 4",opacity:.85},svg);
+    el("text",{x:mx,y:H-padB+20,"text-anchor":"middle","font-size":9.5,fill:css("--ink-3")},svg).textContent="med "+meds[i];
+  });
+  rows.forEach(function(t,r){
+    var y=padT+r*(rowH+gap);
+    var isS=t.key===SAV;
+    var nm=el("text",{x:padL-10,y:y+rowH-4,"text-anchor":"end","class":"lab","font-size":10.5,
+      fill:isS?css("--s2"):css("--ink-2"),"font-weight":isS?700:400},svg);
+    var dn=nice(t.name);nm.textContent=dn.length>30?dn.slice(0,29)+"…":dn;
+    t.bw.forEach(function(v,i){
+      var x=padL+i*(cellW+10);
+      el("rect",{x:x,y:y+2,width:cellW,height:rowH-4,fill:css("--sunk"),rx:2},svg);
+      var bw=max?cellW*v/max:0;
+      var rect=el("rect",{x:x,y:y+2,width:Math.max(v?2:0,bw),height:rowH-4,rx:2,
+        fill:isS?css("--s2"):css("--s1"),opacity:isS?1:.34},svg);
+      bind(rect,nice(t.name),[["Week of "+D.weeks[i],fmt(v)+" booked"],["Kept",fmt(t.sw[i])],["County",t.county]]);
+      if(isS||v===0){
+        var inside=bw>cellW*.62;
+        el("text",{x:inside?x+bw-5:x+bw+5,y:y+rowH-5,"text-anchor":inside?"end":"start","font-size":9.5,
+          fill:inside?css("--surface"):(isS?css("--s2"):css("--ink-3")),"font-weight":inside?600:400},svg).textContent=v;
+      }
+    });
+  });
+}
+
+/* ---------- ranking ---------- */
+var RANKM={sv10k:{t:"Surviving appointments per 10,000 contacts",d:1},bk10k:{t:"Appointments booked per 10,000 contacts",d:1},
+  booked:{t:"Appointments booked in August (raw count)",d:0},cx:{t:"Cancellation rate (lower is better)",d:1}};
+function rank(m){
+  var svg=document.getElementById("c-rank");svg.innerHTML="";
+  document.getElementById("rank-title").textContent=RANKM[m].t;
+  var rows=D.tiers.filter(function(t){return t[m]!=null;}).sort(function(a,b){return b[m]-a[m];});
+  var W=Math.max(720,Math.min(1000,svg.parentNode.clientWidth||960));
+  var padL=196,padR=52,padT=10,padB=30,rowH=18,gap=4;
+  var H=padT+padB+rows.length*(rowH+gap);
+  var innerW=W-padL-padR;
+  var max=Math.max.apply(null,rows.map(function(t){return t[m];}));
+  var med=median(rows.map(function(t){return t[m];}));
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  var good=(m!=="cx");
+  rows.forEach(function(t,r){
+    var y=padT+r*(rowH+gap),isS=t.key===SAV;
+    var nm=el("text",{x:padL-10,y:y+rowH-5,"text-anchor":"end","class":"lab","font-size":10.5,
+      fill:isS?css("--s2"):css("--ink-2"),"font-weight":isS?700:400},svg);
+    var dn=nice(t.name);nm.textContent=dn.length>30?dn.slice(0,29)+"…":dn;
+    var bw=max?innerW*t[m]/max:0;
+    var rect=el("rect",{x:padL,y:y+1,width:Math.max(2,bw),height:rowH-2,rx:3,
+      fill:isS?css("--s2"):(good?css("--s1"):css("--ink-3")),opacity:isS?1:.55},svg);
+    bind(rect,nice(t.name),[["County",t.county],["Booked",fmt(t.booked)],["Kept",fmt(t.surv)],
+      ["Cancelled",fmt(t.canc)+(t.cx!=null?"  ("+t.cx+"%)":"")],["Contacts",fmt(t.contacts)],
+      ["Booked / 10k",fmt(t.bk10k,1)],["Kept / 10k",fmt(t.sv10k,1)]]);
+    el("text",{x:padL+bw+7,y:y+rowH-5,"font-size":10,fill:isS?css("--s2"):css("--ink-3")},svg)
+      .textContent=fmt(t[m],RANKM[m].d)+(m==="cx"?"%":"");
+  });
+  var mx=padL+innerW*med/max;
+  el("line",{x1:mx,x2:mx,y1:padT-2,y2:H-padB+4,stroke:css("--ink-3"),"stroke-width":1.5,"stroke-dasharray":"3 4"},svg);
+  el("text",{x:mx,y:H-padB+18,"text-anchor":"middle","class":"lab","font-size":10.5,fill:css("--ink-3")},svg)
+    .textContent="fleet median "+fmt(med,RANKM[m].d)+(m==="cx"?"%":"");
+}
+
+/* ---------- profile index ---------- */
+function profile(){
+  var svg=document.getElementById("c-profile");svg.innerHTML="";
+  var S=D.savannah,M=D.medians;
+  var items=[
+    {k:"Tropical storm & hurricane events",v:S.trop/M.trop,a:S.trop+" events",b:"median "+M.trop},
+    {k:"Trees falling on property (per 10k people)",v:S.th/M.th,a:S.th.toFixed(2),b:"median "+M.th},
+    {k:"All damaging-wind events per year",v:S.wind/M.wind,a:S.wind.toFixed(1)+"/yr",b:"median "+M.wind},
+    {k:"Tree & landscaping firms (per 10k people)",v:S.comp/M.comp,a:S.comp.toFixed(2),b:"median "+M.comp},
+    {k:"Market population",v:S.pop/M.pop,a:fmt(S.pop),b:"median "+fmt(M.pop)},
+    {k:"Typical home value",v:S.zhvi/M.zhvi,a:"$"+fmt(S.zhvi),b:"median $"+fmt(M.zhvi)}
+  ];
+  var W=Math.max(680,Math.min(1000,svg.parentNode.clientWidth||960));
+  var padL=268,padR=60,padT=26,padB=30,rowH=30,gap=8;
+  var H=padT+padB+items.length*(rowH+gap);
+  var innerW=W-padL-padR;
+  var max=Math.max(2,Math.ceil(Math.max.apply(null,items.map(function(i){return i.v;}))));
+  var x1=function(v){return padL+innerW*Math.min(v,max)/max;};
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  for(var g=0;g<=max;g++){
+    var gx=padL+innerW*g/max;
+    el("line",{x1:gx,x2:gx,y1:padT-8,y2:H-padB+2,stroke:css("--rule"),"stroke-width":1},svg);
+    el("text",{x:gx,y:padT-14,"text-anchor":"middle","font-size":10,fill:css("--ink-3")},svg).textContent=g+"×";
+  }
+  var bx=padL+innerW/max;
+  el("line",{x1:bx,x2:bx,y1:padT-8,y2:H-padB+2,stroke:css("--ink-3"),"stroke-width":2,"stroke-dasharray":"3 4"},svg);
+  items.forEach(function(it,r){
+    var y=padT+r*(rowH+gap);
+    el("text",{x:padL-14,y:y+rowH/2+1,"text-anchor":"end","class":"lab","font-size":12,fill:css("--ink-2"),
+      "dominant-baseline":"middle"},svg).textContent=it.k;
+    var w=x1(it.v)-padL;
+    var rect=el("rect",{x:padL,y:y+5,width:Math.max(2,w),height:rowH-10,rx:3,fill:css("--s2"),
+      opacity:it.v>=1?1:.5},svg);
+    bind(rect,it.k,[["Chatham County",it.a],["Fleet median",it.b],["Ratio",it.v.toFixed(2)+"×"]]);
+    var lx=Math.max(padL+w+8,bx+10);
+    el("text",{x:lx,y:y+rowH/2+1,"font-size":11.5,fill:css("--ink-2"),"dominant-baseline":"middle"},svg)
+      .textContent=it.v.toFixed(1)+"×";
+  });
+}
+
+/* ---------- correlations ---------- */
+function corr(){
+  var svg=document.getElementById("c-corr");svg.innerHTML="";
+  var rows=D.corr.slice().sort(function(a,b){return Math.abs(b[1])-Math.abs(a[1]);});
+  var W=Math.max(680,Math.min(1000,svg.parentNode.clientWidth||960));
+  var padL=250,padR=60,padT=28,padB=34,rowH=24,gap=7;
+  var H=padT+padB+rows.length*(rowH+gap);
+  var innerW=W-padL-padR,mid=padL+innerW/2,half=innerW/2;
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  el("rect",{x:mid-half*0.2,y:padT-6,width:half*0.4,height:H-padT-padB+10,fill:css("--sunk"),opacity:.85},svg);
+  [-1,-0.5,0,0.5,1].forEach(function(t){
+    var x=mid+half*t;
+    el("line",{x1:x,x2:x,y1:padT-6,y2:H-padB+4,stroke:t===0?css("--rule-2"):css("--rule"),"stroke-width":t===0?1.5:1},svg);
+    el("text",{x:x,y:padT-14,"text-anchor":"middle","font-size":10,fill:css("--ink-3")},svg).textContent=t.toFixed(1);
+  });
+  el("text",{x:mid,y:H-padB+22,"text-anchor":"middle","class":"lab","font-size":10.5,fill:css("--ink-3")},svg)
+    .textContent="shaded band = too weak to act on";
+  rows.forEach(function(c,r){
+    var y=padT+r*(rowH+gap),v=c[1],rho=c[2];
+    el("text",{x:padL-14,y:y+rowH/2,"text-anchor":"end","class":"lab","font-size":12,fill:css("--ink-2"),
+      "dominant-baseline":"middle"},svg).textContent=c[0];
+    var w=half*Math.abs(v);
+    var rect=el("rect",{x:v<0?mid-w:mid,y:y+4,width:Math.max(2,w),height:rowH-8,rx:3,
+      fill:v<0?css("--s2"):css("--s1"),opacity:Math.abs(v)<0.2?.35:.9},svg);
+    bind(rect,c[0],[["Pearson r",v.toFixed(2)],["Spearman rho",rho.toFixed(2)],
+      ["Direction",v<0?"more of this, less yield":"more of this, more yield"]]);
+    var rx=mid+half*rho;
+    el("circle",{cx:rx,cy:y+rowH/2,r:4.5,fill:"none",stroke:css("--surface"),"stroke-width":4},svg);
+    el("circle",{cx:rx,cy:y+rowH/2,r:4.5,fill:"none",stroke:css("--ink-2"),"stroke-width":2},svg);
+    var end=v<0?mid-w:mid+w;
+    var tx=v<0?Math.min(end-9,rx-11):Math.max(end+9,rx+11);
+    el("text",{x:tx,y:y+rowH/2,"text-anchor":v<0?"end":"start","font-size":11,
+      fill:css("--ink-2"),"dominant-baseline":"middle"},svg).textContent=(v>0?"+":"")+v.toFixed(2);
+  });
+}
+
+/* ---------- scatter ---------- */
+function scatter(){
+  var svg=document.getElementById("c-scatter");svg.innerHTML="";
+  var rows=D.tiers.filter(function(t){return t.th!=null&&t.sv10k!=null;});
+  var W=Math.max(680,Math.min(1000,svg.parentNode.clientWidth||960)),H=430;
+  var padL=58,padR=24,padT=18,padB=54;
+  var xs=rows.map(function(t){return t.th;}),ys=rows.map(function(t){return t.sv10k;});
+  var xmax=Math.ceil(Math.max.apply(null,xs)+1),ymax=Math.ceil(Math.max.apply(null,ys)+1);
+  var cmax=Math.max.apply(null,rows.map(function(t){return t.contacts;}));
+  var X=function(v){return padL+(W-padL-padR)*v/xmax;},Y=function(v){return H-padB-(H-padT-padB)*v/ymax;};
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  for(var gy=0;gy<=ymax;gy+=2){
+    el("line",{x1:padL,x2:W-padR,y1:Y(gy),y2:Y(gy),stroke:css("--rule"),"stroke-width":1},svg);
+    el("text",{x:padL-10,y:Y(gy)+4,"text-anchor":"end","font-size":10,fill:css("--ink-3")},svg).textContent=gy;
+  }
+  for(var gx=0;gx<=xmax;gx+=2){
+    el("text",{x:X(gx),y:H-padB+18,"text-anchor":"middle","font-size":10,fill:css("--ink-3")},svg).textContent=gx;
+  }
+  el("text",{x:(padL+W-padR)/2,y:H-12,"text-anchor":"middle","class":"lab","font-size":11.5,fill:css("--ink-2")},svg)
+    .textContent="Storm reports of trees falling on property, per 10,000 residents (2015–2025)";
+  el("text",{x:16,y:(padT+H-padB)/2,"text-anchor":"middle","class":"lab","font-size":11.5,fill:css("--ink-2"),
+    transform:"rotate(-90 16 "+((padT+H-padB)/2)+")"},svg).textContent="Surviving appointments per 10,000 contacts";
+  rows.slice().sort(function(a,b){return b.contacts-a.contacts;}).forEach(function(t){
+    var isS=t.key===SAV;
+    var r=6+16*Math.sqrt(t.contacts/cmax);
+    var c=el("circle",{cx:X(t.th),cy:Y(t.sv10k),r:r,fill:isS?css("--s2"):css("--s1"),
+      opacity:isS?.92:.42,stroke:css("--surface"),"stroke-width":2},svg);
+    bind(c,nice(t.name),[["County",t.county],["Tree-on-property /10k",t.th],["Kept / 10k contacts",fmt(t.sv10k,1)],
+      ["Contacts",fmt(t.contacts)],["Home value","$"+fmt(t.zhvi)],["Tree firms /10k",t.comp]]);
+    if(isS){
+      el("text",{x:X(t.th),y:Y(t.sv10k)-r-9,"text-anchor":"middle","class":"lab","font-size":12,
+        "font-weight":700,fill:css("--s2")},svg).textContent="Savannah";
+    }
+  });
+}
+
+/* ---------- shortlist table ---------- */
+function table(){
+  var tb=document.querySelector("#t-short tbody");
+  var S=D.savannah;
+  var sav={name:"Chatham County, Georgia",pop:S.pop,zhvi:S.zhvi,th:S.th,trop:S.trop,wind:S.wind,comp:S.comp,firms:S.firms,sim:0,sav:1};
+  var data=D.shortlist.map(function(d){var o={};for(var k in d)o[k]=d[k];o.sav=0;return o;}).concat([sav]);
+  var maxTh=Math.max.apply(null,data.map(function(d){return d.th;}));
+  var state={k:"sim",dir:1};
+  function draw(){
+    data.sort(function(a,b){
+      var x=a[state.k],y=b[state.k];
+      if(typeof x==="string")return state.dir*x.localeCompare(y);
+      return state.dir*(x-y);
+    });
+    tb.innerHTML=data.map(function(d){
+      return '<tr class="'+(d.sav?"sav":"")+'">'+
+        '<td class="name">'+d.name+'</td>'+
+        '<td>'+(d.sav?"—":d.sim.toFixed(2))+'</td>'+
+        '<td>'+fmt(d.pop)+'</td>'+
+        '<td>$'+fmt(d.zhvi)+'</td>'+
+        '<td class="bar-cell">'+d.th.toFixed(2)+'<i><b style="width:'+(100*d.th/maxTh).toFixed(1)+'%"></b></i></td>'+
+        '<td>'+d.trop+'</td>'+
+        '<td>'+d.wind.toFixed(1)+'</td>'+
+        '<td>'+d.comp.toFixed(2)+'</td>'+
+        '<td>'+d.firms+'</td></tr>';
+    }).join("");
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("#t-short th.sortable"),function(th){
+    th.setAttribute("tabindex","0");th.setAttribute("aria-sort","none");
+    function go(){
+      var k=th.dataset.k;
+      state.dir=(state.k===k)?-state.dir:(k==="name"?1:-1);
+      state.k=k;
+      Array.prototype.forEach.call(document.querySelectorAll("#t-short th"),function(o){o.setAttribute("aria-sort","none");});
+      th.setAttribute("aria-sort",state.dir>0?"ascending":"descending");
+      draw();
+    }
+    th.addEventListener("click",go);
+    th.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});
+  });
+  document.querySelector('#t-short th[data-k="sim"]').setAttribute("aria-sort","ascending");
+  draw();
+}
+
+function drawAll(){weekly();rank(document.querySelector("#rank .seg[aria-pressed=\"true\"]")?
+  document.querySelector("#rank .seg[aria-pressed=\"true\"]").dataset.m:"sv10k");profile();corr();scatter();}
+Array.prototype.forEach.call(document.querySelectorAll("#rank .seg"),function(b){
+  b.addEventListener("click",function(){
+    Array.prototype.forEach.call(document.querySelectorAll("#rank .seg"),function(o){o.setAttribute("aria-pressed","false");});
+    b.setAttribute("aria-pressed","true");rank(b.dataset.m);
+  });
+});
+table();drawAll();
+var t=null;
+addEventListener("resize",function(){clearTimeout(t);t=setTimeout(drawAll,180);});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll);
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+addEventListener("scroll",hideTip,{passive:true});
+})();
+</script>
+
+</body>
+</html>
