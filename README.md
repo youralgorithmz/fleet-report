@@ -10,3 +10,4 @@ The page is marked `noindex` and excluded in `robots.txt` — it is reachable by
 
 - `/` — Fleet cancellation gap (28 August 2026)
 - `/savannah/` — The Savannah Pattern: territory yield analysis and a national county screen (29 August 2026)
+- `/michigan-storm/` — Michigan Storm Board: where the 2–3 September storm landed, ranked target ZIPs and crew staging (3 September 2026)
