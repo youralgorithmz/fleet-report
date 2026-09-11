@@ -62,7 +62,8 @@
   .verdict ol { margin-top: 12px; padding-left: 22px; display: grid; gap: 8px; color: var(--ink-2); font-size: 15.5px; }
   .verdict li b { color: var(--ink); font-weight: 600; }
 
-  .score { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; margin-top: 24px; }
+  .score { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; margin-top: 24px; }
+  section h3 { font-weight: 700; letter-spacing: -0.01em; }
   .sc { border-radius: 10px; padding: 12px; text-align: center; border: 1px solid var(--line); background: var(--panel); min-width: 0; }
   .sc .n { font: 500 10.5px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
   .sc .g { font: 700 15px/1.2 var(--f-display); margin-top: 6px; }
@@ -104,7 +105,7 @@
   .src { margin-top: 14px; display: grid; gap: 5px; font: 400 12.5px/1.5 var(--f-mono); color: var(--muted); }
   .src a { color: var(--ink-2); overflow-wrap: anywhere; }
   footer { padding-block: 26px 40px; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
-  @media (max-width: 760px) { .facts, .score, .metrics { grid-template-columns: 1fr 1fr; } .meta { text-align: left; } }
+  @media (max-width: 760px) { .facts, .metrics { grid-template-columns: 1fr 1fr; } .score { grid-template-columns: repeat(3, 1fr); } .meta { text-align: left; } }
   @media (max-width: 420px) { .score { grid-template-columns: 1fr 1fr; } }
 </style>
 
@@ -118,7 +119,7 @@
     <div class="fact"><div class="k">Website platform</div><div class="v">WordPress + Elementor on GoDaddy</div></div>
     <div class="fact"><div class="k">Pages found</div><div class="v">Home, Tree Removal, Tree Trimming, Emergency, About, Reviews, Contact, Community</div></div>
     <div class="fact"><div class="k">Address on site</div><div class="v">5198 Verdis St, Jacksonville 32258</div></div>
-    <div class="fact"><div class="k">Territory with us</div><div class="v">8 ZIPs, Duval + St. Johns</div></div>
+    <div class="fact"><div class="k">Territory with us</div><div class="v">8 ZIPs &middot; ~300,000 people &middot; ~125,000 households</div></div>
   </div>
 
   <div class="verdict">
@@ -127,6 +128,7 @@
       <li><b>Nobody searching for a tree service in Jacksonville finds you.</b> In six searches across your service area you did not appear once. We could not locate a Google Business Profile under your name, phone or address from the open web.</li>
       <li><b>The website is still the theme demo with your logo on it.</b> The browser tab says &ldquo;Treecuting&rdquo;, it advertises a $29.99 &ldquo;Garden Fence&rdquo; plan, and it links to the theme vendor&rsquo;s demo site 32 times.</li>
       <li><b>On a phone it takes about 23 seconds to show its main image</b> under standard mobile test conditions, and the only phone number is at the very bottom of the page.</li>
+      <li><b>The market you already hold is large and getting richer.</b> Your eight ZIPs contain about 300,000 people in 125,000 households, with median incomes from $74,000 to $132,000 and home values from $325,000 to $793,000. St. Johns is Florida&rsquo;s fastest-growing county. Nobody there can find you yet.</li>
     </ol>
   </div>
 
@@ -136,6 +138,7 @@
     <div class="sc na"><div class="n">03 Follow-up</div><div class="g">Test on the call</div></div>
     <div class="sc bad"><div class="n">04 Website</div><div class="g">Needs rebuild</div></div>
     <div class="sc good"><div class="n">05 Territory</div><div class="g">Yours</div></div>
+    <div class="sc good"><div class="n">06 Market</div><div class="g">Strong</div></div>
   </div>
 </div>
 
@@ -214,6 +217,71 @@
   </section>
 
   <section>
+    <div class="sh"><span class="num">06</span><h2>Your market: the eight ZIPs</h2><span class="pill good">Large, affluent, growing</span></div>
+    <p class="lead">What the Census says about the households you hold exclusive rights to reach. <b>About 300,000 people in 125,000 households</b>, split roughly 86,000 households in Duval and 39,000 in St. Johns. All figures are American Community Survey 2024 five-year estimates by ZIP.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>ZIP</th><th>Area</th><th>People</th><th>Households</th><th>Median income</th><th>Median home value</th><th>Median age</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">32217</td><td>San Jose, Lakewood</td><td class="c">20,221</td><td class="c">8,634</td><td class="c">$73,832</td><td class="c">$325,100</td><td class="c">37.7</td></tr>
+        <tr><td class="mono">32224</td><td>Intracoastal West, UNF</td><td class="c">42,092</td><td class="c">16,195</td><td class="c">$88,259</td><td class="c">$458,100</td><td class="c">33.6</td></tr>
+        <tr><td class="mono">32256</td><td>Southside, Baymeadows, Deerwood</td><td class="c">58,192</td><td class="c">27,886</td><td class="c">$73,570</td><td class="c">$382,500</td><td class="c">34.4</td></tr>
+        <tr><td class="mono">32257</td><td>Mandarin (north)</td><td class="c">42,904</td><td class="c">17,833</td><td class="c">$75,780</td><td class="c">$339,300</td><td class="c">40.3</td></tr>
+        <tr><td class="mono">32258</td><td>Mandarin (south), Bartram</td><td class="c">40,408</td><td class="c">15,897</td><td class="c">$102,204</td><td class="c">$370,700</td><td class="c">36.2</td></tr>
+        <tr><td class="mono">32081</td><td>Nocatee, Ponte Vedra</td><td class="c">29,784</td><td class="c">10,657</td><td class="c">$131,624</td><td class="c">$642,500</td><td class="c">41.7</td></tr>
+        <tr><td class="mono">32082</td><td>Ponte Vedra Beach</td><td class="c">29,289</td><td class="c">13,138</td><td class="c">$124,558</td><td class="c">$792,600</td><td class="c">53.1</td></tr>
+        <tr><td class="mono">32084</td><td>St. Augustine</td><td class="c">37,291</td><td class="c">15,231</td><td class="c">$73,837</td><td class="c">$344,200</td><td class="c">44.5</td></tr>
+        <tr><th>Total</th><th></th><th class="c">300,181</th><th class="c">125,471</th><th></th><th></th><th></th></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Source: US Census Bureau, ACS 2024 5-year, by ZIP Code Tabulation Area, via censusreporter.org. Area names are the common neighbourhood names, not Census names. Owner-occupied share and year built were not pulled in this pass.</p>
+
+    <ul class="find">
+      <li><span class="i good">&#10003;</span><span><b>Mandarin is your core.</b> 32257 and 32258 together hold about 34,000 households at $340,000 to $371,000 home values, median age 36 to 40, 2.4 to 2.5 people per household: established single-family neighbourhoods. A competitor already runs a Mandarin page titled &ldquo;Live Oak &amp; Hardwood Specialists&rdquo;, which tells you what the trees are and what homeowners there search for. This is where removal and large-tree trimming volume should come from.</span></li>
+      <li><span class="i good">&#10003;</span><span><b>Ponte Vedra Beach is your margin.</b> 32082 has the oldest residents (median 53), the highest home values ($792,600) and 13,000 households. Older, high-value properties with mature landscapes buy preservation pruning, storm preparation and arborist-grade work, and they pay for it. It is also where credentials on the website matter most.</span></li>
+      <li><span class="i warn">!</span><span><b>Nocatee is a long game.</b> 32081 is the richest ZIP ($131,624) and the most family-shaped (2.8 per household), but it is a master-planned community that is still being built. Young trees mean little removal work now and steady maintenance later. The right offer there is recurring care and HOA relationships, not storm-removal ads.</span></li>
+      <li><span class="i warn">!</span><span><b>Southside and Intracoastal are dense and young.</b> 32256 has the most people (58,000) but only 2.1 per household and a median age of 34, which usually means a large share of apartments and renters. Expect fewer homeowner jobs per capita and more property-manager and commercial work. Owner-occupied share was not pulled; confirm before spending here.</span></li>
+      <li><span class="i good">&#10003;</span><span><b>Money is not the constraint.</b> Every ZIP&rsquo;s median income is at or above Duval County&rsquo;s $73,708, and four are well above it. At Jacksonville removal prices, most jobs in these ZIPs clear your $500 minimum comfortably.</span></li>
+    </ul>
+
+    <h3 style="font-size:20px;margin-top:28px">Growth</h3>
+    <ul class="find">
+      <li><span class="i good">&#10003;</span><span><b>St. Johns is Florida&rsquo;s fastest-growing county.</b> It added about 13,400 residents between 2023 and 2024, a 4.2% rise, and reached an estimated 346,000 by July 2025, roughly 54% growth over ten years. Nocatee is consistently ranked among the top-selling master-planned communities in the country. Every new roof is a future customer, and none of them has a tree guy yet.</span></li>
+      <li><span class="i good">&#10003;</span><span><b>Duval grew 6% from 2020 to 2024</b>, from 995,561 to 1,055,159 people. Slower than St. Johns, but on a base ten times the size, with an older housing stock and older trees.</span></li>
+    </ul>
+
+    <h3 style="font-size:20px;margin-top:28px">Trees, storms and rules</h3>
+    <ul class="find">
+      <li><span class="i good">&#10003;</span><span><b>Jacksonville is one of the most tree-covered big cities in the country.</b> The city&rsquo;s canopy assessment measured 30% canopy inside the urban priority area, and a Green Infrastructure Center study put the citywide figure at 55.5%, including the rural county land. The inventory of work is not the problem.</span></li>
+      <li><span class="i warn">!</span><span><b>Storm season is the demand spike, and it has hit three years running.</b> Nicole in November 2022 caused an estimated $34 million of damage in St. Johns County. Debby, Helene and Milton all brought tropical-storm-force wind or flooding to the area in 2024. Hurricane season runs 1 June to 30 November with the peak from mid-August to October. That is when a homeowner searches &ldquo;emergency tree removal near me&rdquo; and calls whoever appears. Today that is not you.</span></li>
+      <li><span class="i warn">!</span><span><b>The city&rsquo;s tree code is a selling point if you know it.</b> Jacksonville protects trees over set trunk diameters and requires permits for clearing, with a stated exemption for owners of occupied single-family homes removing trees on their own lot. Contractors have been fined for unpermitted removals. A short &ldquo;do I need a permit&rdquo; page, written plainly, earns trust and search traffic that competitors are already collecting. Have the city or your attorney confirm the wording before publishing.</span></li>
+    </ul>
+
+    <h3 style="font-size:20px;margin-top:28px">Competition</h3>
+    <ul class="find">
+      <li><span class="i warn">!</span><span><b>Crowded, but beatable on presence.</b> Expertise.com reports reviewing 199 tree service providers in Jacksonville. The ones it ranks carry 74 to 339 Google reviews each: Eagerton 339, The Branch Manager 183, Greenwise 103, Durance 96, Tree Tech 94, Alpha 92, TREECO 74, Tree Cutters of Florida 74. That is the bar for looking established. You currently have no findable listing, so the gap is presence, not capability.</span></li>
+      <li><span class="i good">&#10003;</span><span><b>Nobody owns all eight ZIPs.</b> The winners differ by town (section 02): Bushor&rsquo;s and William Davis on the Southside, Jax Tree Removal and Russell in Mandarin, Tree Masters and Southern Tree Experts in Ponte Vedra. A company that shows up in all eight with one consistent profile is unusual, and you already hold the outbound side of all eight.</span></li>
+    </ul>
+
+    <h3 style="font-size:20px;margin-top:28px">Prices and the $500 standard</h3>
+    <ul class="find">
+      <li><span class="i good">&#10003;</span><span><b>Published Jacksonville removal prices run roughly $400 to $1,800 for a typical job, with a mid-point near $1,100</b>, and $300 to $3,500 across the full range of sizes. Small trees under 30 feet are quoted at $300 to $800. Stump grinding is quoted far lower, around $80 to $140. Every appointment we book for you is qualified to a $500 minimum, so removals and large trims qualify, while a lone stump or a single small trim generally does not.</span></li>
+      <li><span class="i warn">!</span><span><b>Your site currently advertises $29.99.</b> Against these prices the theme&rsquo;s pricing table does not just look wrong; it anchors the homeowner at a number you cannot honour. It is the first thing to remove.</span></li>
+    </ul>
+
+    <h3 style="font-size:20px;margin-top:28px">What to sell when</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Months</th><th>What homeowners are doing</th><th>What to lead with</th></tr></thead>
+      <tbody>
+        <tr><td>Nov to Feb</td><td>Cooler, drier; hardwoods dormant; post-season clean-up</td><td>Removals, hardwood pruning, stump grinding bundles, &ldquo;before spring growth&rdquo; trims</td></tr>
+        <tr><td>Mar to May</td><td>Spring growth, pollen, yard season, tax refunds</td><td>Trimming and crown reduction, palm cleaning, hazard assessments before storm season</td></tr>
+        <tr><td>Jun to mid-Aug</td><td>Season opens; heat; homeowners watching forecasts</td><td>Storm-prep pruning over roofs and lines, &ldquo;get it done before the peak&rdquo; offers</td></tr>
+        <tr><td>Mid-Aug to Oct</td><td>Peak hurricane season; the spike</td><td>Emergency response, crane work, insurance-claim help; the phone must be answered in minutes</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">The calendar is arborist practice plus the NOAA hurricane season, not measured search demand for these ZIPs. Search-volume data by month and town is a follow-up we can pull.</p>
+  </section>
+
+  <section>
     <div class="sh"><span class="num">&rarr;</span><h2>What we would fix first</h2></div>
     <p class="lead">In this order. The first two are days, not months, and they change what a homeowner sees this week.</p>
     <ol class="plan">
@@ -230,7 +298,8 @@
     <ul class="find">
       <li><span class="i na">?</span><span><b>Google Maps rankings and the profile itself.</b> Not readable by our tools; checked live on the call.</span></li>
       <li><span class="i na">?</span><span><b>Follow-up timing.</b> Done with you on the call, not behind your back.</span></li>
-      <li><span class="i na">?</span><span><b>Local demand by service and season.</b> Requires search-volume data we did not pull for this pass. Available as a follow-up.</span></li>
+      <li><span class="i na">?</span><span><b>Measured search demand by month and town.</b> Section 06 gives the market from Census, storm and competitor data; monthly search-volume data per ZIP is a follow-up.</span></li>
+      <li><span class="i na">?</span><span><b>Owner-occupied share and housing age by ZIP.</b> Available from the Census; not pulled in this pass. Worth having before spending in 32256 and 32224.</span></li>
       <li><span class="i na">?</span><span><b>Your appointment numbers with us.</b> Deliberately left out of a public-sources document. Your weekly scorecard covers them.</span></li>
     </ul>
     <div class="src">
@@ -239,6 +308,14 @@
       <span>Lighthouse 12, mobile preset, run from Jacksonville-equivalent throttling defaults</span>
       <span>Web search, US, for the six queries listed in section 02, plus name, phone and address queries; Bing results page for the company name</span>
       <span>Directory checks: Yelp, Angi, HomeAdvisor, Thumbtack, BBB search results for the company name</span>
+      <a href="https://censusreporter.org/profiles/86000US32258-32258/">US Census Bureau, ACS 2024 5-year by ZCTA, via censusreporter.org (profiles for 32217, 32224, 32256, 32257, 32258, 32081, 32082, 32084; county profiles for Duval and St. Johns, ACS 2024 1-year)</a>
+      <a href="https://www.census.gov/quickfacts/fact/table/duvalcountyflorida/PST045224">Census QuickFacts, Duval County: 995,561 (Apr 2020) to 1,055,159 (Jul 2024), +6.0%</a>
+      <a href="https://sjcitizen.com/st-johns-county-adds-another-batch-of-residents-en-route-to-350000-but-pace-slows/">St. Johns Citizen on state population estimates for St. Johns County; usafacts.org for the ten-year change</a>
+      <a href="https://www.jacksonville.gov/getContentAsset/d9ff679b-3c86-4a10-a33b-0f51740b551a/135b97c9-84fa-4e82-b956-0fbccec4aa1f/Jacksonville-Urban-Tree-Canopy-Report.pdf?language=en">City of Jacksonville Urban Tree Canopy Assessment; Green Infrastructure Center, Jacksonville Trees to Offset Stormwater</a>
+      <a href="https://www.sjcfl.us/sjc-historic-hazards/">St. Johns County Historic Hazard Events (Nicole 2022; Debby, Helene, Milton 2024); NOAA National Hurricane Center season climatology</a>
+      <a href="https://jacksonville.elaws.us/code/coor_zose_ch656_pt12_subptb_sec656.1205">Jacksonville Code of Ordinances &sect; 656.1205, removal of protected trees</a>
+      <a href="https://www.expertise.com/home-improvement/tree-services/florida/jacksonville">Expertise.com, Jacksonville tree services (199 reviewed; review counts as shown 11 Sep 2026)</a>
+      <a href="https://www.homeblue.com/tree-service/jacksonville-fl-tree-removal-cost.htm">Price ranges: HomeBlue, Homeyou and Today&rsquo;s Homeowner Jacksonville tree removal cost pages</a>
     </div>
   </section>
 </div>
