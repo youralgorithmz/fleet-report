@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>High Standards Tree Market Analysis</title>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F6F5F0; --panel: #FFFFFF; --panel-2: #EFEDE6; --ink: #12181D; --ink-2: #3D4952; --muted: #6B777F;
+    --line: #DDD9CF; --line-2: #C6C1B5; --accent: #E25F14; --accent-soft: rgba(226,95,20,.10);
+    --good: #178B7C; --good-soft: rgba(23,139,124,.12); --warn: #B5760C; --warn-soft: rgba(181,118,12,.14);
+    --bad: #B23A2E; --bad-soft: rgba(178,58,46,.12);
+    --f-display: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --f-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1518; --panel: #171E23; --panel-2: #1F272D; --ink: #EEF0EC; --ink-2: #C3CBD0; --muted: #8F9CA4;
+      --line: #2A343B; --line-2: #3A464E; --accent: #F27A3D; --accent-soft: rgba(242,122,61,.14);
+      --good: #43B3A9; --good-soft: rgba(67,179,169,.14); --warn: #E0A33A; --warn-soft: rgba(224,163,58,.14);
+      --bad: #E0705F; --bad-soft: rgba(224,112,95,.14);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1518; --panel: #171E23; --panel-2: #1F272D; --ink: #EEF0EC; --ink-2: #C3CBD0; --muted: #8F9CA4;
+    --line: #2A343B; --line-2: #3A464E; --accent: #F27A3D; --accent-soft: rgba(242,122,61,.14);
+    --good: #43B3A9; --good-soft: rgba(67,179,169,.14); --warn: #E0A33A; --warn-soft: rgba(224,163,58,.14);
+    --bad: #E0705F; --bad-soft: rgba(224,112,95,.14);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--f-body); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: var(--f-display); letter-spacing: -0.015em; text-wrap: balance; margin: 0; font-variation-settings: "opsz" 96; }
+  p, ul, ol { margin: 0; } ul { padding: 0; list-style: none; }
+  .mono { font-family: var(--f-mono); }
+  .wrap { max-width: 860px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 32px); }
+
+  .mast { border-bottom: 1px solid var(--line); padding-block: 22px 26px; }
+  .mast .top { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 9px; text-decoration: none; font: 800 19px/1 var(--f-display); letter-spacing: -0.02em; }
+  .logo svg { width: 24px; height: 24px; } .logo .ai { color: var(--accent); }
+  .meta { font: 500 11.5px/1.5 var(--f-mono); color: var(--muted); text-align: right; }
+  .mast h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1; font-weight: 800; margin-top: 22px; }
+  .mast h1 small { display: block; font: 600 16px/1.3 var(--f-body); color: var(--ink-2); letter-spacing: 0; margin-top: 8px; }
+  .facts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-top: 22px; }
+  .fact { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--panel); min-width: 0; }
+  .fact .k { font: 500 10.5px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .fact .v { font-size: 14px; font-weight: 600; margin-top: 4px; overflow-wrap: anywhere; }
+
+  .verdict { margin-top: 28px; padding: 18px 20px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); }
+  .verdict h2 { font-size: 22px; font-weight: 700; }
+  .verdict ol { margin-top: 12px; padding-left: 22px; display: grid; gap: 8px; color: var(--ink-2); font-size: 15.5px; }
+  .verdict li b { color: var(--ink); font-weight: 600; }
+
+  .score { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; margin-top: 24px; }
+  .sc { border-radius: 10px; padding: 12px; text-align: center; border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+  .sc .n { font: 500 10.5px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .sc .g { font: 700 15px/1.2 var(--f-display); margin-top: 6px; }
+  .sc.bad .g { color: var(--bad); } .sc.warn .g { color: var(--warn); } .sc.good .g { color: var(--good); } .sc.na .g { color: var(--muted); }
+
+  section { padding-block: 34px; border-bottom: 1px solid var(--line); }
+  .sh { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .sh .num { font: 700 13px/1 var(--f-mono); color: var(--accent); }
+  .sh h2 { font-size: clamp(24px, 3.2vw, 32px); font-weight: 700; line-height: 1.05; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 6px; font: 500 11.5px/1 var(--f-mono); letter-spacing: .04em; margin-left: auto; }
+  .pill.bad { background: var(--bad-soft); color: var(--bad); } .pill.warn { background: var(--warn-soft); color: var(--warn); } .pill.good { background: var(--good-soft); color: var(--good); } .pill.na { background: var(--panel-2); color: var(--muted); }
+  .lead { margin-top: 14px; font-size: 16.5px; color: var(--ink-2); max-width: 64ch; }
+  .lead b { color: var(--ink); font-weight: 600; }
+  .find { margin-top: 16px; display: grid; gap: 8px; }
+  .find li { display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: 14.5px; color: var(--ink-2); align-items: start; }
+  .find li b { color: var(--ink); font-weight: 600; }
+  .find .i { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font: 700 11px/1 var(--f-mono); margin-top: 2px; }
+  .find .i.bad { background: var(--bad-soft); color: var(--bad); } .find .i.warn { background: var(--warn-soft); color: var(--warn); } .find .i.good { background: var(--good-soft); color: var(--good); } .find .i.na { background: var(--panel-2); color: var(--muted); }
+  .find code { font: 12.5px var(--f-mono); background: var(--panel-2); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+  .tbl { margin-top: 16px; overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 520px; }
+  th, td { text-align: left; padding: 9px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+  th { font: 500 10.5px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-top: 0; background: var(--panel-2); }
+  td.c { text-align: center; font-family: var(--f-mono); font-size: 13px; }
+  td.c.no { color: var(--bad); font-weight: 600; } td.c.yes { color: var(--good); }
+  .note { margin-top: 12px; font: 400 12.5px/1.5 var(--f-mono); color: var(--muted); }
+  .metrics { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-top: 16px; }
+  .m { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--panel); min-width: 0; }
+  .m .k { font: 500 10.5px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .m .v { font: 700 24px/1.1 var(--f-display); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .m .v.bad { color: var(--bad); } .m .v.warn { color: var(--warn); }
+  .m .d { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .plan { margin-top: 16px; display: grid; gap: 10px; counter-reset: p; }
+  .plan li { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+  .plan li::before { counter-increment: p; content: "0" counter(p); font: 700 13px/1 var(--f-mono); color: var(--accent); padding-top: 3px; }
+  .plan .t { font-weight: 600; font-size: 15.5px; }
+  .plan .d { font-size: 14px; color: var(--ink-2); margin-top: 3px; }
+  .plan .w { font: 500 11.5px/1.5 var(--f-mono); color: var(--muted); margin-top: 6px; }
+  .src { margin-top: 14px; display: grid; gap: 5px; font: 400 12.5px/1.5 var(--f-mono); color: var(--muted); }
+  .src a { color: var(--ink-2); overflow-wrap: anywhere; }
+  footer { padding-block: 26px 40px; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+  @media (max-width: 760px) { .facts, .score, .metrics { grid-template-columns: 1fr 1fr; } .meta { text-align: left; } }
+  @media (max-width: 420px) { .score { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<div class="wrap mast">
+  <div class="top">
+    <a class="logo" href="https://youralgorithmz.github.io/youralgo-ai/"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="7" fill="var(--ink)"/><path d="M7 8h4l3 5 3-5h4l-5 8v4h-4v-4L7 8z" fill="var(--bg)"/><circle cx="21" cy="21" r="3" fill="var(--accent)"/></svg>YourAlgo<span class="ai">.Ai</span></a>
+    <div class="meta">Free market analysis &middot; prepared 11 Sep 2026<br>Public sources only &middot; nothing here came from inside your accounts</div>
+  </div>
+  <h1>High Standards Tree Service Inc.<small>Jacksonville, FL &middot; highstandardstree.com &middot; (904) 776-2105</small></h1>
+  <div class="facts">
+    <div class="fact"><div class="k">Website platform</div><div class="v">WordPress + Elementor on GoDaddy</div></div>
+    <div class="fact"><div class="k">Pages found</div><div class="v">Home, Tree Removal, Tree Trimming, Emergency, About, Reviews, Contact, Community</div></div>
+    <div class="fact"><div class="k">Address on site</div><div class="v">5198 Verdis St, Jacksonville 32258</div></div>
+    <div class="fact"><div class="k">Territory with us</div><div class="v">8 ZIPs, Duval + St. Johns</div></div>
+  </div>
+
+  <div class="verdict">
+    <h2>The short version</h2>
+    <ol>
+      <li><b>Nobody searching for a tree service in Jacksonville finds you.</b> In six searches across your service area you did not appear once. We could not locate a Google Business Profile under your name, phone or address from the open web.</li>
+      <li><b>The website is still the theme demo with your logo on it.</b> The browser tab says &ldquo;Treecuting&rdquo;, it advertises a $29.99 &ldquo;Garden Fence&rdquo; plan, and it links to the theme vendor&rsquo;s demo site 32 times.</li>
+      <li><b>On a phone it takes about 23 seconds to show its main image</b> under standard mobile test conditions, and the only phone number is at the very bottom of the page.</li>
+    </ol>
+  </div>
+
+  <div class="score" aria-label="Check results">
+    <div class="sc bad"><div class="n">01 Listing</div><div class="g">Not found</div></div>
+    <div class="sc bad"><div class="n">02 Search</div><div class="g">0 of 6</div></div>
+    <div class="sc na"><div class="n">03 Follow-up</div><div class="g">Test on the call</div></div>
+    <div class="sc bad"><div class="n">04 Website</div><div class="g">Needs rebuild</div></div>
+    <div class="sc good"><div class="n">05 Territory</div><div class="g">Yours</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section>
+    <div class="sh"><span class="num">01</span><h2>Your Google listing</h2><span class="pill bad">Not found</span></div>
+    <p class="lead">For most local tree jobs the Google Business Profile is what the homeowner sees first, before any website. <b>We could not find yours.</b> Searching the name, the phone number and the street address across Google web results, Bing and the major directories returned no listing for a Jacksonville business.</p>
+    <ul class="find">
+      <li><span class="i bad">!</span><span><b>Name search returns other companies.</b> &ldquo;High Standards Tree&rdquo; brings up Higher Standards Tree Care in Port Orange, High Standard Tree Services in Auburndale and High Standards Tree Care in Hollywood. Homeowners who hear your name and search it are being sent to three other companies.</span></li>
+      <li><span class="i bad">!</span><span><b>Phone number search finds nothing of yours.</b> (904) 776-2105 does not surface a listing, a directory entry or a review anywhere we could reach.</span></li>
+      <li><span class="i warn">!</span><span><b>No directory presence.</b> No Yelp, Angi, HomeAdvisor, Thumbtack or Better Business Bureau page was found under your name. Competitors on the first page have several each.</span></li>
+      <li><span class="i na">?</span><span><b>To be confirmed live on the call.</b> Google Maps cannot be read by our tools, so a profile may exist that web search does not show. If it does, its name, phone and address must match the website exactly, and it needs categories, services, photos and reviews. We check this together in the first two minutes.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="num">02</span><h2>Where you show up, town by town</h2><span class="pill bad">0 appearances in 6 searches</span></div>
+    <p class="lead">We ran the searches a homeowner in your ZIPs would type. <b>You did not appear in any of them.</b> The companies that did are listed so you can see who is taking the calls.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Search</th><th>Covers your ZIPs</th><th>You</th><th>Who appeared</th></tr></thead>
+      <tbody>
+        <tr><td>tree service Jacksonville FL</td><td>all</td><td class="c no">No</td><td>Roberts Tree Service, Show Me Tree Service, Big Ben&rsquo;s, 904Tree, The Tree Surgeons, Shaw&rsquo;s, Custom Tree Surgeons</td></tr>
+        <tr><td>tree removal Jacksonville FL</td><td>all</td><td class="c no">No</td><td>Roberts, Big Ben&rsquo;s, 904Tree, The Tree Surgeons, American Tree Solutions, Shaw&rsquo;s, Custom Tree Surgeons</td></tr>
+        <tr><td>tree service Mandarin Jacksonville</td><td>32257, 32258</td><td class="c no">No</td><td>Jax Tree Removal, Russell Tree Care, North Florida Tree Service, American Tree Surgeons, Snip&rsquo;s, Tree Cutters of Florida</td></tr>
+        <tr><td>tree service Southside Baymeadows</td><td>32256, 32217</td><td class="c no">No</td><td>Bushor&rsquo;s Tree Surgeons, William Davis Tree Service, Hamilton Tree Service, Jax Tree Removal, North Florida Tree Service</td></tr>
+        <tr><td>tree service Ponte Vedra Beach</td><td>32081, 32082</td><td class="c no">No</td><td>Bushor&rsquo;s, Tree Masters, Southern Tree Experts, Ponte Vedra Beach Tree Removal, Lucas, Bold City, Beaver</td></tr>
+        <tr><td>&ldquo;High Standards Tree&rdquo; Jacksonville</td><td>your own name</td><td class="c no">No</td><td>Three unrelated companies with similar names, plus directory pages</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Web search results, 11 Sep 2026, US. Google&rsquo;s local map pack is not included because it cannot be read by our tools; on the call we look at it together on your phone, standing in your ZIP.</p>
+    <ul class="find">
+      <li><span class="i warn">!</span><span><b>What the winners have in common.</b> Bushor&rsquo;s says &ldquo;since 1962, ISA Certified Arborists&rdquo;. Jax Tree Removal says &ldquo;ISA Certified Arborist, CCO crane operators, 24/7&rdquo;. Custom Tree Surgeons says &ldquo;over 35 years&rdquo;. 904Tree says &ldquo;fully insured, homeowner-insurance approved&rdquo;. Every one leads with a credential and a number. Your site leads with &ldquo;Preserve Nature, Ensure Safety&rdquo;.</span></li>
+      <li><span class="i warn">!</span><span><b>Your own name is a liability right now.</b> A homeowner who saw your truck and searched the name lands on Port Orange or Auburndale. A verified profile with photos of your crew fixes that in weeks.</span></li>
+      <li><span class="i good">&#10003;</span><span><b>The upside is real.</b> Mandarin, Southside and Ponte Vedra each have a different set of winners, which means no single company owns the whole area. A company with a clean profile and town pages can get onto page one town by town.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="num">03</span><h2>Your follow-up speed</h2><span class="pill na">Timed live on the call</span></div>
+    <p class="lead">We time this the way a homeowner experiences it: call the number, leave a message, submit the website form, send a text, and count the minutes to a human reply. <b>We do not do this without you knowing</b>, so it happens on the call, with you watching the clock.</p>
+    <ul class="find">
+      <li><span class="i bad">!</span><span><b>On a phone, the number is at the bottom of the page.</b> The mobile header shows the logo and a menu icon. The one tap-to-call link sits in the footer. A homeowner on a cracked phone in a storm does not scroll 4,000 pixels to find it.</span></li>
+      <li><span class="i bad">!</span><span><b>The homepage has no contact form.</b> Inner pages carry a Contact Form 7 form. Where its submissions go, who receives them and how fast, is the first thing we test.</span></li>
+      <li><span class="i warn">!</span><span><b>Two contact details on the site are not yours.</b> A second phone link points to <code>tel:23055873407</code> and a second email to <code>info@example.com</code>. Both are theme leftovers, and a homeowner who taps the wrong one gets nothing.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="num">04</span><h2>Your website on a phone</h2><span class="pill bad">Needs a rebuild, not a patch</span></div>
+    <p class="lead">Measured with Google&rsquo;s Lighthouse tool under its standard mobile conditions on 11 Sep 2026. <b>The page is 4.7 MB and takes about 23 seconds to show its main image.</b> Most visitors on a phone leave before that.</p>
+    <div class="metrics">
+      <div class="m"><div class="k">First content</div><div class="v bad">6.1 s</div><div class="d">anything on screen</div></div>
+      <div class="m"><div class="k">Main image</div><div class="v bad">23.4 s</div><div class="d">largest contentful paint</div></div>
+      <div class="m"><div class="k">Page weight</div><div class="v bad">4.7 MB</div><div class="d">2.4 MB is images off-screen</div></div>
+      <div class="m"><div class="k">Server</div><div class="v">50 ms</div><div class="d">hosting is fine; the page is the problem</div></div>
+    </div>
+    <div class="metrics" style="grid-template-columns: repeat(3, minmax(0,1fr))">
+      <div class="m"><div class="k">Lighthouse SEO</div><div class="v warn">85</div><div class="d">no meta description</div></div>
+      <div class="m"><div class="k">Accessibility</div><div class="v warn">71</div><div class="d">contrast, unnamed buttons, zoom disabled</div></div>
+      <div class="m"><div class="k">Best practices</div><div class="v warn">75</div><div class="d">39 insecure requests, console errors</div></div>
+    </div>
+    <ul class="find">
+      <li><span class="i bad">!</span><span><b>The browser tab reads &ldquo;Treecuting&rdquo;</b> on every page. That is the theme&rsquo;s name, and it is what Google shows as your headline in search results. Your company name appears nowhere in a page title.</span></li>
+      <li><span class="i bad">!</span><span><b>A pricing table sells &ldquo;Garden Fence&rdquo; and &ldquo;Forest Planning&rdquo; at $29.99, $49.99 and $69.99.</b> Theme placeholder content, live on your homepage, under the heading &ldquo;Not Any Hidden Charge&rdquo;.</span></li>
+      <li><span class="i bad">!</span><span><b>32 links to the theme vendor&rsquo;s demo site and 14 to a GoDaddy staging address.</b> Menu and footer links send visitors to <code>23july.hostlin.com</code> and <code>p8c.a9a.myftpupload.com</code> instead of your pages.</span></li>
+      <li><span class="i bad">!</span><span><b>Blog posts with placeholder titles</b> such as &ldquo;Unsatiable entreaties may collecting power&rdquo; are published and linked from the homepage, dated 2021.</span></li>
+      <li><span class="i warn">!</span><span><b>&ldquo;847 satisfied clients, 2,671 trees removed, 20 years, 263 emergencies&rdquo;</b> and the four testimonials from &ldquo;John D., James T., David R., Mike T.&rdquo; read as theme defaults. If they are real, they need names, dates and a source; if not, they need to go before a homeowner or a competitor notices.</span></li>
+      <li><span class="i warn">!</span><span><b>No business schema, no meta description, zoom disabled.</b> Google gets no structured name, address, phone or service-area data from the page, and the viewport tag blocks pinch-to-zoom, which fails accessibility checks.</span></li>
+      <li><span class="i good">&#10003;</span><span><b>What is worth keeping.</b> The domain, the logo, the real photos of your crane and crews, and the three real service pages. Hosting responds in 50 ms. Everything else is faster to rebuild than to clean.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="num">05</span><h2>Territory</h2><span class="pill good">Already yours</span></div>
+    <p class="lead">You hold exclusive ZIP territory with us across Duval and St. Johns: <b>32217, 32224, 32256, 32257, 32258, 32081, 32082 and 32084.</b> No other company is marketed to homeowners in those ZIPs through us while you are running. The work above is about making sure the homeowners we reach, and the ones searching on their own, can find and trust you when they look.</p>
+  </section>
+
+  <section>
+    <div class="sh"><span class="num">&rarr;</span><h2>What we would fix first</h2></div>
+    <p class="lead">In this order. The first two are days, not months, and they change what a homeowner sees this week.</p>
+    <ol class="plan">
+      <li><div><div class="t">Claim or fix the Google Business Profile</div><div class="d">Exact name, phone and address matching the site. Categories: tree service, arborist. Services listed. Twenty real photos of crews, the crane and finished jobs. Review link texted to every completed job from now on.</div><div class="w">FIRST WEEK &middot; MEASURED BY: profile views, calls from listing, review count</div></div></li>
+      <li><div><div class="t">Strip the theme leftovers and put the phone at the top</div><div class="d">Page titles with your name and city, the pricing table and placeholder posts removed, the example.com and wrong-number links deleted, the demo-site links repointed, a tap-to-call bar fixed to the top of every mobile page.</div><div class="w">FIRST WEEK &middot; MEASURED BY: calls and form submissions from the site</div></div></li>
+      <li><div><div class="t">Rebuild the site to load in under 3 seconds on a phone</div><div class="d">Compress and resize images, cut the unused scripts, fix the 39 insecure requests, add business schema and meta descriptions. Same domain, same photos, same three services.</div><div class="w">WEEKS 2 TO 4 &middot; MEASURED BY: Lighthouse main-image time, bounce rate</div></div></li>
+      <li><div><div class="t">One page per town you hold</div><div class="d">Mandarin, San Jose and Lakewood, Southside and Baymeadows, Intracoastal, Nocatee, Ponte Vedra Beach, St. Augustine. Each with the towns&rsquo; names, the services, a photo from a job there and the number.</div><div class="w">WEEKS 3 TO 6 &middot; MEASURED BY: appearances in the town searches above</div></div></li>
+      <li><div><div class="t">Time the follow-up and set a target</div><div class="d">Call, text and form answered by a person or a system inside five minutes, day and evening, with every attempt logged. We run this for you today on the appointments we book; the same standard should apply to every inbound lead.</div><div class="w">ONGOING &middot; MEASURED BY: median first reply, leads waiting past 20 minutes</div></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="sh"><span class="num">&#8212;</span><h2>What this analysis did not cover</h2></div>
+    <ul class="find">
+      <li><span class="i na">?</span><span><b>Google Maps rankings and the profile itself.</b> Not readable by our tools; checked live on the call.</span></li>
+      <li><span class="i na">?</span><span><b>Follow-up timing.</b> Done with you on the call, not behind your back.</span></li>
+      <li><span class="i na">?</span><span><b>Local demand by service and season.</b> Requires search-volume data we did not pull for this pass. Available as a follow-up.</span></li>
+      <li><span class="i na">?</span><span><b>Your appointment numbers with us.</b> Deliberately left out of a public-sources document. Your weekly scorecard covers them.</span></li>
+    </ul>
+    <div class="src">
+      <span>Sources, all read 11 Sep 2026:</span>
+      <a href="https://highstandardstree.com/">highstandardstree.com</a> and its /tree-removal/, /tree-trimming/, /emergency-tree-service/, /about-us/, /reviews/, /contact/, /community/ pages (HTML inspected directly)
+      <span>Lighthouse 12, mobile preset, run from Jacksonville-equivalent throttling defaults</span>
+      <span>Web search, US, for the six queries listed in section 02, plus name, phone and address queries; Bing results page for the company name</span>
+      <span>Directory checks: Yelp, Angi, HomeAdvisor, Thumbtack, BBB search results for the company name</span>
+    </div>
+  </section>
+</div>
+
+<footer><div class="wrap">
+  Prepared by YourAlgo.Ai, a service of Your Algorithm LLC, Lake City, Florida, for High Standards Tree Service Inc. Findings are from public sources on the date shown and may change as the site or listings change. No outcome is promised; the measurements listed against each fix are how progress will be shown.
+</div></footer>
+
+</body>
+</html>
