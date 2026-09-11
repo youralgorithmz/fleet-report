@@ -12,3 +12,4 @@ The page is marked `noindex` and excluded in `robots.txt` — it is reachable by
 - `/savannah/` — The Savannah Pattern: territory yield analysis and a national county screen (29 August 2026)
 - `/michigan-storm/` — Michigan Storm Board: where the 2–3 September storm landed, ranked target ZIPs and crew staging (3 September 2026)
 - `/next-three-markets/` — The Next Three Markets: three counties in three states to sign the next contractor, screened against Savannah and the best-yield markets (9 September 2026)
+- `/charleston-market/` — Charleston County Tree Market: prospect-facing market brief for tree contractors in Charleston County, SC — Census housing, Zillow values, NOAA storm record, ZIP table, competitor field, weekly cadence (11 September 2026)
