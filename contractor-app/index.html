@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="Interactive prototype of the Your Algorithm contractor app. Sample data only.">
+<title>Contractor App Prototype</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B3%3C/text%3E%3C/svg%3E">
+<style>
+/* host reset, matching the artifact runtime this page was authored against */
+:root{color-scheme:light dark}
+body{margin:0;font:14px system-ui,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+  :root {
+    --bench: #e8e4dc;
+    --bench-panel: #f7f5f1;
+    --bench-line: #d3cec4;
+    --bench-text: #141312;
+    --bench-muted: #55524d;
+    --bench-dim: #6a665f;
+    --accent: #8a5208;
+    --accent-ink: #ffffff;
+
+    /* The app's own tokens, light. From contractor-app/lib/theme.ts. */
+    --app-ground: #ffffff;
+    --app-raised: #f4f2ee;
+    --app-hairline: #e0ddd7;
+    --app-hairline-strong: #bdb8ae;
+    --app-text: #141312;
+    --app-muted: #55524d;
+    --app-dim: #5f5c57;
+    --app-accent: #8a5208;
+    --app-accent-soft: #f0e6d8;
+    --app-err: #a31826;
+    --app-err-bg: #fcf0f1;
+    --app-warn: #8a5700;
+    --app-warn-bg: #fdf6e8;
+
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bench: #171614;
+      --bench-panel: #1f1e1b;
+      --bench-line: #2f2d29;
+      --bench-text: #f3f2f0;
+      --bench-muted: #a8a49d;
+      --bench-dim: #8a857d;
+      --accent: #d9932f;
+      --accent-ink: #141312;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bench: #171614;
+    --bench-panel: #1f1e1b;
+    --bench-line: #2f2d29;
+    --bench-text: #f3f2f0;
+    --bench-muted: #a8a49d;
+    --bench-dim: #8a857d;
+    --accent: #d9932f;
+    --accent-ink: #141312;
+  }
+
+  .phone[data-app="dark"] {
+    --app-ground: #0a0a0a;
+    --app-raised: #151515;
+    --app-hairline: #1e1e1e;
+    --app-hairline-strong: #2e2e2e;
+    --app-text: #f3f2f0;
+    --app-muted: #a5a29c;
+    --app-dim: #8e8b86;
+    --app-accent: #d9932f;
+    --app-accent-soft: #2a1f0c;
+    --app-err: #ff5a68;
+    --app-err-bg: #1d0c0e;
+    --app-warn: #ffb000;
+    --app-warn-bg: #1c1505;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bench);
+    color: var(--bench-text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; }
+
+  .masthead { border-bottom: 1px solid var(--bench-line); padding-bottom: 18px; margin-bottom: 28px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--bench-dim); margin: 0 0 10px;
+  }
+  h1 { margin: 0 0 8px; font-size: 27px; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+  .standfirst { margin: 0; color: var(--bench-muted); max-width: 62ch; }
+
+  .bench { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; }
+  .stage { flex: 0 0 auto; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+  .rail { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+
+  .phone {
+    width: 390px; max-width: 100%; height: 800px;
+    background: var(--app-ground);
+    border: 1px solid var(--bench-line);
+    border-radius: 34px;
+    box-shadow: 0 24px 60px -30px rgba(20, 19, 18, 0.55);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    font-size: 15px;
+    position: relative;
+  }
+  .screen { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; min-height: 0; }
+  .screen::-webkit-scrollbar { width: 0; }
+
+  .caption { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bench-dim); text-align: center; }
+
+  .app-label {
+    font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--app-dim);
+  }
+  .sect { border-top: 1px solid var(--app-hairline); padding-top: 16px; margin-top: 26px; }
+  .hint { font-size: 13px; color: var(--app-dim); line-height: 1.45; }
+
+  .btn {
+    min-height: 48px; padding: 0 16px; border: 1px solid var(--app-hairline-strong);
+    background: var(--app-ground); color: var(--app-text);
+    font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn:hover { background: var(--app-raised); }
+  .btn.primary { background: var(--app-accent); border-color: var(--app-accent); color: #fff; font-weight: 700; min-height: 52px; font-size: 17px; }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .btn.ghost { border-style: dashed; color: var(--app-dim); font-weight: 600; }
+  .btn.on { border-color: var(--app-accent); background: var(--app-accent-soft); color: var(--app-accent); font-weight: 700; }
+  .btn-row { display: flex; gap: 10px; }
+  .btn-row .btn { flex: 1 1 0; }
+
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; padding: 3px 6px; border: 1px solid var(--app-hairline);
+    background: var(--app-raised); color: var(--app-muted);
+  }
+  .badge.err { color: var(--app-err); background: var(--app-err-bg); border-color: var(--app-err); }
+
+  /* lock */
+  .lock { background: #0a0a0a; flex: 1 1 auto; display: flex; flex-direction: column; padding: 92px 16px 28px; }
+  .lock-time { font-size: 74px; font-weight: 200; color: #f3f2f0; line-height: 1; letter-spacing: -0.02em; }
+  .lock-date { font-size: 16px; color: #8e8b86; margin-top: 4px; }
+  .notif {
+    width: 100%; text-align: left; display: block;
+    background: #151515; border: 1px solid #1e1e1e; border-radius: 18px;
+    padding: 15px 16px; color: inherit; font: inherit; cursor: pointer;
+  }
+  .notif:hover { background: #1b1b1b; }
+  .notif + .notif { margin-top: 10px; }
+  .notif-head { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .notif-mark {
+    width: 18px; height: 18px; border-radius: 5px; background: #8a5208; color: #fff;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .notif-app { font-size: 12px; color: #8e8b86; }
+  .notif-title { font-size: 15px; font-weight: 700; color: #f3f2f0; }
+  .notif-body { font-size: 14px; color: #b5b2ad; line-height: 1.45; margin-top: 3px; }
+
+  /* sign in */
+  .signin { padding: 56px 24px 24px; flex: 1 1 auto; display: flex; flex-direction: column; }
+  .signin h2 { margin: 0 0 8px; font-size: 28px; font-weight: 700; color: var(--app-text); letter-spacing: -0.01em; }
+  .signin p.lede { margin: 0 0 26px; font-size: 17px; color: var(--app-muted); }
+  .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+  .field input {
+    min-height: 50px; border: 1px solid var(--app-hairline-strong); background: var(--app-ground);
+    color: var(--app-text); font-family: inherit; font-size: 17px; padding: 0 14px;
+  }
+  .field input:focus-visible { outline: 2px solid var(--app-accent); outline-offset: -1px; }
+
+  /* list */
+  .list-head { padding: 20px 20px 14px; border-bottom: 1px solid var(--app-hairline); }
+  .list-co { font-size: 21px; font-weight: 700; color: var(--app-text); }
+  .list-sync { font-size: 13px; color: var(--app-dim); margin-top: 4px; }
+  .banner {
+    font-size: 13px; line-height: 1.45; padding: 10px 12px; margin-top: 12px;
+    border-left: 2px solid var(--app-warn); background: var(--app-warn-bg); color: var(--app-warn);
+  }
+  .row {
+    width: 100%; text-align: left; display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px; min-height: 84px; border: 0; border-bottom: 1px solid var(--app-hairline);
+    background: var(--app-ground); color: inherit; font: inherit; cursor: pointer;
+  }
+  .row:hover { background: var(--app-raised); }
+  .row-when { width: 88px; flex: 0 0 88px; }
+  .row-day { font-size: 13px; font-weight: 700; color: var(--app-accent); letter-spacing: 0.03em; }
+  .row-time { font-size: 20px; font-weight: 700; color: var(--app-text); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .row-body { flex: 1 1 auto; min-width: 0; }
+  .row-title { font-size: 17px; color: var(--app-text); line-height: 1.35; }
+  .row-badges { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .row-chev { font-size: 26px; color: var(--app-dim); line-height: 1; }
+
+  /* detail */
+  .detail { padding: 16px 20px 40px; flex: 1 1 auto; }
+  .back {
+    border: 0; background: none; color: var(--app-accent); font: inherit; font-size: 15px;
+    font-weight: 600; cursor: pointer; padding: 6px 0; margin-bottom: 10px;
+  }
+  .d-when { font-size: 15px; font-weight: 700; color: var(--app-accent); letter-spacing: 0.03em; }
+  .d-name { margin: 6px 0 0; font-size: 27px; font-weight: 700; color: var(--app-text); letter-spacing: -0.01em; }
+  .d-addr { font-size: 17px; color: var(--app-muted); margin-top: 8px; }
+  .d-missing {
+    font-size: 15px; line-height: 1.45; padding: 10px 12px; margin-top: 10px;
+    border-left: 2px solid var(--app-warn); background: var(--app-warn-bg); color: var(--app-warn);
+  }
+  .mark { font-size: 17px; color: var(--app-text); }
+  .scope { font-size: 17px; color: var(--app-muted); line-height: 1.5; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .change-note { font-size: 15px; color: var(--app-text); line-height: 1.4; }
+  .change-at { font-size: 13px; color: var(--app-dim); margin-top: 2px; }
+  .change + .change { margin-top: 12px; }
+  .photos { display: flex; gap: 8px; flex-wrap: wrap; }
+  .photo {
+    width: 78px; height: 78px; border: 1px solid var(--app-hairline);
+    background: var(--app-raised); display: flex; align-items: flex-end; padding: 6px;
+    font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; color: var(--app-dim);
+  }
+  .photo.add { border-style: dashed; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; }
+  .photo.add:hover { border-color: var(--app-accent); color: var(--app-accent); }
+
+  /* numbers */
+  .pad { padding: 20px 20px 36px; flex: 1 1 auto; }
+  .h-screen { font-size: 24px; font-weight: 700; color: var(--app-text); letter-spacing: -0.01em; margin: 0; }
+  .h-sub { font-size: 14px; color: var(--app-dim); margin-top: 3px; }
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--app-hairline); border: 1px solid var(--app-hairline); margin-top: 18px; }
+  .tile { background: var(--app-ground); padding: 14px 12px; }
+  .tile-n { font-size: 28px; font-weight: 700; color: var(--app-text); line-height: 1; font-variant-numeric: tabular-nums; }
+  .tile-k { font-size: 11px; color: var(--app-dim); margin-top: 6px; line-height: 1.3; }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 96px; margin-top: 14px; }
+  .bar-wrap { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+  .bar { width: 100%; background: var(--app-accent-soft); border-top: 3px solid var(--app-accent); }
+  .bar-k { font-size: 10px; color: var(--app-dim); font-family: var(--mono); }
+  .tally { display: flex; flex-direction: column; }
+  .tally-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--app-hairline); }
+  .tally-row:last-child { border-bottom: 0; }
+  .tally-n { font-size: 19px; font-weight: 700; color: var(--app-text); width: 30px; font-variant-numeric: tabular-nums; }
+  .tally-l { font-size: 15px; color: var(--app-text); flex: 1 1 auto; }
+  .tally-b { height: 6px; background: var(--app-accent); flex: 0 0 auto; }
+
+  /* territory */
+  .map { width: 100%; height: auto; display: block; margin-top: 16px; }
+  .legend { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .leg { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--app-muted); }
+  .swatch { width: 16px; height: 16px; flex: 0 0 auto; border: 1px solid var(--app-hairline-strong); }
+  .zips { margin-top: 6px; }
+  .zip-row { display: flex; align-items: baseline; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--app-hairline); }
+  .zip-n { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--app-text); width: 58px; flex: 0 0 auto; }
+  .zip-t { font-size: 15px; color: var(--app-muted); }
+
+  /* messages */
+  .thread { flex: 1 1 auto; padding: 18px 16px 12px; display: flex; flex-direction: column; gap: 12px; }
+  .msg { max-width: 82%; padding: 11px 14px; font-size: 15px; line-height: 1.45; }
+  .msg.them { align-self: flex-start; background: var(--app-raised); color: var(--app-text); }
+  .msg.you { align-self: flex-end; background: var(--app-accent); color: #fff; }
+  .msg-who { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--app-dim); margin-bottom: 5px; }
+  .msg-at { font-size: 11px; color: var(--app-dim); margin-top: 5px; }
+  .msg.you .msg-at { color: rgba(255,255,255,0.75); }
+  .composer { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--app-hairline); }
+  .composer input {
+    flex: 1 1 auto; min-width: 0; min-height: 46px; border: 1px solid var(--app-hairline-strong);
+    background: var(--app-ground); color: var(--app-text); font-family: inherit; font-size: 15px; padding: 0 12px;
+  }
+  .composer input:focus-visible { outline: 2px solid var(--app-accent); outline-offset: -1px; }
+
+  /* tabs */
+  .tabbar { display: flex; border-top: 1px solid var(--app-hairline); background: var(--app-ground); flex: 0 0 auto; }
+  .tab {
+    flex: 1 1 0; border: 0; background: none; cursor: pointer; font: inherit;
+    padding: 9px 4px 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    color: var(--app-dim); min-height: 58px;
+  }
+  .tab svg { width: 21px; height: 21px; display: block; }
+  .tab-l { font-size: 10.5px; letter-spacing: 0.02em; }
+  .tab[aria-selected="true"] { color: var(--app-accent); }
+  .tab[aria-selected="true"] .tab-l { font-weight: 700; }
+  .tab-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--app-accent); position: absolute; margin: -2px 0 0 15px; }
+
+  .sample-flag {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--app-dim); border: 1px solid var(--app-hairline); padding: 3px 7px; display: inline-block;
+  }
+
+  /* sheet */
+  .sheet-scrim { position: absolute; inset: 0; background: rgba(10,10,10,0.5); display: flex; align-items: flex-end; z-index: 5; }
+  .sheet { width: 100%; background: var(--app-ground); padding: 22px 20px 26px; border-top: 1px solid var(--app-hairline-strong); }
+  .sheet h3 { margin: 0 0 8px; font-size: 19px; font-weight: 700; color: var(--app-text); }
+  .sheet p { margin: 0 0 18px; font-size: 15px; color: var(--app-muted); line-height: 1.5; }
+  .toast {
+    position: absolute; left: 16px; right: 16px; bottom: 76px; z-index: 6;
+    background: var(--app-text); color: var(--app-ground); padding: 13px 16px; font-size: 14px; line-height: 1.4;
+  }
+
+  /* rail */
+  .panel { background: var(--bench-panel); border: 1px solid var(--bench-line); padding: 18px; }
+  .panel h2 {
+    margin: 0 0 14px; font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--bench-dim);
+  }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 1px solid var(--bench-line); background: transparent; color: var(--bench-text);
+    font: inherit; font-size: 14px; padding: 9px 14px; min-height: 44px; cursor: pointer;
+    display: inline-flex; align-items: center;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+
+  .switches { display: flex; flex-direction: column; gap: 2px; }
+  .switch { display: flex; align-items: center; gap: 12px; padding: 11px 0; min-height: 48px; border-bottom: 1px solid var(--bench-line); cursor: pointer; }
+  .switch:last-child { border-bottom: 0; }
+  .switch input { width: 18px; height: 18px; accent-color: var(--accent); flex: 0 0 auto; cursor: pointer; }
+  .switch-name { font-size: 15px; color: var(--bench-text); display: block; }
+  .switch-why { font-size: 13px; color: var(--bench-dim); line-height: 1.4; display: block; }
+
+  .rules { display: flex; flex-direction: column; gap: 16px; }
+  .rule-h { font-size: 14px; font-weight: 700; color: var(--bench-text); display: block; }
+  .rule-p { font-size: 14px; color: var(--bench-muted); line-height: 1.5; margin: 2px 0 0; }
+
+  .foot { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--bench-line); font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--bench-dim); }
+
+  @media (max-width: 860px) {
+    .bench { gap: 28px; }
+    .stage { width: 100%; }
+    .phone { height: 740px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Your Algorithm &middot; Prototype</p>
+    <h1>The contractor app</h1>
+    <p class="standfirst">
+      A working click-through of the Android app on sample data. Four tabs: the estimates we booked,
+      the numbers behind them, the territory you hold, and a line straight to your rep.
+    </p>
+  </header>
+
+  <div class="bench">
+
+    <div class="stage">
+      <div class="phone" id="phone" data-app="light">
+
+        <!-- LOCK -->
+        <section class="screen" id="s-lock" hidden>
+          <div class="lock">
+            <div style="padding-inline:12px">
+              <div class="lock-time">8:41</div>
+              <div class="lock-date">Friday, 19 September</div>
+            </div>
+            <div style="margin-top:52px">
+              <button class="notif" type="button" data-open="a1">
+                <span class="notif-head">
+                  <span class="notif-mark">Y</span><span class="notif-app">Your Algorithm</span>
+                  <span class="notif-app">&middot;</span><span class="notif-app">now</span>
+                </span>
+                <span class="notif-title">New estimate booked</span>
+                <span class="notif-body">Sat, Sep 20, 8:30 AM &mdash; 1142 Lakeview Dr, DeLand FL</span>
+              </button>
+              <button class="notif" type="button" data-open="a4">
+                <span class="notif-head">
+                  <span class="notif-mark">Y</span><span class="notif-app">Your Algorithm</span>
+                  <span class="notif-app">&middot;</span><span class="notif-app">2h</span>
+                </span>
+                <span class="notif-title">New estimate booked</span>
+                <span class="notif-body">Mon, Sep 22, 2:00 PM &mdash; 88 Rosewood Ct, Orange City FL</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SIGN IN -->
+        <section class="screen" id="s-signin" hidden>
+          <div class="signin">
+            <p class="app-label" style="letter-spacing:0.3em;margin:0 0 14px">Your Algorithm</p>
+            <h2>Your appointments</h2>
+            <p class="lede">Sign in with the username and password your rep gave you.</p>
+
+            <div class="field">
+              <label class="app-label" for="pf-user">Username</label>
+              <input id="pf-user" name="username" type="text" value="cedarridge" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="field">
+              <label class="app-label" for="pf-pass">Password</label>
+              <input id="pf-pass" name="password" type="password" value="treecare2026" autocomplete="off">
+            </div>
+
+            <button class="btn primary" type="button" id="do-signin" style="margin-top:10px">Sign in</button>
+            <button class="btn ghost" type="button" id="do-bio" style="margin-top:10px">Use fingerprint instead</button>
+
+            <div style="flex:1 1 auto"></div>
+            <div style="border-top:1px solid var(--app-hairline);padding-top:18px">
+              <p class="hint" style="margin:0">
+                Forgotten your password? Call your rep and they will reset it. There is no
+                self-service reset, because this app shows your customers&rsquo; details.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- LIST -->
+        <section class="screen" id="s-list" hidden>
+          <div class="list-head">
+            <div class="list-co">Cedar Ridge Tree Care</div>
+            <div class="list-sync" id="list-sync">Updated 8:41 PM, 19 Sep</div>
+            <div class="banner" id="list-banner" hidden></div>
+          </div>
+          <div id="list-rows" style="flex:1 1 auto"></div>
+        </section>
+
+        <!-- DETAIL -->
+        <section class="screen" id="s-detail" hidden>
+          <div class="detail" id="detail-body"></div>
+        </section>
+
+        <!-- NUMBERS -->
+        <section class="screen" id="s-numbers" hidden>
+          <div class="pad">
+            <h2 class="h-screen">Your numbers</h2>
+            <div class="h-sub">Week of 15&ndash;21 September &middot; <span class="sample-flag">Sample</span></div>
+
+            <div class="tiles">
+              <div class="tile"><div class="tile-n">6</div><div class="tile-k">Booked<br>this week</div></div>
+              <div class="tile"><div class="tile-n">4</div><div class="tile-k">Booked<br>last week</div></div>
+              <div class="tile"><div class="tile-n">19</div><div class="tile-k">Booked<br>this month</div></div>
+            </div>
+
+            <div class="sect">
+              <div class="app-label" style="margin-bottom:4px">Estimates booked, by week</div>
+              <div class="bars" id="bars"></div>
+            </div>
+
+            <div class="sect">
+              <div class="app-label" style="margin-bottom:10px">How you marked them</div>
+              <div class="tally" id="tally"></div>
+              <div class="hint" style="margin-top:12px">
+                Five of this month&rsquo;s appointments are not marked yet.
+              </div>
+            </div>
+
+            <div class="sect">
+              <p class="hint" style="margin:0">
+                These are estimates we booked onto your calendar, and what you told us happened at them.
+                Nothing on this screen is a projection, an average or a figure we worked out for you.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- TERRITORY -->
+        <section class="screen" id="s-territory" hidden>
+          <div class="pad">
+            <h2 class="h-screen">Your territory</h2>
+            <div class="h-sub">Volusia County, Florida &middot; <span class="sample-flag">Sample</span></div>
+
+            <svg class="map" viewBox="0 0 320 262" role="img" aria-label="Schematic map of Volusia County showing the ZIP areas held at your tier">
+              <g id="map-cells"></g>
+            </svg>
+
+            <div class="legend">
+              <div class="leg"><span class="swatch" style="background:var(--app-accent);border-color:var(--app-accent)"></span>Yours, at your tier</div>
+              <div class="leg"><span class="swatch" style="background:var(--app-raised)"></span>Held by another company at a different tier</div>
+              <div class="leg"><span class="swatch" style="background:var(--app-ground)"></span>Not covered</div>
+            </div>
+
+            <div class="sect">
+              <div class="app-label" style="margin-bottom:6px">The five you hold</div>
+              <div class="zips" id="zips"></div>
+            </div>
+
+            <div class="sect">
+              <p class="hint" style="margin:0 0 10px">
+                One company per territory at your tier. While you hold these, we do not put another
+                tree company at your tier into them.
+              </p>
+              <p class="hint" style="margin:0">
+                Want to add an area or drop one? Ask your rep &mdash; territory is changed by a person,
+                never in the app.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- MESSAGES -->
+        <section class="screen" id="s-messages" hidden>
+          <div class="thread" id="thread"></div>
+          <div class="composer">
+            <label class="app-label" for="pf-msg" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Message your rep</label>
+            <input id="pf-msg" type="text" placeholder="Message Nile&hellip;">
+            <button class="btn" type="button" id="do-send" style="flex:0 0 auto">Send</button>
+          </div>
+        </section>
+
+        <nav class="tabbar" id="tabbar" hidden></nav>
+        <div id="sheet-host"></div>
+        <div id="toast-host"></div>
+      </div>
+
+      <p class="caption" id="stage-caption">Appointments &mdash; the daily screen</p>
+    </div>
+
+    <aside class="rail">
+
+      <section class="panel">
+        <h2>Screens</h2>
+        <div class="jump" id="jump"></div>
+      </section>
+
+      <section class="panel">
+        <h2>States worth showing</h2>
+        <div class="switches">
+          <label class="switch" for="sw-dark">
+            <input type="checkbox" id="sw-dark">
+            <span>
+              <span class="switch-name">Dark theme</span>
+              <span class="switch-why">The app follows the phone. A crew starting at 6am is looking at this one.</span>
+            </span>
+          </label>
+          <label class="switch" for="sw-offline">
+            <input type="checkbox" id="sw-offline">
+            <span>
+              <span class="switch-name">No signal</span>
+              <span class="switch-why">The list is cached on the phone, so a driveway with no bars still shows whose house it is.</span>
+            </span>
+          </label>
+          <label class="switch" for="sw-failed">
+            <input type="checkbox" id="sw-failed">
+            <span>
+              <span class="switch-name">Calendar unreachable</span>
+              <span class="switch-why">Says so out loud. &ldquo;Nothing booked&rdquo; and &ldquo;we could not look&rdquo; are different sentences.</span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>What the screens encode</h2>
+        <div class="rules">
+          <div>
+            <span class="rule-h">The notification names no homeowner</span>
+            <p class="rule-p">Time and place only. A lock screen is read by whoever is holding the phone.</p>
+          </div>
+          <div>
+            <span class="rule-h">Checked by us, then how it went</span>
+            <p class="rule-p">Our pre-visit check and their post-visit result sit in separate sections. Blended, they read as one claim &mdash; and the first contractor to lose a bid says the appointment was never verified.</p>
+          </div>
+          <div>
+            <span class="rule-h">The numbers are counted, never modelled</span>
+            <p class="rule-p">Estimates we booked, and what the contractor told us happened. No averages, no projections, no figure we worked out on their behalf.</p>
+          </div>
+          <div>
+            <span class="rule-h">Territory is per tier, not per ZIP</span>
+            <p class="rule-p">The map says &ldquo;yours at your tier&rdquo; and shows who else is in the county at another one. Saying &ldquo;you own this ZIP&rdquo; would contradict how we actually sell.</p>
+          </div>
+          <div>
+            <span class="rule-h">The app never changes anything itself</span>
+            <p class="rule-p">Appointments, territory, service area: all of it moves through a person who confirms and tells the homeowner.</p>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+  </div>
+
+  <p class="foot">
+    Sample data &mdash; the company, every homeowner, address, number and ZIP assignment here is invented.
+    Prototype only: no live calendar, no live routing sheet, no real record.
+  </p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var APPTS = [
+    { id:'a1', day:'Sat, 20 Sep', time:'8:30 AM', long:'Saturday, 20 September, 8:30 AM',
+      name:'Marcus Webb', title:'Tree Assessment — Marcus Webb',
+      address:'1142 Lakeview Dr, DeLand FL 32724', phone:'(386) 555‑0147',
+      scope:'Large oak leaning over the back fence since the storm, wants it taken down. Two palms out front trimmed at the same time if we’re there. Access through the side gate, dog in the yard.',
+      marks:[['Qualified','Nile'],['Verified','Nile'],['Confirmed','Dustin']],
+      history:[['Moved to a new time','Thursday, 18 September, 4:12 PM']],
+      photos:0, outcome:null, cancelled:false },
+    { id:'a2', day:'Sat, 20 Sep', time:'11:00 AM', long:'Saturday, 20 September, 11:00 AM',
+      name:'Danielle Prieto', title:'Tree Assessment — Danielle Prieto',
+      address:'7 Marisol Way, Deltona FL 32725', phone:'(386) 555‑0192',
+      scope:'Two dead pines at the back of the lot she wants gone before hurricane season. Asked whether the stumps can come out at the same time.',
+      marks:[['Qualified','Nile']], history:[], photos:0, outcome:null, cancelled:false },
+    { id:'a3', day:'Mon, 22 Sep', time:'9:00 AM', long:'Monday, 22 September, 9:00 AM',
+      name:'Ray Coleman', title:'Tree Assessment — Ray Coleman',
+      address:'214 Bluff Rd, DeBary FL 32713', phone:'(386) 555‑0238',
+      scope:'Oak limb over the driveway after the wind came through.',
+      marks:[['Qualified','Dustin'],['Verified','Dustin']],
+      history:[['Removed from the calendar — reason unknown','Friday, 19 September, 7:02 AM']],
+      photos:0, outcome:null, cancelled:true },
+    { id:'a4', day:'Mon, 22 Sep', time:'2:00 PM', long:'Monday, 22 September, 2:00 PM',
+      name:'Sandra Okafor', title:'Tree Assessment — Sandra Okafor',
+      address:'88 Rosewood Ct, Orange City FL 32763', phone:'(386) 555‑0271',
+      scope:'Wants the whole row of hedges along the drive taken back, and a look at the maple by the porch that is dropping branches.',
+      marks:[['Qualified','Nile'],['Verified','Nile'],['Confirmed','Nile']],
+      history:[], photos:2, outcome:'bid', cancelled:false },
+    { id:'a5', day:'Tue, 23 Sep', time:'8:00 AM', long:'Tuesday, 23 September, 8:00 AM',
+      name:'Kevin Truong', title:'Tree Assessment — Kevin Truong',
+      address:null, phone:'(386) 555‑0315',
+      scope:'Large camphor at the property line the neighbour has complained about. Wants an opinion on whether it can be saved.',
+      marks:[['Qualified','Dustin']], history:[], photos:0, outcome:null, cancelled:false },
+    { id:'a6', day:'Wed, 24 Sep', time:'10:30 AM', long:'Wednesday, 24 September, 10:30 AM',
+      name:'Priya Raman', title:'Tree Assessment — Priya Raman',
+      address:'455 Heron Lake Dr, DeLand FL 32724', phone:'(386) 555‑0358',
+      scope:'Storm took half a water oak down across the fence. Needs the rest of it removed and the fence cleared.',
+      marks:[['Qualified','Nile'],['Verified','Dustin'],['Confirmed','Dustin']],
+      history:[], photos:3, outcome:'won', cancelled:false }
+  ];
+
+  var OUTCOMES = [
+    { id:'bid', label:'Bid it' }, { id:'won', label:'Won it' },
+    { id:'lost', label:'Lost it' }, { id:'no_show', label:'No show' }
+  ];
+  var OUTCOME_BADGE = { bid:'Bid', won:'Won', lost:'Lost', no_show:'No show' };
+
+  var WEEKS = [
+    ['25 Aug',3], ['1 Sep',5], ['8 Sep',4], ['15 Sep',6]
+  ];
+  var TALLY = [['Bid',8],['Won',3],['Lost',2],['No show',1]];
+
+  /* Schematic cells, not real boundaries. A shipped map draws real ZIP
+     polygons; this shows the idea without pretending to be survey data. */
+  var CELLS = [
+    { pts:'24,36 108,28 116,92 30,100',    zip:'32720', town:'DeLand',      state:'mine' },
+    { pts:'108,28 196,34 200,96 116,92',   zip:'32724', town:'DeLand',      state:'mine' },
+    { pts:'196,34 286,44 288,104 200,96',  zip:'32117', town:'Daytona',     state:'other' },
+    { pts:'30,100 116,92 122,158 38,164',  zip:'32763', town:'Orange City', state:'mine' },
+    { pts:'116,92 200,96 204,160 122,158', zip:'32725', town:'Deltona',     state:'mine' },
+    { pts:'200,96 288,104 290,166 204,160',zip:'32713', town:'DeBary',      state:'other' },
+    { pts:'38,164 122,158 128,222 46,228', zip:'32174', town:'Ormond',      state:'none' },
+    { pts:'122,158 204,160 208,224 128,222',zip:'32738', town:'Deltona',    state:'mine' },
+    { pts:'204,160 290,166 292,226 208,224',zip:'32168', town:'New Smyrna', state:'none' }
+  ];
+
+  var THREAD = [
+    { who:'Nile, your rep', side:'them', text:'Marcus Webb is confirmed for Saturday 8:30. He asked that you call before you set off — the dog is in the yard.', at:'Thu 4:14 PM' },
+    { who:'You', side:'you', text:'Got it. Any chance Monday 9:00 can move back an hour? Crew is on a removal until then.', at:'Thu 6:02 PM' },
+    { who:'Nile, your rep', side:'them', text:'Asked him — 10:00 works. Calendar is updated and he has been told.', at:'Fri 8:20 AM' }
+  ];
+
+  var TABS = [
+    { id:'list', label:'Appointments', icon:'M3 5h14M3 10h14M3 15h9' },
+    { id:'numbers', label:'Numbers', icon:'M4 16V9M9 16V4M14 16v-5' },
+    { id:'territory', label:'Territory', icon:'M10 17s6-5.2 6-9.4A6 6 0 1 0 4 7.6C4 11.8 10 17 10 17z M10 5.6a2 2 0 1 1 0 4 2 2 0 0 1 0-4z' },
+    { id:'messages', label:'Messages', icon:'M3 4h14v10H7l-4 3V4z' }
+  ];
+
+  var SCREENS = [
+    { id:'lock', label:'Lock screen', caption:'The notification — why it is an app', tabs:false },
+    { id:'signin', label:'Sign in', caption:'Sign in — no self-service reset', tabs:false },
+    { id:'list', label:'Appointments', caption:'Appointments — the daily screen', tabs:true },
+    { id:'detail', label:'Appointment', caption:'One appointment — who, where, and who checked it', tabs:false },
+    { id:'numbers', label:'Numbers', caption:'The numbers — counted, never modelled', tabs:true },
+    { id:'territory', label:'Territory', caption:'Territory — exclusivity made tangible', tabs:true },
+    { id:'messages', label:'Messages', caption:'Messages — a line to your rep', tabs:true }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var currentAppt = 'a1';
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+    });
+  }
+  function byId(id) { return APPTS.filter(function (a) { return a.id === id; })[0]; }
+
+  function show(id) {
+    SCREENS.forEach(function (s) { $('s-' + s.id).hidden = (s.id !== id); });
+    var meta = SCREENS.filter(function (s) { return s.id === id; })[0];
+    $('stage-caption').textContent = meta ? meta.caption : '';
+    $('tabbar').hidden = !(meta && meta.tabs);
+    document.querySelectorAll('#jump .chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', String(c.dataset.screen === id));
+    });
+    document.querySelectorAll('#tabbar .tab').forEach(function (t) {
+      t.setAttribute('aria-selected', String(t.dataset.screen === id));
+    });
+    var el = $('s-' + id);
+    if (el) el.scrollTop = 0;
+  }
+
+  function renderList() {
+    var offline = $('sw-offline').checked;
+    var failed = $('sw-failed').checked;
+
+    $('list-sync').textContent = offline
+      ? 'Offline — showing the list from 8:41 PM, 19 Sep'
+      : 'Updated 8:41 PM, 19 Sep';
+
+    var banner = $('list-banner');
+    banner.hidden = !failed;
+    if (failed) banner.textContent = 'Cedar Ridge Tree Care: calendar request failed — this list may be incomplete.';
+
+    $('list-rows').innerHTML = APPTS.map(function (a) {
+      var badges = '';
+      if (a.cancelled) badges += '<span class="badge err">Cancelled</span>';
+      if (a.outcome) badges += '<span class="badge">' + esc(OUTCOME_BADGE[a.outcome]) + '</span>';
+      return '<button class="row" type="button" data-open="' + a.id + '">' +
+        '<span class="row-when"><span class="row-day">' + esc(a.day) + '</span>' +
+        '<span class="row-time" style="display:block">' + esc(a.time) + '</span></span>' +
+        '<span class="row-body"><span class="row-title" style="display:block">' + esc(a.title) + '</span>' +
+        (badges ? '<span class="row-badges">' + badges + '</span>' : '') + '</span>' +
+        '<span class="row-chev">›</span></button>';
+    }).join('');
+  }
+
+  function renderDetail() {
+    var a = byId(currentAppt);
+    if (!a) return;
+
+    var marks = a.marks.map(function (m) {
+      return '<div class="mark">' + esc(m[0]) + ' by ' + esc(m[1]) + '</div>';
+    }).join('');
+
+    var pills = OUTCOMES.map(function (o) {
+      return '<button class="btn' + (a.outcome === o.id ? ' on' : '') + '" type="button" data-outcome="' +
+        o.id + '">' + esc(o.label) + '</button>';
+    }).join('');
+
+    var history = a.history.map(function (h) {
+      return '<div class="change"><div class="change-note">' + esc(h[0]) + '</div>' +
+        '<div class="change-at">' + esc(h[1]) + '</div></div>';
+    }).join('');
+
+    var shots = '';
+    for (var i = 0; i < a.photos; i += 1) shots += '<div class="photo">IMG ' + (i + 1) + '</div>';
+    shots += '<button class="photo add" type="button" data-act="photo">+</button>';
+
+    $('detail-body').innerHTML =
+      '<button class="back" type="button" id="do-back">‹ Appointments</button>' +
+      '<div class="d-when">' + esc(a.long) + '</div>' +
+      '<h2 class="d-name">' + esc(a.name) + '</h2>' +
+      (a.address ? '<div class="d-addr">' + esc(a.address) + '</div>'
+        : '<div class="d-missing">No address on this one &mdash; call before you drive.</div>') +
+      '<div class="btn-row" style="margin-top:16px">' +
+        '<button class="btn" type="button" data-act="call">Call</button>' +
+        '<button class="btn" type="button" data-act="directions"' + (a.address ? '' : ' disabled style="opacity:.45"') + '>Directions</button>' +
+      '</div>' +
+      (marks ? '<div class="sect"><div class="app-label" style="margin-bottom:10px">Checked by us</div>' + marks +
+        '<div class="hint" style="margin-top:8px">Every appointment is checked by a person before it reaches you.</div></div>' : '') +
+      '<div class="sect"><div class="app-label" style="margin-bottom:10px">What they asked for</div>' +
+        '<div class="scope">' + esc(a.scope) + '</div></div>' +
+      '<div class="sect"><div class="app-label" style="margin-bottom:10px">How it went</div>' +
+        '<div class="hint" style="margin-bottom:12px">Your result, after the visit. Kept separate from our check above.</div>' +
+        '<div class="pills">' + pills + '</div></div>' +
+      '<div class="sect"><div class="app-label" style="margin-bottom:10px">Photos from the visit</div>' +
+        '<div class="hint" style="margin-bottom:12px">Whatever the crew shoots stays on the job record.</div>' +
+        '<div class="photos">' + shots + '</div></div>' +
+      (history ? '<div class="sect"><div class="app-label" style="margin-bottom:10px">What has changed</div>' + history + '</div>' : '') +
+      '<div class="sect"><div class="app-label" style="margin-bottom:10px">Need this changed?</div>' +
+        '<div class="hint" style="margin-bottom:12px">Your rep makes the change and tells the homeowner. Nothing moves until they confirm.</div>' +
+        '<div class="btn-row"><button class="btn" type="button" data-ask="move">Ask to move</button>' +
+        '<button class="btn" type="button" data-ask="cancel">Ask to cancel</button></div></div>';
+  }
+
+  function renderNumbers() {
+    var max = Math.max.apply(null, WEEKS.map(function (w) { return w[1]; }));
+    $('bars').innerHTML = WEEKS.map(function (w) {
+      var h = Math.round((w[1] / max) * 72) + 4;
+      return '<div class="bar-wrap"><span class="bar-k">' + w[1] + '</span>' +
+        '<div class="bar" style="height:' + h + 'px"></div>' +
+        '<span class="bar-k">' + esc(w[0]) + '</span></div>';
+    }).join('');
+
+    var top = Math.max.apply(null, TALLY.map(function (t) { return t[1]; }));
+    $('tally').innerHTML = TALLY.map(function (t) {
+      return '<div class="tally-row"><span class="tally-n">' + t[1] + '</span>' +
+        '<span class="tally-l">' + esc(t[0]) + '</span>' +
+        '<span class="tally-b" style="width:' + Math.round((t[1] / top) * 96) + 'px"></span></div>';
+    }).join('');
+  }
+
+  function renderTerritory() {
+    var fill = { mine:'var(--app-accent)', other:'var(--app-raised)', none:'var(--app-ground)' };
+    var ink  = { mine:'#ffffff', other:'var(--app-muted)', none:'var(--app-dim)' };
+    $('map-cells').innerHTML = CELLS.map(function (c) {
+      var xs = c.pts.split(' ').map(function (p) { return parseFloat(p.split(',')[0]); });
+      var ys = c.pts.split(' ').map(function (p) { return parseFloat(p.split(',')[1]); });
+      var cx = xs.reduce(function (a, b) { return a + b; }, 0) / xs.length;
+      var cy = ys.reduce(function (a, b) { return a + b; }, 0) / ys.length;
+      // var() resolves in an inline style but not reliably in an SVG
+      // presentation attribute, which renders every cell black.
+      return '<polygon points="' + c.pts + '" style="fill:' + fill[c.state] +
+        ';stroke:var(--app-hairline-strong);stroke-width:1.5' +
+        (c.state === 'other' ? ';stroke-dasharray:4 3' : '') + '"></polygon>' +
+        '<text x="' + cx + '" y="' + (cy + 4) + '" text-anchor="middle" style="fill:' + ink[c.state] +
+        '" font-family="ui-monospace, monospace" font-size="12" font-weight="700">' + c.zip + '</text>';
+    }).join('');
+
+    $('zips').innerHTML = CELLS.filter(function (c) { return c.state === 'mine'; }).map(function (c) {
+      return '<div class="zip-row"><span class="zip-n">' + c.zip + '</span>' +
+        '<span class="zip-t">' + esc(c.town) + '</span></div>';
+    }).join('');
+  }
+
+  function renderThread() {
+    $('thread').innerHTML = THREAD.map(function (m) {
+      return '<div class="msg ' + m.side + '">' +
+        (m.side === 'them' ? '<div class="msg-who">' + esc(m.who) + '</div>' : '') +
+        esc(m.text) + '<div class="msg-at">' + esc(m.at) + '</div></div>';
+    }).join('');
+    $('thread').scrollTop = $('thread').scrollHeight;
+  }
+
+  function openSheet(kind) {
+    var moving = kind === 'move';
+    $('sheet-host').innerHTML =
+      '<div class="sheet-scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h">' +
+      '<h3 id="sheet-h">' + (moving ? 'Ask to move this?' : 'Ask to cancel this?') + '</h3>' +
+      '<p>This sends a message to your rep. They will confirm with you before anything changes on the calendar.</p>' +
+      '<div class="btn-row"><button class="btn" type="button" data-sheet="close">Not now</button>' +
+      '<button class="btn primary" type="button" data-sheet="send">Send</button></div></div></div>';
+  }
+  function closeSheet() { $('sheet-host').innerHTML = ''; }
+
+  var toastTimer = null;
+  function toast(msg) {
+    $('toast-host').innerHTML = '<div class="toast" role="status">' + esc(msg) + '</div>';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { $('toast-host').innerHTML = ''; }, 3200);
+  }
+
+  $('jump').innerHTML = SCREENS.map(function (s) {
+    return '<button class="chip" type="button" data-screen="' + s.id + '" aria-pressed="false">' + esc(s.label) + '</button>';
+  }).join('');
+
+  $('tabbar').innerHTML = TABS.map(function (t) {
+    return '<button class="tab" type="button" role="tab" aria-selected="false" data-screen="' + t.id + '">' +
+      '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="' + t.icon + '"></path></svg>' +
+      '<span class="tab-l">' + esc(t.label) + '</span></button>';
+  }).join('');
+
+  function goto(id) {
+    if (id === 'list') renderList();
+    if (id === 'detail') renderDetail();
+    if (id === 'numbers') renderNumbers();
+    if (id === 'territory') renderTerritory();
+    if (id === 'messages') renderThread();
+    show(id);
+  }
+
+  $('jump').addEventListener('click', function (e) {
+    var chip = e.target.closest('.chip');
+    if (chip) goto(chip.dataset.screen);
+  });
+  $('tabbar').addEventListener('click', function (e) {
+    var tab = e.target.closest('.tab');
+    if (tab) goto(tab.dataset.screen);
+  });
+
+  $('phone').addEventListener('click', function (e) {
+    var t = e.target;
+
+    var opener = t.closest('[data-open]');
+    if (opener) { currentAppt = opener.dataset.open; goto('detail'); return; }
+
+    if (t.closest('#do-signin') || t.closest('#do-bio')) { goto('list'); return; }
+    if (t.closest('#do-back')) { goto('list'); return; }
+
+    var act = t.closest('[data-act]');
+    if (act) {
+      var a = byId(currentAppt);
+      if (act.dataset.act === 'call') toast('Calling ' + a.phone + ' — the phone’s own dialler opens here.');
+      else if (act.dataset.act === 'directions') toast('Opening ' + a.address + ' in maps.');
+      else toast('The camera opens here, and the photo stays on this job.');
+      return;
+    }
+
+    var pill = t.closest('[data-outcome]');
+    if (pill) {
+      var appt = byId(currentAppt);
+      appt.outcome = appt.outcome === pill.dataset.outcome ? null : pill.dataset.outcome;
+      renderDetail(); renderList();
+      return;
+    }
+
+    var ask = t.closest('[data-ask]');
+    if (ask) { openSheet(ask.dataset.ask); return; }
+
+    var sheetBtn = t.closest('[data-sheet]');
+    if (sheetBtn) {
+      closeSheet();
+      if (sheetBtn.dataset.sheet === 'send') toast('Sent to your rep. They will confirm before anything changes.');
+      return;
+    }
+
+    if (t.id === 'scrim') closeSheet();
+
+    if (t.closest('#do-send')) {
+      var box = $('pf-msg');
+      var text = box.value.trim();
+      if (!text) return;
+      THREAD.push({ who:'You', side:'you', text:text, at:'Just now' });
+      box.value = '';
+      renderThread();
+      return;
+    }
+  });
+
+  $('pf-msg').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); $('do-send').click(); }
+  });
+
+  $('sw-dark').addEventListener('change', function () {
+    $('phone').dataset.app = this.checked ? 'dark' : 'light';
+    renderTerritory();
+  });
+  $('sw-offline').addEventListener('change', renderList);
+  $('sw-failed').addEventListener('change', renderList);
+
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+
+  renderList(); renderDetail(); renderNumbers(); renderTerritory(); renderThread();
+  show('list');
+})();
+</script>
+</body>
+</html>
