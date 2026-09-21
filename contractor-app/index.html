@@ -475,25 +475,18 @@ img{max-width:100%}
             <h2 class="h-screen">Your territory</h2>
             <div class="h-sub">Volusia County, Florida &middot; <span class="sample-flag">Sample</span></div>
 
-            <svg class="map" viewBox="0 0 320 262" role="img" aria-label="Schematic map of Volusia County showing the ZIP areas held at your tier">
+            <svg class="map" viewBox="0 0 320 262" role="img" aria-label="Map of the ZIP codes Cedar Ridge Tree Care holds">
               <g id="map-cells"></g>
             </svg>
 
-            <div class="legend">
-              <div class="leg"><span class="swatch" style="background:var(--app-accent);border-color:var(--app-accent)"></span>Yours, at your tier</div>
-              <div class="leg"><span class="swatch" style="background:var(--app-raised)"></span>Held by another company at a different tier</div>
-              <div class="leg"><span class="swatch" style="background:var(--app-ground)"></span>Not covered</div>
-            </div>
-
             <div class="sect">
-              <div class="app-label" style="margin-bottom:6px">The five you hold</div>
+              <div class="app-label" style="margin-bottom:6px">The nine you hold</div>
               <div class="zips" id="zips"></div>
             </div>
 
             <div class="sect">
               <p class="hint" style="margin:0 0 10px">
-                One company per territory at your tier. While you hold these, we do not put another
-                tree company at your tier into them.
+                While you hold these, we do not put another tree company at your tier into them.
               </p>
               <p class="hint" style="margin:0">
                 Want to add an area or drop one? Ask your rep &mdash; territory is changed by a person,
@@ -571,8 +564,8 @@ img{max-width:100%}
             <p class="rule-p">Estimates we booked, and what the contractor told us happened. No averages, no projections, no figure we worked out on their behalf.</p>
           </div>
           <div>
-            <span class="rule-h">Territory is per tier, not per ZIP</span>
-            <p class="rule-p">The map says &ldquo;yours at your tier&rdquo; and shows who else is in the county at another one. Saying &ldquo;you own this ZIP&rdquo; would contradict how we actually sell.</p>
+            <span class="rule-h">The map shows theirs, and only theirs</span>
+            <p class="rule-p">A contractor sees their own patch. Who else is in the county, and at what tier, is our business &mdash; putting it on their screen invites an argument about a boundary with somebody they now know the name of.</p>
           </div>
           <div>
             <span class="rule-h">The app never changes anything itself</span>
@@ -647,15 +640,15 @@ img{max-width:100%}
   /* Schematic cells, not real boundaries. A shipped map draws real ZIP
      polygons; this shows the idea without pretending to be survey data. */
   var CELLS = [
-    { pts:'24,36 108,28 116,92 30,100',    zip:'32720', town:'DeLand',      state:'mine' },
-    { pts:'108,28 196,34 200,96 116,92',   zip:'32724', town:'DeLand',      state:'mine' },
-    { pts:'196,34 286,44 288,104 200,96',  zip:'32117', town:'Daytona',     state:'other' },
-    { pts:'30,100 116,92 122,158 38,164',  zip:'32763', town:'Orange City', state:'mine' },
-    { pts:'116,92 200,96 204,160 122,158', zip:'32725', town:'Deltona',     state:'mine' },
-    { pts:'200,96 288,104 290,166 204,160',zip:'32713', town:'DeBary',      state:'other' },
-    { pts:'38,164 122,158 128,222 46,228', zip:'32174', town:'Ormond',      state:'none' },
-    { pts:'122,158 204,160 208,224 128,222',zip:'32738', town:'Deltona',    state:'mine' },
-    { pts:'204,160 290,166 292,226 208,224',zip:'32168', town:'New Smyrna', state:'none' }
+    { pts:'24,36 108,28 116,92 30,100',    zip:'32720', town:'DeLand' },
+    { pts:'108,28 196,34 200,96 116,92',   zip:'32724', town:'DeLand' },
+    { pts:'196,34 286,44 288,104 200,96',  zip:'32117', town:'Daytona' },
+    { pts:'30,100 116,92 122,158 38,164',  zip:'32763', town:'Orange City' },
+    { pts:'116,92 200,96 204,160 122,158', zip:'32725', town:'Deltona' },
+    { pts:'200,96 288,104 290,166 204,160',zip:'32713', town:'DeBary' },
+    { pts:'38,164 122,158 128,222 46,228', zip:'32174', town:'Ormond Beach' },
+    { pts:'122,158 204,160 208,224 128,222',zip:'32738', town:'Deltona' },
+    { pts:'204,160 290,166 292,226 208,224',zip:'32168', town:'New Smyrna' }
   ];
 
   var THREAD = [
@@ -798,23 +791,21 @@ img{max-width:100%}
   }
 
   function renderTerritory() {
-    var fill = { mine:'var(--app-accent)', other:'var(--app-raised)', none:'var(--app-ground)' };
-    var ink  = { mine:'#ffffff', other:'var(--app-muted)', none:'var(--app-dim)' };
+    // Every cell is theirs. A contractor is never shown another company's
+    // patch - it is a distraction at best, and an invitation to argue about a
+    // boundary with somebody they now know the name of at worst.
     $('map-cells').innerHTML = CELLS.map(function (c) {
       var xs = c.pts.split(' ').map(function (p) { return parseFloat(p.split(',')[0]); });
       var ys = c.pts.split(' ').map(function (p) { return parseFloat(p.split(',')[1]); });
       var cx = xs.reduce(function (a, b) { return a + b; }, 0) / xs.length;
       var cy = ys.reduce(function (a, b) { return a + b; }, 0) / ys.length;
-      // var() resolves in an inline style but not reliably in an SVG
-      // presentation attribute, which renders every cell black.
-      return '<polygon points="' + c.pts + '" style="fill:' + fill[c.state] +
-        ';stroke:var(--app-hairline-strong);stroke-width:1.5' +
-        (c.state === 'other' ? ';stroke-dasharray:4 3' : '') + '"></polygon>' +
-        '<text x="' + cx + '" y="' + (cy + 4) + '" text-anchor="middle" style="fill:' + ink[c.state] +
-        '" font-family="ui-monospace, monospace" font-size="12" font-weight="700">' + c.zip + '</text>';
+      return '<polygon points="' + c.pts + '" style="fill:var(--app-accent);' +
+        'stroke:var(--app-ground);stroke-width:2"></polygon>' +
+        '<text x="' + cx + '" y="' + (cy + 4) + '" text-anchor="middle" style="fill:#ffffff"' +
+        ' font-family="ui-monospace, monospace" font-size="12" font-weight="700">' + c.zip + '</text>';
     }).join('');
 
-    $('zips').innerHTML = CELLS.filter(function (c) { return c.state === 'mine'; }).map(function (c) {
+    $('zips').innerHTML = CELLS.map(function (c) {
       return '<div class="zip-row"><span class="zip-n">' + c.zip + '</span>' +
         '<span class="zip-t">' + esc(c.town) + '</span></div>';
     }).join('');
