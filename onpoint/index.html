@@ -6,7 +6,6 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="description" content="Market analysis of the petition signature-gathering industry and a technical SEO, AEO and site audit of onpointccc.com.">
 <style>
-  /* Host reset the artifact runtime normally supplies. */
   :root{color-scheme:light dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
   html,body{margin:0}
   img{max-width:100%}
@@ -97,16 +96,45 @@ p{max-width:70ch}
 .sd.zero .num{color:var(--crit)}
 .demo-note{padding:12px 16px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink-2)}
 code,.mono{font-family:var(--mono);font-size:12.5px}
-pre{background:var(--card);border:1px solid var(--rule);padding:14px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.6;margin:14px 0}
+pre{background:var(--card);border:1px solid var(--rule);padding:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;font-family:var(--mono);font-size:12px;line-height:1.6;margin:14px 0}
+@media (max-width:560px){pre{font-size:10.5px;padding:11px}}
 
 /* charts */
 figure{margin:22px 0}
 figcaption{font-size:13px;color:var(--ink-3);margin-top:10px;max-width:68ch}
 .chart-t{font-family:var(--display);font-weight:700;font-size:15px;margin-bottom:3px}
 .chart-s{font-size:13px;color:var(--ink-3);margin-bottom:14px}
-svg{max-width:100%;height:auto;display:block}
-.barrow{cursor:default}
-.barrow:hover .bshape{opacity:.82}
+
+/* Bars are HTML, not SVG, on purpose: an SVG bar chart on a fixed viewBox
+   scales its text down with the drawing, so 11px labels land at ~6px on a
+   phone. These reflow instead, and the type stays the size it was set. */
+.bars{display:flex;flex-direction:column;gap:2px}
+.hb{display:grid;grid-template-columns:206px minmax(0,1fr) 40px;gap:12px;align-items:center;padding:5px 0}
+.hb-l{font-family:var(--display);font-size:13px;font-weight:500;color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+.hb.me .hb-l{font-weight:700;color:var(--ink)}
+.hb-t{background:var(--rule-2);height:16px;border-radius:3px;overflow:hidden;min-width:0}
+.hb-f{height:100%;background:var(--neutral-bar);border-radius:3px}
+.hb.me .hb-f{background:var(--accent)}
+.hb-v{font-family:var(--display);font-weight:700;font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink-3);text-align:right}
+.hb.me .hb-v{color:var(--accent)}
+
+.cy{display:grid;grid-template-columns:62px minmax(0,1fr) 82px;gap:12px;align-items:center;padding:7px 0}
+.cy-y{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink)}
+.cy-t{background:var(--rule-2);height:22px;border-radius:3px;overflow:hidden;min-width:0}
+.cy-f{height:100%;border-radius:3px;background:var(--accent)}
+.cy.odd .cy-f{background:var(--amber)}
+.cy.spot .cy-f{background:var(--accent);opacity:.42;border:1.5px dashed var(--accent);box-sizing:border-box}
+.cy-v{font-family:var(--display);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;text-align:right}
+.cy-n{grid-column:2/-1;font-size:12px;color:var(--ink-3);margin-top:-4px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:12.5px;color:var(--ink-2);font-family:var(--display)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:2px;display:inline-block}
+
+@media (max-width:560px){
+  .hb{grid-template-columns:minmax(0,1fr) 40px;row-gap:4px;column-gap:10px;padding:8px 0}
+  .hb-l{grid-column:1/-1;font-size:13.5px}
+  .cy{grid-template-columns:52px minmax(0,1fr) 74px;column-gap:10px}
+}
 
 /* findings */
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 14px;align-items:center}
@@ -240,7 +268,13 @@ ul.tight li{margin-bottom:7px}
   <figure>
     <div class="chart-t">Average cost per required signature, US ballot initiatives</div>
     <div class="chart-s">Even years carry federal turnout and contested measures. Odd years do not.</div>
-    <div id="cprsChart"></div>
+  <div class="bars">
+    <div class="cy even" title="2022: $12.70 — Average across the cycle"><div class="cy-y">2022</div><div class="cy-t"><div class="cy-f" style="width:79.4%"></div></div><div class="cy-v" style="color:var(--ink)">$12.70</div><div class="cy-n">Average across the cycle</div></div>
+    <div class="cy even" title="2024: $14.87 — Average — highest recorded since 2010"><div class="cy-y">2024</div><div class="cy-t"><div class="cy-f" style="width:92.9%"></div></div><div class="cy-v" style="color:var(--ink)">$14.87</div><div class="cy-n">Average — highest recorded since 2010</div></div>
+    <div class="cy odd" title="2025: $0.70 — Average — lowest odd year since at least 2013"><div class="cy-y">2025</div><div class="cy-t"><div class="cy-f" style="width:4.4%"></div></div><div class="cy-v" style="color:var(--amber)">$0.70</div><div class="cy-n">Average — lowest odd year since at least 2013</div></div>
+    <div class="cy spot" title="2026: $12.00 — California spot rate, March 2026 — not an average"><div class="cy-y">2026</div><div class="cy-t"><div class="cy-f" style="width:75.0%"></div></div><div class="cy-v" style="color:var(--ink)">$12.00</div><div class="cy-n">California spot rate, March 2026 — not an average</div></div>
+  </div>
+  <div class="legend"><span><i style="background:var(--ink)"></i>Even year</span><span><i style="background:var(--amber)"></i>Odd year</span><span><i style="background:var(--accent);opacity:.42;border:1.5px dashed var(--accent);box-sizing:border-box"></i>Spot rate, not an average</span></div>
     <figcaption>Ballotpedia. 2024 was the highest average recorded since 2010; 2025 was the lowest of any odd year since at least 2013. The 2026 figure is not yet published &mdash; Ballotpedia finalises it in October 2026 &mdash; so it is shown as the reported California spot rate, not an average.</figcaption>
   </figure>
 
@@ -272,7 +306,24 @@ ul.tight li{margin-bottom:7px}
   <figure>
     <div class="chart-t">Colorado licensed petition entities, by petitions circulating</div>
     <div class="chart-s">Top 15 of 82 licensed entities. 33 of the 82 are circulating none.</div>
-    <div id="coChart"></div>
+  <div class="bars">
+    <div class="hb" title="Lloyd&#x27;s Mobile Notary Services — 11 petitions circulating"><div class="hb-l">Lloyd&#x27;s Mobile Notary Services</div><div class="hb-t"><div class="hb-f" style="width:100.0%"></div></div><div class="hb-v">11</div></div>
+    <div class="hb" title="Ground War Marketing — 11 petitions circulating"><div class="hb-l">Ground War Marketing</div><div class="hb-t"><div class="hb-f" style="width:100.0%"></div></div><div class="hb-v">11</div></div>
+    <div class="hb" title="Citizens Voice — 10 petitions circulating"><div class="hb-l">Citizens Voice</div><div class="hb-t"><div class="hb-f" style="width:90.9%"></div></div><div class="hb-v">10</div></div>
+    <div class="hb" title="Lotus Engagement LLC — 8 petitions circulating"><div class="hb-l">Lotus Engagement LLC</div><div class="hb-t"><div class="hb-f" style="width:72.7%"></div></div><div class="hb-v">8</div></div>
+    <div class="hb me" title="On Point Consulting &amp; Canvassing — 7 petitions circulating"><div class="hb-l">On Point Consulting &amp; Canvassing</div><div class="hb-t"><div class="hb-f" style="width:63.6%"></div></div><div class="hb-v">7</div></div>
+    <div class="hb" title="David Morgan &amp; Associates — 7 petitions circulating"><div class="hb-l">David Morgan &amp; Associates</div><div class="hb-t"><div class="hb-f" style="width:63.6%"></div></div><div class="hb-v">7</div></div>
+    <div class="hb" title="Make Petitioning Great Again LLC — 7 petitions circulating"><div class="hb-l">Make Petitioning Great Again LLC</div><div class="hb-t"><div class="hb-f" style="width:63.6%"></div></div><div class="hb-v">7</div></div>
+    <div class="hb" title="SynergySignatures LLC — 7 petitions circulating"><div class="hb-l">SynergySignatures LLC</div><div class="hb-t"><div class="hb-f" style="width:63.6%"></div></div><div class="hb-v">7</div></div>
+    <div class="hb" title="High Desert Political Consultants — 7 petitions circulating"><div class="hb-l">High Desert Political Consultants</div><div class="hb-t"><div class="hb-f" style="width:63.6%"></div></div><div class="hb-v">7</div></div>
+    <div class="hb" title="Marquette Enterprises, LLC — 7 petitions circulating"><div class="hb-l">Marquette Enterprises, LLC</div><div class="hb-t"><div class="hb-f" style="width:63.6%"></div></div><div class="hb-v">7</div></div>
+    <div class="hb" title="Ballot Access Pros — 7 petitions circulating"><div class="hb-l">Ballot Access Pros</div><div class="hb-t"><div class="hb-f" style="width:63.6%"></div></div><div class="hb-v">7</div></div>
+    <div class="hb" title="Pinnacle Partners Management — 6 petitions circulating"><div class="hb-l">Pinnacle Partners Management</div><div class="hb-t"><div class="hb-f" style="width:54.5%"></div></div><div class="hb-v">6</div></div>
+    <div class="hb" title="QualifyNow LLC — 5 petitions circulating"><div class="hb-l">QualifyNow LLC</div><div class="hb-t"><div class="hb-f" style="width:45.5%"></div></div><div class="hb-v">5</div></div>
+    <div class="hb" title="Blitz Canvassing — 5 petitions circulating"><div class="hb-l">Blitz Canvassing</div><div class="hb-t"><div class="hb-f" style="width:45.5%"></div></div><div class="hb-v">5</div></div>
+    <div class="hb" title="Dime 10 Group LLC — 4 petitions circulating"><div class="hb-l">Dime 10 Group LLC</div><div class="hb-t"><div class="hb-f" style="width:36.4%"></div></div><div class="hb-v">4</div></div>
+  </div>
+  <div class="legend"><span><i style="background:var(--accent)"></i>On Point</span><span><i style="background:var(--neutral-bar)"></i>Other licensed entities</span></div>
     <figcaption>Colorado Secretary of State, Officially Licensed Petition Entities register, read 23 September 2026. Counts are the distinct petitions listed against each entity.</figcaption>
   </figure>
 
@@ -391,105 +442,7 @@ ul.tight li{margin-bottom:7px}
   $("#tBot").addEventListener("click", function(){ renderStats(true); });
   renderStats(false);
 
-  /* ---------- helpers ---------- */
-  var NS = "http://www.w3.org/2000/svg";
-  function el(n, a){ var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
-  function money(n){ return "$" + n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2}); }
-
-  /* ---------- chart 1: CPRS by year ---------- */
-  (function(){
-    var data = [
-      {y:"2022", v:12.70, kind:"even", note:"average"},
-      {y:"2024", v:14.87, kind:"even", note:"average — record high since 2010"},
-      {y:"2025", v:0.70,  kind:"odd",  note:"average — lowest odd year since 2013"},
-      {y:"2026", v:12.00, kind:"spot", note:"California spot rate, March 2026"}
-    ];
-    var W=680, H=290, ml=46, mr=16, mt=16, mb=64;
-    var iw = W-ml-mr, ih = H-mt-mb;
-    var max = 16;
-    var svg = el("svg", {viewBox:"0 0 "+W+" "+H, role:"img",
-      "aria-label":"Average cost per required signature: 2022 $12.70, 2024 $14.87, 2025 $0.70, and a March 2026 California spot rate of $12.00."});
-
-    [0,4,8,12,16].forEach(function(t){
-      var y = mt + ih - (t/max)*ih;
-      svg.appendChild(el("line",{x1:ml,x2:W-mr,y1:y,y2:y,stroke:"var(--rule-2)","stroke-width":1}));
-      var tx = el("text",{x:ml-9,y:y+4,"text-anchor":"end","font-size":11,fill:"var(--ink-3)","font-family":"var(--mono)"});
-      tx.textContent = "$"+t; svg.appendChild(tx);
-    });
-
-    var bw = iw/data.length, barw = Math.min(84, bw*0.52);
-    data.forEach(function(d,i){
-      var cx = ml + bw*i + bw/2;
-      var h = (d.v/max)*ih, y = mt + ih - h;
-      var fill = d.kind==="odd" ? "var(--amber)" : "var(--accent)";
-      var g = el("g",{class:"barrow"});
-      var r = el("rect",{class:"bshape", x:cx-barw/2, y:y, width:barw, height:Math.max(h,2),
-                         fill:fill, rx:4, ry:4});
-      if (d.kind==="spot") { r.setAttribute("fill-opacity","0.42"); r.setAttribute("stroke",fill); r.setAttribute("stroke-width","1.5"); r.setAttribute("stroke-dasharray","4 3"); }
-      g.appendChild(r);
-      var t = el("title"); t.textContent = d.y+": "+money(d.v)+" — "+d.note; g.appendChild(t);
-      var vl = el("text",{x:cx,y:y-8,"text-anchor":"middle","font-size":13,"font-weight":"700",fill:"var(--ink)","font-family":"var(--display)"});
-      vl.textContent = money(d.v); g.appendChild(vl);
-      var xl = el("text",{x:cx,y:mt+ih+21,"text-anchor":"middle","font-size":12.5,fill:"var(--ink-2)","font-family":"var(--display)","font-weight":"600"});
-      xl.textContent = d.y; g.appendChild(xl);
-      var sl = el("text",{x:cx,y:mt+ih+38,"text-anchor":"middle","font-size":10.5,fill:"var(--ink-3)","font-family":"var(--mono)"});
-      sl.textContent = d.kind==="spot" ? "spot rate" : (d.kind==="odd" ? "odd year" : "even year"); g.appendChild(sl);
-      svg.appendChild(g);
-    });
-    svg.appendChild(el("line",{x1:ml,x2:W-mr,y1:mt+ih,y2:mt+ih,stroke:"var(--rule)","stroke-width":1}));
-
-    var lg = el("g",{});
-    [["var(--accent)","Even year"],["var(--amber)","Odd year"]].forEach(function(p,i){
-      lg.appendChild(el("rect",{x:ml+i*112,y:H-15,width:11,height:11,fill:p[0],rx:2}));
-      var t = el("text",{x:ml+i*112+17,y:H-5,"font-size":11.5,fill:"var(--ink-2)","font-family":"var(--display)"});
-      t.textContent = p[1]; lg.appendChild(t);
-    });
-    svg.appendChild(lg);
-    $("#cprsChart").appendChild(svg);
-  })();
-
-  /* ---------- chart 2: Colorado entities ---------- */
-  (function(){
-    var rows = [
-      {n:"Lloyd's Mobile Notary Services", c:11},
-      {n:"Ground War Marketing", c:11},
-      {n:"Citizens Voice", c:10},
-      {n:"Lotus Engagement LLC", c:8},
-      {n:"On Point Consulting & Canvassing", c:7, me:true},
-      {n:"David Morgan & Associates", c:7},
-      {n:"Make Petitioning Great Again LLC", c:7},
-      {n:"SynergySignatures LLC", c:7},
-      {n:"High Desert Political Consultants", c:7},
-      {n:"Marquette Enterprises, LLC", c:7},
-      {n:"Ballot Access Pros", c:7},
-      {n:"Pinnacle Partners Management", c:6},
-      {n:"QualifyNow LLC", c:5},
-      {n:"Blitz Canvassing", c:5},
-      {n:"Dime 10 Group LLC", c:4}
-    ];
-    var W=680, lw=232, mr=44, mt=8, rowh=25;
-    var H = mt + rows.length*rowh + 10;
-    var iw = W-lw-mr, max=11;
-    var svg = el("svg",{viewBox:"0 0 "+W+" "+H, role:"img",
-      "aria-label":"Colorado licensed petition entities by petitions circulating. On Point Consulting and Canvassing has 7, against a top of 11."});
-    rows.forEach(function(d,i){
-      var y = mt + i*rowh;
-      var g = el("g",{class:"barrow"});
-      var lab = el("text",{x:lw-10,y:y+15,"text-anchor":"end","font-size":11.5,
-        fill:d.me?"var(--ink)":"var(--ink-2)","font-family":"var(--display)","font-weight":d.me?"700":"500"});
-      lab.textContent = d.n.length>30 ? d.n.slice(0,29)+"…" : d.n;
-      g.appendChild(lab);
-      var w = (d.c/max)*iw;
-      g.appendChild(el("rect",{class:"bshape",x:lw,y:y+4,width:Math.max(w,2),height:15,
-        fill:d.me?"var(--accent)":"var(--neutral-bar)",rx:3,ry:3}));
-      var v = el("text",{x:lw+w+8,y:y+16,"font-size":12,fill:d.me?"var(--accent)":"var(--ink-3)",
-        "font-family":"var(--display)","font-weight":"700"});
-      v.textContent = d.c; g.appendChild(v);
-      var t = el("title"); t.textContent = d.n+" — "+d.c+" petitions circulating"; g.appendChild(t);
-      svg.appendChild(g);
-    });
-    $("#coChart").appendChild(svg);
-  })();
+  var $$money = function(n){ return "$" + n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2}); };
 
   /* ---------- calculator ---------- */
   (function(){
@@ -497,7 +450,7 @@ ul.tight li{margin-bottom:7px}
     function upd(){
       var sv = +s.value, cv = +c.value, total = sv*cv;
       $("#sigsOut").textContent = sv.toLocaleString("en-US");
-      $("#cprsOut").textContent = money(cv);
+      $("#cprsOut").textContent = $$money(cv);
       $("#outTotal").textContent = "$" + Math.round(total).toLocaleString("en-US");
       var base = sv*14.87, d = Math.round((total-base)/base*100);
       $("#outVs").textContent = (d>0?"+":"") + d + "%";
