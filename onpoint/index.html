@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="Market analysis of the petition signature-gathering industry and a technical SEO, AEO and site audit of onpointccc.com.">
+<style>
+  /* Host reset the artifact runtime normally supplies. */
+  :root{color-scheme:light dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  html,body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<title>On Point Field Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#F2F4F6; --card:#FFFFFF; --ink:#101B2D; --ink-2:#37475C; --ink-3:#6B7A8C;
+  --rule:#D9DFE6; --rule-2:#E9EDF1;
+  --accent:#12805E; --accent-soft:#12805E1F;
+  --amber:#C8790F; --amber-soft:#C8790F1F;
+  --crit:#B3261E; --crit-soft:#B3261E1A;
+  --neutral-bar:#9BA8B6;
+  --display:'Archivo',system-ui,-apple-system,sans-serif;
+  --body:'Source Serif 4',Georgia,serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E141C; --card:#151E29; --ink:#EAF0F6; --ink-2:#B3C1D0; --ink-3:#8496A8;
+    --rule:#243040; --rule-2:#1C2634;
+    --accent:#2FA37C; --accent-soft:#2FA37C26;
+    --amber:#D89426; --amber-soft:#D8942626;
+    --crit:#E2645C; --crit-soft:#E2645C26;
+    --neutral-bar:#546374;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E141C; --card:#151E29; --ink:#EAF0F6; --ink-2:#B3C1D0; --ink-3:#8496A8;
+  --rule:#243040; --rule-2:#1C2634;
+  --accent:#2FA37C; --accent-soft:#2FA37C26;
+  --amber:#D89426; --amber-soft:#D8942626;
+  --crit:#E2645C; --crit-soft:#E2645C26;
+  --neutral-bar:#546374;
+}
+
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:0 72px}
+h1,h2,h3,h4,.d{font-family:var(--display);text-wrap:balance}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+/* masthead */
+.mast{border-bottom:3px solid var(--ink);padding-block:34px 18px;margin-bottom:8px}
+.brow{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.mast h1{font-size:clamp(30px,6vw,52px);font-weight:800;line-height:1.02;letter-spacing:-.025em;margin:14px 0 10px}
+.mast .sub{font-size:clamp(16px,2.2vw,19px);color:var(--ink-2);margin:0;max-width:62ch}
+.mast .site{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:12px}
+
+/* scores */
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:26px 0 8px}
+.sc{background:var(--card);padding:16px 18px}
+.sc .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.sc .v{font-family:var(--display);font-size:38px;font-weight:800;line-height:1.05;margin-top:6px;font-variant-numeric:tabular-nums}
+.sc .n{font-size:13px;color:var(--ink-3);line-height:1.4;margin-top:3px}
+.sc.bad .v{color:var(--crit)} .sc.warn .v{color:var(--amber)} .sc.good .v{color:var(--accent)}
+
+section{margin-top:56px}
+h2{font-size:clamp(21px,3.2vw,28px);font-weight:800;letter-spacing:-.018em;margin:0 0 6px}
+h2 .no{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:8px}
+.lede{color:var(--ink-2);max-width:68ch;margin:0 0 22px}
+h3{font-size:17px;font-weight:700;margin:26px 0 8px;letter-spacing:-.008em}
+p{max-width:70ch}
+
+.card{background:var(--card);border:1px solid var(--rule);padding:20px 22px}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:16px 20px;margin:20px 0}
+.callout.crit{border-left-color:var(--crit);background:var(--crit-soft)}
+.callout.amber{border-left-color:var(--amber);background:var(--amber-soft)}
+.callout p{margin:0;max-width:66ch}
+.callout .h{font-family:var(--display);font-weight:700;display:block;margin-bottom:5px}
+
+/* crawler demo */
+.demo{background:var(--card);border:1px solid var(--rule);margin:20px 0}
+.demo-bar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;border-bottom:1px solid var(--rule);align-items:center}
+.demo-bar .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-right:auto}
+.tog{font-family:var(--display);font-size:13px;font-weight:600;padding:7px 14px;border:1px solid var(--rule);background:transparent;color:var(--ink-2);cursor:pointer;border-radius:2px}
+.tog[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tog:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stats-demo{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:1px;background:var(--rule-2)}
+.sd{background:var(--card);padding:18px 14px;text-align:center}
+.sd .num{font-family:var(--display);font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.sd .lbl2{font-size:12px;color:var(--ink-3);margin-top:7px;line-height:1.3}
+.sd.zero .num{color:var(--crit)}
+.demo-note{padding:12px 16px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink-2)}
+code,.mono{font-family:var(--mono);font-size:12.5px}
+pre{background:var(--card);border:1px solid var(--rule);padding:14px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.6;margin:14px 0}
+
+/* charts */
+figure{margin:22px 0}
+figcaption{font-size:13px;color:var(--ink-3);margin-top:10px;max-width:68ch}
+.chart-t{font-family:var(--display);font-weight:700;font-size:15px;margin-bottom:3px}
+.chart-s{font-size:13px;color:var(--ink-3);margin-bottom:14px}
+svg{max-width:100%;height:auto;display:block}
+.barrow{cursor:default}
+.barrow:hover .bshape{opacity:.82}
+
+/* findings */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 14px;align-items:center}
+.filters .fl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-right:4px}
+.chip{font-family:var(--display);font-size:12.5px;font-weight:600;padding:6px 12px;border:1px solid var(--rule);background:transparent;color:var(--ink-2);cursor:pointer;border-radius:2px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.flist{border-top:1px solid var(--rule)}
+.f{border-bottom:1px solid var(--rule);padding:16px 0;display:grid;grid-template-columns:86px 1fr;gap:4px 16px}
+.f .sev{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;padding-top:3px}
+.f.critical .sev{color:var(--crit)} .f.high .sev{color:var(--amber)}
+.f.medium .sev{color:var(--ink-2)} .f.good .sev{color:var(--accent)}
+.f .ttl{font-family:var(--display);font-weight:700;font-size:15.5px}
+.f .ax{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase}
+.f .why{grid-column:2;color:var(--ink-2);font-size:15px;margin-top:4px}
+.f .fix{grid-column:2;font-size:14.5px;margin-top:7px;padding-left:12px;border-left:2px solid var(--rule)}
+.f .fix b{font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:2px}
+.empty{padding:26px 0;color:var(--ink-3)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;align-items:end}
+.calc label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+.calc input[type=range]{width:100%;accent-color:var(--accent)}
+.calc .rv{font-family:var(--display);font-weight:700;font-size:16px;font-variant-numeric:tabular-nums;margin-top:5px}
+.calc-out{grid-column:1/-1;border-top:1px solid var(--rule);padding-top:16px;display:flex;flex-wrap:wrap;gap:22px 40px}
+.calc-out div .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.calc-out div .v{font-family:var(--display);font-size:27px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:4px}
+
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+.tw{overflow-x:auto}
+th,td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+td.n{font-variant-numeric:tabular-nums;font-family:var(--display);font-weight:600}
+tr.me td{background:var(--accent-soft)}
+tr.me td:first-child{font-weight:700}
+
+ul.tight{max-width:70ch;padding-left:20px}
+ul.tight li{margin-bottom:7px}
+.foot{margin-top:60px;padding-top:22px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-3)}
+.foot a{color:var(--ink-2)}
+.srcs{font-size:12.5px;line-height:1.75}
+
+@media (max-width:620px){
+  .calc{grid-template-columns:1fr}
+  .f{grid-template-columns:1fr;gap:2px}
+  .f .why,.f .fix{grid-column:1}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="brow">
+    <span>Field Report</span><span>Prepared 23 September 2026</span><span>Public sources only</span>
+  </div>
+  <h1>On Point Consulting &amp; Canvassing</h1>
+  <p class="sub">A market read on petition and signature gathering, and an audit of what search engines and answer engines can actually see on onpointccc.com.</p>
+  <p class="site">onpointccc.com &middot; Fort Lauderdale, FL &middot; Colorado licensed petition entity #2026189</p>
+</header>
+
+<div class="scores">
+  <div class="sc bad"><div class="k">Structured data</div><div class="v">0</div><div class="n">No schema markup of any kind</div></div>
+  <div class="sc bad"><div class="k">Indexable pages</div><div class="v">1</div><div class="n">No sitemap, no robots.txt</div></div>
+  <div class="sc warn"><div class="k">Proof numbers visible<br>to a crawler</div><div class="v">0 of 5</div><div class="n">All five serve as &ldquo;0&rdquo;</div></div>
+  <div class="sc good"><div class="k">Page weight</div><div class="v">44<span style="font-size:20px">KB</span></div><div class="n">Genuinely fast, no images or external JS</div></div>
+</div>
+
+<section id="verdict">
+  <h2><span class="no">01 / The read</span>A fast, well-written page that answer engines cannot quote</h2>
+  <p class="lede">The site is not slow, broken or badly written &mdash; it is faster than most agency sites and the copy is specific. The problem is narrower and more fixable: almost none of what makes the company credible is in a form a machine can read, and the single most load-bearing content on the page is served as the number zero.</p>
+
+  <div class="callout crit">
+    <span class="h">The headline finding</span>
+    <p>Five proof numbers &mdash; years in business, doors knocked, signatures gathered, validity rate, states worked &mdash; are rendered by JavaScript from a starting value of <code>0</code>, and only when the block is scrolled into view. The served HTML says the company has zero years of experience and zero signatures. That is what a crawler that does not run JavaScript, or renders without scrolling, takes away.</p>
+  </div>
+
+  <p>Everything else in this report is ordinary technical work. That one is not, because it inverts the page&rsquo;s own argument. A company whose pitch is <em>&ldquo;you only pay for work that verifiably happened&rdquo;</em> is publishing its verification as nothing.</p>
+</section>
+
+<section id="crawler">
+  <h2><span class="no">02 / What a machine sees</span>The same block, two readers</h2>
+  <p class="lede">Toggle between what a person sees after scrolling and what sits in the HTML that every crawler, scraper and answer engine downloads first.</p>
+
+  <div class="demo">
+    <div class="demo-bar">
+      <span class="lbl">Stat block, onpointccc.com</span>
+      <button class="tog" id="tHuman" aria-pressed="true" type="button">Human, after scrolling</button>
+      <button class="tog" id="tBot" aria-pressed="false" type="button">Crawler, served HTML</button>
+    </div>
+    <div class="stats-demo" id="statsDemo"></div>
+    <div class="demo-note" id="demoNote"></div>
+  </div>
+
+<pre id="srcBlock">&lt;div class="num" data-count="11"     data-suffix=""  &gt;0&lt;/div&gt;&lt;div class="lbl"&gt;Years in the Business&lt;/div&gt;
+&lt;div class="num" data-count="175000" data-suffix="+" &gt;0&lt;/div&gt;&lt;div class="lbl"&gt;Doors Knocked&lt;/div&gt;
+&lt;div class="num" data-count="400000" data-suffix="+" &gt;0&lt;/div&gt;&lt;div class="lbl"&gt;Signatures Gathered&lt;/div&gt;
+&lt;div class="num" data-count="79"     data-suffix="%+"&gt;0&lt;/div&gt;&lt;div class="lbl"&gt;Validity Rate&lt;/div&gt;
+&lt;div class="num" data-count="14"     data-suffix=""  &gt;0&lt;/div&gt;&lt;div class="lbl"&gt;States&lt;/div&gt;</pre>
+
+  <p>The real figures exist in <code>data-count</code>. They are written into the page by an <code>IntersectionObserver</code>, which fires only when the element enters the viewport &mdash; so even a crawler that executes JavaScript but does not scroll leaves with zeros.</p>
+
+  <div class="callout">
+    <span class="h">The fix is one line each</span>
+    <p>Put the real number in the HTML and let the script animate <em>up to</em> it from there, rather than up from a hard-coded <code>0</code>. Nothing about the animation has to change and nobody viewing the page sees a difference.</p>
+  </div>
+</section>
+
+<section id="numbers">
+  <h2><span class="no">03 / Consistency</span>Three different door counts</h2>
+  <p class="lede">A company selling verifiability should agree with itself. Three figures for doors knocked appear in three places on the same page.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Where</th><th>Claim</th><th>Reads as</th></tr></thead>
+    <tbody>
+      <tr><td>Meta description</td><td class="n">350,000+ doors &middot; 5 states</td><td>What Google and most link previews show</td></tr>
+      <tr><td>Stat block <code>data-count</code></td><td class="n">175,000+ doors &middot; 14 states</td><td>What a visitor sees after scrolling</td></tr>
+      <tr><td>Body copy</td><td class="n">10,000+ doors a week</td><td>A rate, not a total &mdash; not comparable to either</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Signatures are consistent at 400,000+ across the stat block and the body. States are 14 in both, and 5 in the meta description. The meta description is the one that disagrees with everything else, and it is the copy that travels furthest.</p>
+</section>
+
+<section id="market">
+  <h2><span class="no">04 / The market</span>A business with a two-year heartbeat</h2>
+  <p class="lede">Signature gathering is not a steadily growing market. It is a market that nearly switches off in odd years and pays record rates in even ones, and 2026 is an even year.</p>
+
+  <figure>
+    <div class="chart-t">Average cost per required signature, US ballot initiatives</div>
+    <div class="chart-s">Even years carry federal turnout and contested measures. Odd years do not.</div>
+    <div id="cprsChart"></div>
+    <figcaption>Ballotpedia. 2024 was the highest average recorded since 2010; 2025 was the lowest of any odd year since at least 2013. The 2026 figure is not yet published &mdash; Ballotpedia finalises it in October 2026 &mdash; so it is shown as the reported California spot rate, not an average.</figcaption>
+  </figure>
+
+  <div class="callout amber">
+    <span class="h">What the cycle means commercially</span>
+    <p>The gap between 2024 and 2025 is roughly twenty-one to one. A firm that wins work in an even year and holds the crew together through the odd year is running a fundamentally different business from one that staffs up and disbands. On Point&rsquo;s stated model &mdash; rapid crew mobilisation, pay-for-verified-work &mdash; is built for the peak, which is the right shape; the question a buyer will ask is what happens to the crew in 2027.</p>
+  </div>
+
+  <h3>How large the 2024 peak actually was</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Measure</th><th>2024</th></tr></thead>
+    <tbody>
+      <tr><td>Total spent on signature drives</td><td class="n">$172.15M</td></tr>
+      <tr><td>Initiatives, across 18 states</td><td class="n">53</td></tr>
+      <tr><td>Signature drives as a share of all campaign contributions</td><td class="n">23%</td></tr>
+      <tr><td>Total ballot-measure campaign contributions</td><td class="n">$1.1B+</td></tr>
+      <tr><td>Most expensive single drive &mdash; Florida Amendment 3</td><td class="n">$23,086,166</td></tr>
+      <tr><td>Range of cost per required signature</td><td class="n">$0 &ndash; $48.21</td></tr>
+      <tr><td>States permitting citizen-initiated measures</td><td class="n">26</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Florida, where On Point is based and says the business started, hosted the single most expensive signature drive of the 2024 cycle. That is a genuinely strong home-market story and the website does not tell it.</p>
+
+  <h3>Where they actually stand, in the one state that publishes it</h3>
+  <p>Colorado licenses petition entities and publishes the register, which makes it the only place their position can be measured from outside rather than asserted. On Point holds licence <strong>#2026189</strong> and is circulating <strong>7 petitions</strong>.</p>
+
+  <figure>
+    <div class="chart-t">Colorado licensed petition entities, by petitions circulating</div>
+    <div class="chart-s">Top 15 of 82 licensed entities. 33 of the 82 are circulating none.</div>
+    <div id="coChart"></div>
+    <figcaption>Colorado Secretary of State, Officially Licensed Petition Entities register, read 23 September 2026. Counts are the distinct petitions listed against each entity.</figcaption>
+  </figure>
+
+  <p>Seven active petitions places them mid-pack among <em>active</em> entities and comfortably ahead of the 33 that hold a licence and are circulating nothing. Against the national tier &mdash; Advanced Microtargeting, Fieldworks and PCI Consultants each ran six drives in 2024 and together accounted for 35% of all drives &mdash; this is a regional operator with real, verifiable throughput, not a national one. PCI alone claims 65 million signatures since 1992 against On Point&rsquo;s 400,000.</p>
+
+  <div class="callout">
+    <span class="h">The strategic gap</span>
+    <p>That Colorado licence number is the single most valuable asset the company is not using. It is a state-issued, independently checkable credential with their name on a government register &mdash; exactly the kind of third-party corroboration answer engines weight most heavily, and exactly what distinguishes them from an unverifiable competitor. It appears nowhere on the site.</p>
+  </div>
+</section>
+
+<section id="calc">
+  <h2><span class="no">05 / Deal sizing</span>What a drive is worth</h2>
+  <p class="lede">A model, not a quote. Move the sliders to size a drive against the published market rate.</p>
+  <div class="card">
+    <div class="calc">
+      <div>
+        <label for="sigs">Required signatures</label>
+        <input type="range" id="sigs" min="10000" max="900000" step="10000" value="120000">
+        <div class="rv" id="sigsOut"></div>
+      </div>
+      <div>
+        <label for="cprs">Cost per required signature</label>
+        <input type="range" id="cprs" min="1" max="25" step="0.25" value="14.87">
+        <div class="rv" id="cprsOut"></div>
+      </div>
+      <div class="calc-out">
+        <div><div class="k">Drive budget</div><div class="v" id="outTotal"></div></div>
+        <div><div class="k">Against 2024 average</div><div class="v" id="outVs"></div></div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--ink-3);margin-top:12px">Cost per required signature is the industry&rsquo;s own unit: total drive spend divided by the signatures the state requires, not the number collected. Gathering always exceeds the requirement to absorb invalid signatures &mdash; which is why a validity rate like the 79% On Point publishes is the number that actually moves a budget.</p>
+</section>
+
+<section id="findings">
+  <h2><span class="no">06 / Audit</span>SEO, AEO and site optimization</h2>
+  <p class="lede">Every finding below was checked against the live site on 23 September 2026. Filter by severity or by discipline.</p>
+
+  <div class="filters" role="group" aria-label="Filter findings">
+    <span class="fl">Severity</span>
+    <button class="chip" data-sev="all" aria-pressed="true" type="button">All</button>
+    <button class="chip" data-sev="critical" aria-pressed="false" type="button">Critical</button>
+    <button class="chip" data-sev="high" aria-pressed="false" type="button">High</button>
+    <button class="chip" data-sev="medium" aria-pressed="false" type="button">Medium</button>
+    <button class="chip" data-sev="good" aria-pressed="false" type="button">Working well</button>
+  </div>
+  <div class="filters" role="group" aria-label="Filter by discipline">
+    <span class="fl">Discipline</span>
+    <button class="chip" data-ax="all" aria-pressed="true" type="button">All</button>
+    <button class="chip" data-ax="SEO" aria-pressed="false" type="button">SEO</button>
+    <button class="chip" data-ax="AEO" aria-pressed="false" type="button">AEO</button>
+    <button class="chip" data-ax="SITE" aria-pressed="false" type="button">Site</button>
+  </div>
+
+  <div class="flist" id="flist"></div>
+  <p class="mono" style="font-size:12px;color:var(--ink-3);margin-top:14px" id="fcount"></p>
+</section>
+
+<section id="actions">
+  <h2><span class="no">07 / Order of work</span>What to do, in order</h2>
+  <p class="lede">Ranked by effect per hour of work, not by severity alone.</p>
+  <ol class="tight">
+    <li><strong>Put the five stat numbers in the HTML.</strong> One edit, five values, no visible change to the page. It stops the site telling machines the company has done nothing.</li>
+    <li><strong>Rewrite the meta description</strong> so it matches the page: one door figure, one state count, under 160 characters. Currently 203 characters and contradicts the body twice.</li>
+    <li><strong>Add Organization and Service schema,</strong> including the Colorado licence number, the Fort Lauderdale address, and <code>sameAs</code> links to the Secretary of State register. The site has no structured data at all, and this is where the licence becomes machine-readable proof.</li>
+    <li><strong>Publish robots.txt and a sitemap.</strong> Both 404 today. Name the answer-engine crawlers explicitly while you are there.</li>
+    <li><strong>Fix the www certificate.</strong> <code>www.onpointccc.com</code> currently fails TLS outright &mdash; anyone typing it gets a browser security warning, not the site.</li>
+    <li><strong>Break the single page into service and state pages.</strong> One page can rank for one thing; 14 states and six services are one page&rsquo;s worth of content doing a fraction of its work.</li>
+    <li><strong>Move the contact form off a personal Gmail.</strong> It posts to formsubmit.co addressed to a gmail.com account, which is published in the page source.</li>
+    <li><strong>Claim the brand.</strong> A search for the company name returns four unrelated &ldquo;OnPoint Consulting&rdquo; firms and not this one.</li>
+  </ol>
+</section>
+
+<div class="foot">
+  <p><strong>Method and limits.</strong> Everything here comes from the live site, the Colorado Secretary of State register, and Ballotpedia&rsquo;s published cost analyses. Nothing was inferred from private data and no figure appears that is not sourced. Two apparent defects were checked and discarded rather than reported: the em dashes render correctly (they are valid UTF-8, and only looked wrong in a terminal), and the headline is not run together (it is <code>ground.&lt;br&gt;&lt;em&gt;Results</code>). Search visibility was assessed from result pages, not from Search Console, so &ldquo;no organic presence found&rdquo; means exactly that and not &ldquo;not indexed&rdquo;. The 2026 cost figure is a reported California spot rate for two specific measures, not a national average; Ballotpedia publishes the 2026 average in October.</p>
+  <p class="srcs"><strong>Sources.</strong>
+    <a href="https://onpointccc.com/">onpointccc.com</a> &middot;
+    <a href="https://www.sos.state.co.us/pubs/elections/petitionEntities/licensees.html">Colorado SoS, Officially Licensed Petition Entities</a> &middot;
+    <a href="https://ballotpedia.org/Ballot_measure_signature_costs,_2026">Ballotpedia, Ballot measure signature costs 2026</a> &middot;
+    <a href="https://news.ballotpedia.org/2024/11/04/2024-ballot-initiatives-reach-record-high-cost-per-signature-exceed-combined-172-million-for-signature-drives/">Ballotpedia News, 2024 record-high cost per signature</a> &middot;
+    <a href="https://news.ballotpedia.org/2025/10/20/sponsors-paid-an-average-of-70-cents-per-required-signature-to-put-initiatives-on-the-ballot-this-year-the-lowest-of-any-odd-year-since-at-least-2013/">Ballotpedia News, 2025 odd-year low</a> &middot;
+    <a href="https://ballotpedia.org/Petition_drive_management_companies">Ballotpedia, Petition drive management companies</a> &middot;
+    <a href="https://ballotpedia.org/PCI_Consultants,_Inc.">Ballotpedia, PCI Consultants</a> &middot;
+    <a href="https://sfstandard.com/2026/03/05/california-ballot-bounties-have-gone-wild/">SF Standard, California ballot bounties</a>
+  </p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s){ return document.querySelector(s); };
+
+  /* ---------- crawler demo ---------- */
+  var STATS = [
+    {real:"11",       lbl:"Years in the Business"},
+    {real:"175,000+", lbl:"Doors Knocked"},
+    {real:"400,000+", lbl:"Signatures Gathered"},
+    {real:"79%+",     lbl:"Validity Rate"},
+    {real:"14",       lbl:"States"}
+  ];
+  var NOTE_H = "What a visitor reads once the block scrolls into view. The counter animates up to each value.";
+  var NOTE_B = "What is actually in the HTML before any script runs — and what a crawler that does not scroll still sees afterwards.";
+  function renderStats(bot){
+    $("#statsDemo").innerHTML = STATS.map(function(s){
+      return '<div class="sd'+(bot?" zero":"")+'"><div class="num">'+(bot?"0":s.real)+
+             '</div><div class="lbl2">'+s.lbl+'</div></div>';
+    }).join("");
+    $("#demoNote").textContent = bot ? NOTE_B : NOTE_H;
+    $("#tHuman").setAttribute("aria-pressed", String(!bot));
+    $("#tBot").setAttribute("aria-pressed", String(bot));
+  }
+  $("#tHuman").addEventListener("click", function(){ renderStats(false); });
+  $("#tBot").addEventListener("click", function(){ renderStats(true); });
+  renderStats(false);
+
+  /* ---------- helpers ---------- */
+  var NS = "http://www.w3.org/2000/svg";
+  function el(n, a){ var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function money(n){ return "$" + n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+  /* ---------- chart 1: CPRS by year ---------- */
+  (function(){
+    var data = [
+      {y:"2022", v:12.70, kind:"even", note:"average"},
+      {y:"2024", v:14.87, kind:"even", note:"average — record high since 2010"},
+      {y:"2025", v:0.70,  kind:"odd",  note:"average — lowest odd year since 2013"},
+      {y:"2026", v:12.00, kind:"spot", note:"California spot rate, March 2026"}
+    ];
+    var W=680, H=290, ml=46, mr=16, mt=16, mb=64;
+    var iw = W-ml-mr, ih = H-mt-mb;
+    var max = 16;
+    var svg = el("svg", {viewBox:"0 0 "+W+" "+H, role:"img",
+      "aria-label":"Average cost per required signature: 2022 $12.70, 2024 $14.87, 2025 $0.70, and a March 2026 California spot rate of $12.00."});
+
+    [0,4,8,12,16].forEach(function(t){
+      var y = mt + ih - (t/max)*ih;
+      svg.appendChild(el("line",{x1:ml,x2:W-mr,y1:y,y2:y,stroke:"var(--rule-2)","stroke-width":1}));
+      var tx = el("text",{x:ml-9,y:y+4,"text-anchor":"end","font-size":11,fill:"var(--ink-3)","font-family":"var(--mono)"});
+      tx.textContent = "$"+t; svg.appendChild(tx);
+    });
+
+    var bw = iw/data.length, barw = Math.min(84, bw*0.52);
+    data.forEach(function(d,i){
+      var cx = ml + bw*i + bw/2;
+      var h = (d.v/max)*ih, y = mt + ih - h;
+      var fill = d.kind==="odd" ? "var(--amber)" : "var(--accent)";
+      var g = el("g",{class:"barrow"});
+      var r = el("rect",{class:"bshape", x:cx-barw/2, y:y, width:barw, height:Math.max(h,2),
+                         fill:fill, rx:4, ry:4});
+      if (d.kind==="spot") { r.setAttribute("fill-opacity","0.42"); r.setAttribute("stroke",fill); r.setAttribute("stroke-width","1.5"); r.setAttribute("stroke-dasharray","4 3"); }
+      g.appendChild(r);
+      var t = el("title"); t.textContent = d.y+": "+money(d.v)+" — "+d.note; g.appendChild(t);
+      var vl = el("text",{x:cx,y:y-8,"text-anchor":"middle","font-size":13,"font-weight":"700",fill:"var(--ink)","font-family":"var(--display)"});
+      vl.textContent = money(d.v); g.appendChild(vl);
+      var xl = el("text",{x:cx,y:mt+ih+21,"text-anchor":"middle","font-size":12.5,fill:"var(--ink-2)","font-family":"var(--display)","font-weight":"600"});
+      xl.textContent = d.y; g.appendChild(xl);
+      var sl = el("text",{x:cx,y:mt+ih+38,"text-anchor":"middle","font-size":10.5,fill:"var(--ink-3)","font-family":"var(--mono)"});
+      sl.textContent = d.kind==="spot" ? "spot rate" : (d.kind==="odd" ? "odd year" : "even year"); g.appendChild(sl);
+      svg.appendChild(g);
+    });
+    svg.appendChild(el("line",{x1:ml,x2:W-mr,y1:mt+ih,y2:mt+ih,stroke:"var(--rule)","stroke-width":1}));
+
+    var lg = el("g",{});
+    [["var(--accent)","Even year"],["var(--amber)","Odd year"]].forEach(function(p,i){
+      lg.appendChild(el("rect",{x:ml+i*112,y:H-15,width:11,height:11,fill:p[0],rx:2}));
+      var t = el("text",{x:ml+i*112+17,y:H-5,"font-size":11.5,fill:"var(--ink-2)","font-family":"var(--display)"});
+      t.textContent = p[1]; lg.appendChild(t);
+    });
+    svg.appendChild(lg);
+    $("#cprsChart").appendChild(svg);
+  })();
+
+  /* ---------- chart 2: Colorado entities ---------- */
+  (function(){
+    var rows = [
+      {n:"Lloyd's Mobile Notary Services", c:11},
+      {n:"Ground War Marketing", c:11},
+      {n:"Citizens Voice", c:10},
+      {n:"Lotus Engagement LLC", c:8},
+      {n:"On Point Consulting & Canvassing", c:7, me:true},
+      {n:"David Morgan & Associates", c:7},
+      {n:"Make Petitioning Great Again LLC", c:7},
+      {n:"SynergySignatures LLC", c:7},
+      {n:"High Desert Political Consultants", c:7},
+      {n:"Marquette Enterprises, LLC", c:7},
+      {n:"Ballot Access Pros", c:7},
+      {n:"Pinnacle Partners Management", c:6},
+      {n:"QualifyNow LLC", c:5},
+      {n:"Blitz Canvassing", c:5},
+      {n:"Dime 10 Group LLC", c:4}
+    ];
+    var W=680, lw=232, mr=44, mt=8, rowh=25;
+    var H = mt + rows.length*rowh + 10;
+    var iw = W-lw-mr, max=11;
+    var svg = el("svg",{viewBox:"0 0 "+W+" "+H, role:"img",
+      "aria-label":"Colorado licensed petition entities by petitions circulating. On Point Consulting and Canvassing has 7, against a top of 11."});
+    rows.forEach(function(d,i){
+      var y = mt + i*rowh;
+      var g = el("g",{class:"barrow"});
+      var lab = el("text",{x:lw-10,y:y+15,"text-anchor":"end","font-size":11.5,
+        fill:d.me?"var(--ink)":"var(--ink-2)","font-family":"var(--display)","font-weight":d.me?"700":"500"});
+      lab.textContent = d.n.length>30 ? d.n.slice(0,29)+"…" : d.n;
+      g.appendChild(lab);
+      var w = (d.c/max)*iw;
+      g.appendChild(el("rect",{class:"bshape",x:lw,y:y+4,width:Math.max(w,2),height:15,
+        fill:d.me?"var(--accent)":"var(--neutral-bar)",rx:3,ry:3}));
+      var v = el("text",{x:lw+w+8,y:y+16,"font-size":12,fill:d.me?"var(--accent)":"var(--ink-3)",
+        "font-family":"var(--display)","font-weight":"700"});
+      v.textContent = d.c; g.appendChild(v);
+      var t = el("title"); t.textContent = d.n+" — "+d.c+" petitions circulating"; g.appendChild(t);
+      svg.appendChild(g);
+    });
+    $("#coChart").appendChild(svg);
+  })();
+
+  /* ---------- calculator ---------- */
+  (function(){
+    var s = $("#sigs"), c = $("#cprs");
+    function upd(){
+      var sv = +s.value, cv = +c.value, total = sv*cv;
+      $("#sigsOut").textContent = sv.toLocaleString("en-US");
+      $("#cprsOut").textContent = money(cv);
+      $("#outTotal").textContent = "$" + Math.round(total).toLocaleString("en-US");
+      var base = sv*14.87, d = Math.round((total-base)/base*100);
+      $("#outVs").textContent = (d>0?"+":"") + d + "%";
+      $("#outVs").style.color = d>0 ? "var(--amber)" : (d<0 ? "var(--accent)" : "var(--ink)");
+    }
+    s.addEventListener("input", upd); c.addEventListener("input", upd); upd();
+  })();
+
+  /* ---------- findings ---------- */
+  var F = [
+    {s:"critical",a:"AEO",t:"Five proof numbers are served as zero",
+     w:"Years, doors, signatures, validity rate and states all sit in the HTML as 0. The real values are in data-count attributes and are written by an IntersectionObserver, so they appear only after the block scrolls into view.",
+     f:"Render the real value server-side and animate up to it from there."},
+    {s:"critical",a:"AEO",t:"No structured data of any kind",
+     w:"Zero JSON-LD blocks. There is no Organization, LocalBusiness, Service or FAQPage markup, so nothing on the page is machine-readable as a fact about the company.",
+     f:"Add Organization with address, telephone, founder and sameAs, plus Service entries for the six offerings."},
+    {s:"critical",a:"SEO",t:"No robots.txt and no sitemap.xml",
+     w:"Both return 404 from the GitHub Pages default handler. Nothing tells a crawler what exists or where to look.",
+     f:"Publish both. Name GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot and Google-Extended explicitly."},
+    {s:"high",a:"SEO",t:"Meta description contradicts the page twice",
+     w:"It claims 350,000+ doors and 5 states. The stat block says 175,000+ doors and 14 states; the body says 10,000+ doors a week. It is also 203 characters, so it truncates in results.",
+     f:"One door figure, one state count, under 160 characters."},
+    {s:"high",a:"SITE",t:"www subdomain fails TLS outright",
+     w:"www.onpointccc.com returns a certificate principal mismatch, so the browser blocks it with a security warning rather than redirecting. Anyone who types the www form does not reach the site.",
+     f:"Add www to the GitHub Pages custom domain so the certificate covers it, and redirect www to the apex."},
+    {s:"high",a:"SEO",t:"The entire site is one page",
+     w:"Every link is an anchor, a mailto or a tel. Six services and fourteen states share a single URL, a single title and a single meta description, so the site can compete for one query rather than dozens.",
+     f:"A page per service and per priority state, each with its own title, description and schema."},
+    {s:"high",a:"AEO",t:"The Colorado licence number appears nowhere",
+     w:"On Point Consulting & Canvassing Inc holds Colorado petition entity licence #2026189 and is circulating seven petitions on the public register. This is independently verifiable third-party corroboration and the site never mentions it.",
+     f:"State the licence number on the page and link the register from sameAs in Organization schema."},
+    {s:"high",a:"SEO",t:"No organic presence, and the brand collides",
+     w:"Searches for the company name and its owners return four unrelated firms trading as OnPoint Consulting and nothing for this one. Assessed from result pages, not Search Console, so this means no presence was found rather than not indexed.",
+     f:"Entity disambiguation: consistent name, address and phone everywhere, the licence as corroboration, and a claimed business profile."},
+    {s:"high",a:"SEO",t:"No canonical link",
+     w:"Nothing declares the preferred URL, so any parameterised or alternate host version competes with the original.",
+     f:"One self-referential canonical on every page."},
+    {s:"medium",a:"SITE",t:"Contact form posts to a personal Gmail",
+     w:"The form action is a formsubmit.co endpoint addressed to a gmail.com account, which is published in the page source and harvestable. Every inbound lead passes through a third party to a personal mailbox.",
+     f:"Post to a business address on the domain, or a form endpoint you control."},
+    {s:"medium",a:"AEO",t:"No llms.txt",
+     w:"Nothing offers an answer engine a curated summary of what the company does and where it operates.",
+     f:"Publish one: who they are, the services, the states, the licence."},
+    {s:"medium",a:"SEO",t:"No og:image and no Twitter card",
+     w:"og:title is present but there is no preview image and no twitter:card, so a shared link renders as bare text.",
+     f:"Add og:image, og:description and twitter:card. The page has eight inline SVGs but no shareable raster."},
+    {s:"medium",a:"SITE",t:"No security headers",
+     w:"No HSTS, CSP or X-Frame-Options. GitHub Pages does not allow custom response headers, so this is a hosting limitation rather than a misconfiguration.",
+     f:"Only fixable by moving to a host that allows headers. Worth weighing against the simplicity they have now."},
+    {s:"medium",a:"SITE",t:"Owner mobile numbers are the primary contact",
+     w:"Two personal mobile numbers are published as the main route in. Workable at this size; it becomes a bottleneck and a continuity risk as the crew grows.",
+     f:"A tracked business line that forwards, so the number survives a change of staff."},
+    {s:"good",a:"SITE",t:"Genuinely fast",
+     w:"44KB total, no images, no external JavaScript, 17KB of inline CSS and 6KB of inline JS, with preconnect and display=swap on the one webfont request. Eight inline SVGs carry the graphics at zero image weight.",
+     f:"Nothing. This is better than most agency sites and should be protected through any redesign."},
+    {s:"good",a:"SEO",t:"Fundamentals in place",
+     w:"Viewport, lang attribute and favicon all present, and http redirects to https with a 301. The copy is specific and quotable, which is most of the work.",
+     f:"Nothing."},
+    {s:"good",a:"AEO",t:"Text-first and server-rendered",
+     w:"Apart from the counters, the substance of the page is in the HTML rather than injected by script, which is exactly what an answer engine needs. 1,311 words of specific, claim-dense copy.",
+     f:"Fix the counters and this becomes a strength rather than a near miss."}
+  ];
+  var curS = "all", curA = "all";
+  function draw(){
+    var rows = F.filter(function(f){
+      return (curS==="all"||f.s===curS) && (curA==="all"||f.a===curA);
+    });
+    $("#flist").innerHTML = rows.length ? rows.map(function(f){
+      return '<div class="f '+f.s+'"><div class="sev">'+(f.s==="good"?"WORKS":f.s.toUpperCase())+'</div>'+
+        '<div><div class="ttl">'+f.t+'</div><div class="ax">'+f.a+'</div></div>'+
+        '<div class="why">'+f.w+'</div>'+
+        '<div class="fix"><b>'+(f.s==="good"?"Keep":"Fix")+'</b>'+f.f+'</div></div>';
+    }).join("") : '<p class="empty">No findings match that combination.</p>';
+    var crit = rows.filter(function(f){return f.s==="critical";}).length;
+    $("#fcount").textContent = rows.length + " of " + F.length + " findings shown · " + crit + " critical";
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".chip"), function(b){
+    b.addEventListener("click", function(){
+      var grp = b.hasAttribute("data-sev") ? "data-sev" : "data-ax";
+      Array.prototype.forEach.call(document.querySelectorAll("["+grp+"]"), function(o){
+        o.setAttribute("aria-pressed", String(o===b));
+      });
+      if (grp==="data-sev") curS = b.getAttribute("data-sev"); else curA = b.getAttribute("data-ax");
+      draw();
+    });
+  });
+  draw();
+})();
+</script>
+
+</body>
+</html>
