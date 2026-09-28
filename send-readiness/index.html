@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tree Fleet Send Readiness</title>
+<title>Tree Fleet Send Results</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -50,13 +50,12 @@
   .stamp{font-family:var(--mono);font-size:12px;color:var(--muted);margin:14px 0 0;}
 
   hr{border:0;border-top:1px solid var(--line);margin:32px 0;}
-
   h2{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0 0 4px;}
   section{margin-top:36px;}
   p{margin:0 0 14px;max-width:68ch;}
   .lede{margin-bottom:18px;}
 
-  .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;
+  .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;
         background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:26px 0 0;}
   .fig{background:var(--surface);padding:16px 18px;}
   .fig .n{font-family:var(--mono);font-size:26px;font-weight:500;letter-spacing:-.02em;
@@ -77,12 +76,12 @@
   td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;}
   tr.total td{border-top:1px solid var(--line);font-weight:600;background:var(--line-soft);}
   td.acct{font-family:var(--mono);font-size:13px;}
+  .dim{color:var(--muted);}
 
   .pill{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
         text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;}
   .pill.ok{background:var(--green-soft);color:var(--green);}
   .pill.warn{background:var(--amber-soft);color:var(--amber);}
-  .pill.stop{background:var(--alert-soft);color:var(--alert);}
 
   .call{border-left:3px solid var(--amber);background:var(--surface);padding:14px 18px;margin:18px 0;
         border-radius:0 3px 3px 0;}
@@ -106,140 +105,80 @@
 <div class="wrap">
 
   <p class="eyebrow">Your Algorithm · Operations</p>
-  <h1>Tree Fleet Send Readiness</h1>
-  <p class="standfirst">What actually went out today, what is loaded for the 8:00 ET send, and the three calls still open.</p>
-  <p class="stamp">Read from production 2026-09-27, 22:47 ET · for Nile Brower · figures are live reads, not estimates</p>
+  <h1>Tree Fleet Send Results</h1>
+  <p class="standfirst">What actually went out on 28 September, where it fell short, and the two faults found along the way.</p>
+  <p class="stamp">Completed 2026-09-28 · read from production after the last batch closed · figures are live reads, not estimates</p>
 
   <div class="figs">
-    <div class="fig"><span class="n">76</span><span class="k">Texts out today, fleet-wide</span></div>
-    <div class="fig warn"><span class="n">2</span><span class="k">Of those, on the new lists</span></div>
-    <div class="fig ok"><span class="n">56,919</span><span class="k">Loaded for 8:00 ET</span></div>
-    <div class="fig warn"><span class="n">36,423</span><span class="k">Requested but not loaded</span></div>
+    <div class="fig ok"><span class="n">56,477</span><span class="k">Texts delivered</span></div>
+    <div class="fig"><span class="n">56,919</span><span class="k">Requested</span></div>
+    <div class="fig warn"><span class="n">442</span><span class="k">Short</span></div>
+    <div class="fig"><span class="n">$265.40</span><span class="k">Cost</span></div>
   </div>
 
   <hr>
 
   <section>
-    <h2>No campaign has ever run from the console</h2>
-    <p class="lede">This is the first thing to fix in everyone's head, because it changes what the other numbers mean.</p>
-    <p>The management console has recorded <strong>zero batch jobs</strong> in its entire history (<code>jobs: 0</code>, <code>daily: []</code>), and <code>sentToday</code> reads <strong>0</strong> on every subaccount. Whatever anyone has sent up to now went through GoHighLevel directly, not through the console, and the console has no record of it.</p>
-    <p>That also means the 16 accounts in the plan had nothing to send from until tonight. The console enrolls contacts from lists uploaded into <em>itself</em> — it does not read CRM contacts — and until 21:20 tonight it held exactly one list, Wade's 211-row call-only sheet.</p>
-  </section>
-
-  <section>
-    <h2>Texts out today, by subaccount</h2>
-    <p class="lede">Read from the live fleet across all 38 subaccounts. 19 sent something, 19 were silent.</p>
+    <h2>By subaccount</h2>
+    <p class="lede">Six of the eight hit their requested number exactly. 24 batches, 16 individual failures.</p>
 
     <div class="tw">
       <table>
-        <caption>Outbound, 2026-09-27 Eastern</caption>
-        <thead><tr><th>Subaccount</th><th class="n">Texts out</th></tr></thead>
+        <caption>Delivered against requested, 28 September</caption>
+        <thead><tr><th>Subaccount</th><th class="n">Asked</th><th class="n">Delivered</th><th class="n">Short</th><th class="n">Held</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td class="acct">forestry-grove</td><td class="n">11</td></tr>
-          <tr><td class="acct">timber-tech</td><td class="n">10</td></tr>
-          <tr><td class="acct">above-the-branch-tier-2</td><td class="n">9</td></tr>
-          <tr><td class="acct">nature-worx</td><td class="n">8</td></tr>
-          <tr><td class="acct">goldpalm</td><td class="n">5</td></tr>
-          <tr><td class="acct">murphy-development-group-tier-1</td><td class="n">4</td></tr>
-          <tr><td class="acct">account-one</td><td class="n">3</td></tr>
-          <tr><td class="acct">ap-property-management</td><td class="n">3</td></tr>
-          <tr><td class="acct">Alltimate Tree Care <span style="color:var(--muted)">· reillys-tree-and-more</span></td><td class="n">3</td></tr>
-          <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">3</td></tr>
-          <tr><td class="acct">summit-tree-and-land</td><td class="n">3</td></tr>
-          <tr><td class="acct">wades-tree-service</td><td class="n">3</td></tr>
-          <tr><td class="acct">xd-land-service</td><td class="n">3</td></tr>
-          <tr><td class="acct">harleys-tree-service-tier-1</td><td class="n">2</td></tr>
-          <tr><td class="acct">trinity-roofing</td><td class="n">2</td></tr>
-          <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">1</td></tr>
-          <tr><td class="acct">cost-low-tree-service</td><td class="n">1</td></tr>
-          <tr><td class="acct">holbrook-tree-service</td><td class="n">1</td></tr>
-          <tr><td class="acct">ranger-tree-care-tier-1</td><td class="n">1</td></tr>
-          <tr class="total"><td>Total · 19 other accounts silent</td><td class="n">76</td></tr>
+          <tr><td class="acct">cost-low-tree-service</td><td class="n">8,693</td><td class="n">8,693</td><td class="n">0</td><td class="n">152</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">above-the-branch-tier-2</td><td class="n">7,651</td><td class="n">7,651</td><td class="n">0</td><td class="n">108</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">7,508</td><td class="n">7,508</td><td class="n">0</td><td class="n">5,064</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">walkers-tree-service</td><td class="n">7,430</td><td class="n">7,430</td><td class="n">0</td><td class="n">140</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">xd-land-service</td><td class="n">7,245</td><td class="n">7,245</td><td class="n">0</td><td class="n">497</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">Alltimate Tree Care <span class="dim">· reillys-tree-and-more</span></td><td class="n">7,028</td><td class="n">6,738</td><td class="n">290</td><td class="n">6,933</td><td><span class="pill warn">List consumed</span></td></tr>
+          <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">6,154</td><td class="n">6,002</td><td class="n">152</td><td class="n">562</td><td><span class="pill warn">File was short</span></td></tr>
+          <tr><td class="acct">timber-tech</td><td class="n">5,210</td><td class="n">5,210</td><td class="n">0</td><td class="n">99</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr class="total"><td>Total</td><td class="n">56,919</td><td class="n">56,477</td><td class="n">442</td><td class="n">13,555</td><td></td></tr>
         </tbody>
       </table>
     </div>
 
-    <p>76 across the whole fleet is ordinary conversation traffic — Ethan answering homeowners — not a campaign. Nobody blasted a list today.</p>
+    <p>The 442 shortfall is two causes, neither fixable with the data on hand. <strong>Southern Stone, 152:</strong> its file only ever held 6,154 usable rows against the 8,045 originally requested, known since Saturday. <strong>Alltimate, 290:</strong> its Volusia list is now fully consumed and the remainder were genuine opt-outs, which stayed blocked throughout.</p>
   </section>
 
   <section>
-    <h2>Did today's sends hit the new lists?</h2>
+    <h2>The cooldown was overridden, then restored</h2>
+    <p class="lede">The first pass delivered 28,100 and held 12,214 more. Those holds were not opt-outs.</p>
+    <p>The console skips any contact whose CRM conversation was touched in the last 14 days — a rule Nile set on 2026-09-21 after finding that fresh lists booked one appointment per 626–834 texts while the heaviest re-senders ran one per 5,039–10,722. The gbalo files turned out to overlap heavily with recently-contacted people, so the rule caught them: Alltimate alone had 976 contacts texted that same day, 452 texted two days before, 386 the day before.</p>
+    <p>Joseph overrode it. <code>RESEND_COOLDOWN_DAYS</code> was set to <code>0</code>, the held contacts were staged as their own lists and sent, and the variable was returned to <code>14</code> once the last batch closed — confirmed by reading <code>14</code> back from production.</p>
     <div class="call ok">
-      <h3>Effectively no — 2 numbers out of 119,597</h3>
-      <p>Both are on Alltimate Tree Care (the subaccount is still keyed <code>reillys-tree-and-more</code> from before the rename). Every other account texted today has zero overlap with the ten uploaded files.</p>
-      <p>There is no double-texting problem here. The 14-day resend cooldown will catch those two at enroll time anyway.</p>
+      <h3>Opt-outs were never part of this</h3>
+      <p>The suppression gate and the cooldown are separate checks. Only the cooldown was disabled; the durable opt-out store stayed enforced on every contact, at enroll time rather than at upload time.</p>
     </div>
-    <p>The check compared every number texted today against all 119,597 distinct phone numbers across the ten CSVs, normalised to 10 digits.</p>
+    <p>Staging the held contacts on separate lists, rather than re-running the originals, is what kept anyone from getting a second message the same day.</p>
   </section>
 
   <section>
-    <h2>Loaded for the 8:00 ET send</h2>
-    <p class="lede">Eight accounts, all <code>America/New_York</code>. The <code>High Standards Tree</code> workflow is set on all sixteen accounts in the plan, using each subaccount's own published copy.</p>
-
-    <div class="tw">
-      <table>
-        <caption>Queued, against what was requested</caption>
-        <thead><tr><th>Subaccount</th><th class="n">Usable rows</th><th class="n">Will send</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td class="acct">cost-low-tree-service</td><td class="n">17,168</td><td class="n">8,693</td><td><span class="pill ok">Trims to cap</span></td></tr>
-          <tr><td class="acct">Alltimate Tree Care <span style="color:var(--muted)">· reillys-tree-and-more</span></td><td class="n">7,028</td><td class="n">7,028</td><td><span class="pill warn">Volusia only</span></td></tr>
-          <tr><td class="acct">above-the-branch-tier-2</td><td class="n">12,666</td><td class="n">7,651</td><td><span class="pill ok">Trims to cap</span></td></tr>
-          <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">12,536</td><td class="n">7,508</td><td><span class="pill ok">Trims to cap</span></td></tr>
-          <tr><td class="acct">walkers-tree-service</td><td class="n">16,948</td><td class="n">7,430</td><td><span class="pill ok">Two files merged</span></td></tr>
-          <tr><td class="acct">xd-land-service</td><td class="n">14,005</td><td class="n">7,245</td><td><span class="pill ok">Trims to cap</span></td></tr>
-          <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">6,154</td><td class="n">6,154</td><td><span class="pill warn">Short 1,891</span></td></tr>
-          <tr><td class="acct">timber-tech</td><td class="n">15,507</td><td class="n">5,210</td><td><span class="pill ok">Trims to cap</span></td></tr>
-          <tr class="total"><td>Total</td><td class="n">102,012</td><td class="n">56,919</td><td></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p>All nine lists finished uploading at 22:11 and every one now reads <span class="pill ok">Ready</span> — <strong>106,160 of 106,163 contacts landed, 3 failed</strong>, none pending. The three failures fall on cost-low, reillys and timber-tech, one each, and none of them touches a requested count. The files parsed with zero unusable rows and zero duplicates.</p>
-  </section>
-
-  <section>
-    <h2>Alltimate was re-cut to Volusia only</h2>
-    <p class="lede">Caught before the send, not after. The subaccount is still keyed <code>reillys-tree-and-more</code>, but the company is Alltimate Tree Care and has been since 2026-09-14.</p>
-    <p>Its file held two towns in two different counties: <strong>7,109 rows in 32141 Edgewater (Volusia)</strong> and <strong>4,081 in 32136 Flagler Beach (Flagler)</strong>. Alltimate's protocol allows both ZIPs but attaches a rule to them:</p>
-    <div class="call stop">
-      <h3>From the protocol's own service area</h3>
-      <p>Volusia County, Florida only. The physical property must be inside Volusia County; a matching ZIP does not approve an address in a neighbouring county (Astor 32102, <strong>Flagler Beach 32136</strong> and Mims 32754 straddle county lines). Never reply to, offer times to, or book a lead whose property is outside Volusia County. <strong>Mark an out-of-area conversation read with no outbound message.</strong></p>
-    </div>
-    <p>So every Flagler Beach row would have been texted and then refused in silence. Worse, contacts enroll in ZIP order, and 32136 sorts first, so those 4,081 would have gone out <em>ahead</em> of the Volusia ones. The list was re-cut to Edgewater only and re-uploaded; the count drops from the 8,115 requested to <strong>7,028</strong>.</p>
-    <p>Flagler County is not held by any contractor on the routing sheet, so this is Alltimate's own boundary rather than a territory conflict. Widening the protocol to cover Flagler is available, but that is a territory decision in its own right.</p>
-  </section>
-
-  <section>
-    <h2>Three calls still open</h2>
+    <h2>Two faults worth carrying forward</h2>
 
     <div class="call stop">
-      <h3>1 · Eight accounts have no data at all</h3>
-      <p>33,445 of the requested messages have no file behind them: Harley's 9,740 (the largest single account in the plan), Ranger 7,226, Murphy 5,912, Holbrook 4,037, Taylor Stump 2,681, Nature Worx 1,691, Wade's 1,163, account-one 995.</p>
-      <p>Is gbalo still sending these, or did the requested counts run ahead of the files?</p>
-    </div>
-
-    <div class="call">
-      <h3>2 · The 9:00 ET slot is empty</h3>
-      <p>Nature Worx is the only <code>America/Chicago</code> account in the plan, which is why it was scheduled an hour later — 9:00 ET is 8:00 its time, inside the 7am–7pm window. It is also one of the eight with no file, so unless its data lands, everything goes at 8:00 and there is nothing at 9:00.</p>
+      <h3>1 · A stalled upload reads as a finished one</h3>
+      <p>Changing a service variable forces a redeploy, and the redeploy killed two list uploads mid-flight — Alltimate at 2,180 of 6,645, Affordable CT at 973 of 4,486. Neither retried. The lists simply sat with a pending count nobody was watching, and the send took only what had landed.</p>
+      <p>It was caught because Alltimate's numbers did not add up, not because anything reported a problem. <code>POST /api/manage/lists/&lt;id&gt;</code> with <code>{"action":"resume"}</code> restarts one. After any variable change, check for lists left uploading.</p>
     </div>
 
     <div class="call stop">
-      <h3>3 · Forestry Grove is held back</h3>
-      <p>A 13,589-row file arrived for Forestry Grove, but the plan sets Forestry Grove to zero deliberately. Those two cannot both be right, so the file was not uploaded and nothing is queued for that account.</p>
-      <p>It can be uploaded in about two minutes once someone says which is correct.</p>
+      <h3>2 · The console upload has no territory gate</h3>
+      <p>Alltimate's file mixed 7,109 Edgewater rows (Volusia) with 4,081 Flagler Beach rows (Flagler). Its protocol serves Volusia only and refuses anything outside it <em>with no outbound message</em> — so those 4,081 would have been texted and then ghosted. Contacts enroll in ZIP order and 32136 sorts first, so they would have gone out ahead of every valid one.</p>
+      <p>The file was re-cut to Edgewater only before any of it sent. <code>scripts/list-import.ts</code> runs this territory check; the console's upload route does not. Purchased lists must be cut by county before they go in.</p>
     </div>
   </section>
 
   <section>
-    <h2>One thing to fix regardless</h2>
-    <p>The store was read directly on the service: <strong>12,885 active, 16 released, 29,515 log rows, integrity OK</strong>. It gained <strong>122 suppressions today, 115 of them <code>dnd-tag</code> and 7 manual</strong>, discovered as the uploads met contacts GoHighLevel had already flagged. Those arrived after eight of the nine lists were uploaded, which does not matter: the send re-checks every contact against the store at enroll time rather than at upload time, so a number suppressed after upload is still caught.</p>
-    <p>One trap worth naming, because it nearly produced a false alarm tonight: the same check run through <code>railway run</code> reports <strong>401 active</strong>, because that executes locally and <code>/data/suppression.db</code> is a Railway volume path that does not exist on a laptop. Read the store over <code>railway ssh</code>, or on the service, or the number is fiction.</p>
-    <p><code>SUPPRESSION_MIN_EXPECTED</code> is still unset on the sending service. INV-8 calls for it everywhere that sends, so a shrunken or restored-empty store blocks an upload instead of silently passing everyone through. The correct value right now is <code>12885</code>, and it should be set at a moment when a wrong value cannot block a scheduled send.</p>
+    <h2>Cost</h2>
+    <p>The wallet went from $925.25 to $659.85 — <strong>$265.40 for 56,477 messages, $0.0047 each</strong>. An early estimate of $451 being insufficient was wrong; it assumed roughly twice the real per-message rate.</p>
   </section>
 
   <div class="foot">
-    <p><strong>How these numbers were read.</strong> Console figures come from <code>/api/manage/overview</code>, <code>/lists</code> and <code>/send</code> on production. Today's outbound comes from a read-only probe over <code>conversations.search</code> across all 38 subaccounts; it counts conversations whose most recent message is outbound and dated today, so a thread where the homeowner replied after us is not counted. That makes 76 a floor rather than an exact total — but a campaign blast of thousands would still show, since most of those threads get no reply.</p>
-    <p>Nothing in producing this report sent, booked, tagged or changed anything. The only writes made tonight were the nine list uploads and the workflow setting on sixteen accounts.</p>
+    <p><strong>How these numbers were read.</strong> Per-account figures come from the console's own job ledger at <code>/api/manage/send</code> on production, summed across all 24 batches. The cooldown value was read back from <code>/api/manage/overview</code> after the final redeploy. Cost is the Sendillo wallet balance before and after. Nothing here is projected.</p>
+    <p>Earlier versions of this page described what was loaded and ready to send. This version describes what shipped.</p>
   </div>
 
 </div>
