@@ -108,13 +108,13 @@
   <p class="eyebrow">Your Algorithm · Operations</p>
   <h1>Tree Fleet Send Readiness</h1>
   <p class="standfirst">What actually went out today, what is loaded for the 8:00 ET send, and the three calls still open.</p>
-  <p class="stamp">Read from production 2026-09-27, 22:11 ET · for Nile Brower · figures are live reads, not estimates</p>
+  <p class="stamp">Read from production 2026-09-27, 22:47 ET · for Nile Brower · figures are live reads, not estimates</p>
 
   <div class="figs">
     <div class="fig"><span class="n">76</span><span class="k">Texts out today, fleet-wide</span></div>
     <div class="fig warn"><span class="n">2</span><span class="k">Of those, on the new lists</span></div>
-    <div class="fig ok"><span class="n">58,006</span><span class="k">Loaded for 8:00 ET</span></div>
-    <div class="fig warn"><span class="n">35,336</span><span class="k">Requested but not loaded</span></div>
+    <div class="fig ok"><span class="n">56,919</span><span class="k">Loaded for 8:00 ET</span></div>
+    <div class="fig warn"><span class="n">36,423</span><span class="k">Requested but not loaded</span></div>
   </div>
 
   <hr>
@@ -143,7 +143,7 @@
           <tr><td class="acct">murphy-development-group-tier-1</td><td class="n">4</td></tr>
           <tr><td class="acct">account-one</td><td class="n">3</td></tr>
           <tr><td class="acct">ap-property-management</td><td class="n">3</td></tr>
-          <tr><td class="acct">reillys-tree-and-more</td><td class="n">3</td></tr>
+          <tr><td class="acct">Alltimate Tree Care <span style="color:var(--muted)">· reillys-tree-and-more</span></td><td class="n">3</td></tr>
           <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">3</td></tr>
           <tr><td class="acct">summit-tree-and-land</td><td class="n">3</td></tr>
           <tr><td class="acct">wades-tree-service</td><td class="n">3</td></tr>
@@ -166,7 +166,7 @@
     <h2>Did today's sends hit the new lists?</h2>
     <div class="call ok">
       <h3>Effectively no — 2 numbers out of 119,597</h3>
-      <p>Both are on <code>reillys-tree-and-more</code> (Alltimate Tree Care). Every other account texted today has zero overlap with the ten uploaded files.</p>
+      <p>Both are on Alltimate Tree Care (the subaccount is still keyed <code>reillys-tree-and-more</code> from before the rename). Every other account texted today has zero overlap with the ten uploaded files.</p>
       <p>There is no double-texting problem here. The 14-day resend cooldown will catch those two at enroll time anyway.</p>
     </div>
     <p>The check compared every number texted today against all 119,597 distinct phone numbers across the ten CSVs, normalised to 10 digits.</p>
@@ -182,19 +182,31 @@
         <thead><tr><th>Subaccount</th><th class="n">Usable rows</th><th class="n">Will send</th><th>Status</th></tr></thead>
         <tbody>
           <tr><td class="acct">cost-low-tree-service</td><td class="n">17,168</td><td class="n">8,693</td><td><span class="pill ok">Trims to cap</span></td></tr>
-          <tr><td class="acct">reillys-tree-and-more</td><td class="n">11,179</td><td class="n">8,115</td><td><span class="pill ok">Trims to cap</span></td></tr>
+          <tr><td class="acct">Alltimate Tree Care <span style="color:var(--muted)">· reillys-tree-and-more</span></td><td class="n">7,028</td><td class="n">7,028</td><td><span class="pill warn">Volusia only</span></td></tr>
           <tr><td class="acct">above-the-branch-tier-2</td><td class="n">12,666</td><td class="n">7,651</td><td><span class="pill ok">Trims to cap</span></td></tr>
           <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">12,536</td><td class="n">7,508</td><td><span class="pill ok">Trims to cap</span></td></tr>
           <tr><td class="acct">walkers-tree-service</td><td class="n">16,948</td><td class="n">7,430</td><td><span class="pill ok">Two files merged</span></td></tr>
           <tr><td class="acct">xd-land-service</td><td class="n">14,005</td><td class="n">7,245</td><td><span class="pill ok">Trims to cap</span></td></tr>
           <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">6,154</td><td class="n">6,154</td><td><span class="pill warn">Short 1,891</span></td></tr>
           <tr><td class="acct">timber-tech</td><td class="n">15,507</td><td class="n">5,210</td><td><span class="pill ok">Trims to cap</span></td></tr>
-          <tr class="total"><td>Total</td><td class="n">106,163</td><td class="n">58,006</td><td></td></tr>
+          <tr class="total"><td>Total</td><td class="n">102,012</td><td class="n">56,919</td><td></td></tr>
         </tbody>
       </table>
     </div>
 
-    <p>All nine lists finished uploading at 22:11 and every one now reads <span class="pill ok">Ready</span> — <strong>106,160 of 106,163 contacts landed, 3 failed</strong>, none pending. The three failures fall on cost-low, reillys and timber-tech, one each, and none of them touches a requested count. The files parsed with zero unusable rows and zero duplicates, and only 59 of the 119,811 rows were already suppressed.</p>
+    <p>All nine lists finished uploading at 22:11 and every one now reads <span class="pill ok">Ready</span> — <strong>106,160 of 106,163 contacts landed, 3 failed</strong>, none pending. The three failures fall on cost-low, reillys and timber-tech, one each, and none of them touches a requested count. The files parsed with zero unusable rows and zero duplicates.</p>
+  </section>
+
+  <section>
+    <h2>Alltimate was re-cut to Volusia only</h2>
+    <p class="lede">Caught before the send, not after. The subaccount is still keyed <code>reillys-tree-and-more</code>, but the company is Alltimate Tree Care and has been since 2026-09-14.</p>
+    <p>Its file held two towns in two different counties: <strong>7,109 rows in 32141 Edgewater (Volusia)</strong> and <strong>4,081 in 32136 Flagler Beach (Flagler)</strong>. Alltimate's protocol allows both ZIPs but attaches a rule to them:</p>
+    <div class="call stop">
+      <h3>From the protocol's own service area</h3>
+      <p>Volusia County, Florida only. The physical property must be inside Volusia County; a matching ZIP does not approve an address in a neighbouring county (Astor 32102, <strong>Flagler Beach 32136</strong> and Mims 32754 straddle county lines). Never reply to, offer times to, or book a lead whose property is outside Volusia County. <strong>Mark an out-of-area conversation read with no outbound message.</strong></p>
+    </div>
+    <p>So every Flagler Beach row would have been texted and then refused in silence. Worse, contacts enroll in ZIP order, and 32136 sorts first, so those 4,081 would have gone out <em>ahead</em> of the Volusia ones. The list was re-cut to Edgewater only and re-uploaded; the count drops from the 8,115 requested to <strong>7,028</strong>.</p>
+    <p>Flagler County is not held by any contractor on the routing sheet, so this is Alltimate's own boundary rather than a territory conflict. Widening the protocol to cover Flagler is available, but that is a territory decision in its own right.</p>
   </section>
 
   <section>
@@ -220,7 +232,9 @@
 
   <section>
     <h2>One thing to fix regardless</h2>
-    <p><code>SUPPRESSION_MIN_EXPECTED</code> is unset on the sending service. INV-8 calls for it on every service that sends, so that a shrunken or restored-empty suppression store blocks an upload instead of silently passing everyone through. The store is healthy right now — the upload route refuses outright on a store it had to create, and it did not — so tonight is safe. It should be set to roughly <code>12000</code> before this becomes routine, at a moment when a wrong value cannot block a scheduled send.</p>
+    <p>The store was read directly on the service: <strong>12,885 active, 16 released, 29,515 log rows, integrity OK</strong>. It gained <strong>122 suppressions today, 115 of them <code>dnd-tag</code> and 7 manual</strong>, discovered as the uploads met contacts GoHighLevel had already flagged. Those arrived after eight of the nine lists were uploaded, which does not matter: the send re-checks every contact against the store at enroll time rather than at upload time, so a number suppressed after upload is still caught.</p>
+    <p>One trap worth naming, because it nearly produced a false alarm tonight: the same check run through <code>railway run</code> reports <strong>401 active</strong>, because that executes locally and <code>/data/suppression.db</code> is a Railway volume path that does not exist on a laptop. Read the store over <code>railway ssh</code>, or on the service, or the number is fiction.</p>
+    <p><code>SUPPRESSION_MIN_EXPECTED</code> is still unset on the sending service. INV-8 calls for it everywhere that sends, so a shrunken or restored-empty store blocks an upload instead of silently passing everyone through. The correct value right now is <code>12885</code>, and it should be set at a moment when a wrong value cannot block a scheduled send.</p>
   </section>
 
   <div class="foot">
