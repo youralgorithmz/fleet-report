@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fleet Send Capacity</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+
+
+<style>
+  :root{
+    --paper:#f7f6f2; --surface:#ffffff; --ink:#1a211c; --muted:#6a726b;
+    --line:#dcdad2; --line-soft:#e9e7e0;
+    --amber:#9a6320; --amber-soft:#f3e7d5;
+    --green:#3d6b4c; --green-soft:#e0ece2;
+    --alert:#9c3a2d; --alert-soft:#f6e2de;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --paper:#131713; --surface:#1a201b; --ink:#e7e9e4; --muted:#98a098;
+      --line:#2d352e; --line-soft:#232a24;
+      --amber:#d79b52; --amber-soft:#332618;
+      --green:#7fb28d; --green-soft:#1b2a1f;
+      --alert:#d98675; --alert-soft:#32211d;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --paper:#131713; --surface:#1a201b; --ink:#e7e9e4; --muted:#98a098;
+    --line:#2d352e; --line-soft:#232a24;
+    --amber:#d79b52; --amber-soft:#332618;
+    --green:#7fb28d; --green-soft:#1b2a1f;
+    --alert:#d98675; --alert-soft:#32211d;
+  }
+
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;
+       padding-inline:16px;padding-block:0;}
+  .wrap{max-width:960px;margin:0 auto;padding-block:36px 64px;}
+
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--muted);margin:0 0 10px;}
+  h1{font-size:clamp(26px,4.6vw,38px);line-height:1.12;margin:0 0 10px;font-weight:600;
+     letter-spacing:-.02em;text-wrap:balance;}
+  .standfirst{font-size:17px;color:var(--muted);margin:0 0 6px;max-width:64ch;}
+  .stamp{font-family:var(--mono);font-size:12px;color:var(--muted);margin:14px 0 0;}
+
+  hr{border:0;border-top:1px solid var(--line);margin:32px 0;}
+  h2{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0 0 4px;}
+  h2 .num{font-family:var(--mono);color:var(--muted);font-weight:500;margin-right:8px;}
+  section{margin-top:38px;}
+  p{margin:0 0 14px;max-width:68ch;}
+  .lede{margin-bottom:18px;}
+
+  .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;
+        background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:26px 0 0;}
+  .fig{background:var(--surface);padding:16px 18px;}
+  .fig .n{font-family:var(--mono);font-size:26px;font-weight:500;letter-spacing:-.02em;
+          font-variant-numeric:tabular-nums;display:block;}
+  .fig .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+          color:var(--muted);display:block;margin-top:5px;}
+  .fig.warn .n{color:var(--amber);}
+  .fig.ok .n{color:var(--green);}
+  .fig.stop .n{color:var(--alert);}
+
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface);margin:18px 0;}
+  table{border-collapse:collapse;width:100%;font-size:14px;}
+  caption{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+          text-transform:uppercase;color:var(--muted);padding:12px 14px 0;}
+  th,td{padding:8px 14px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+  thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+           color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:0;}
+  td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  tr.total td{border-top:1px solid var(--line);font-weight:600;background:var(--line-soft);}
+  td.acct{font-family:var(--mono);font-size:13px;}
+  .dim{color:var(--muted);}
+  .note{font-size:13px;color:var(--muted);}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+        text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;}
+  .pill.ok{background:var(--green-soft);color:var(--green);}
+  .pill.warn{background:var(--amber-soft);color:var(--amber);}
+  .pill.stop{background:var(--alert-soft);color:var(--alert);}
+
+  .call{border-left:3px solid var(--amber);background:var(--surface);padding:14px 18px;margin:18px 0;
+        border-radius:0 3px 3px 0;}
+  .call.stop{border-left-color:var(--alert);}
+  .call.ok{border-left-color:var(--green);}
+  .call h3{font-size:15px;margin:0 0 6px;font-weight:600;}
+  .call p{margin:0;font-size:14.5px;color:var(--muted);max-width:none;}
+  .call p + p{margin-top:8px;}
+
+  code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:1px 5px;border-radius:2px;}
+  strong{font-weight:600;}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+        font-size:13px;color:var(--muted);}
+  .foot p{max-width:70ch;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <p class="eyebrow">Your Algorithm · Operations</p>
+  <h1>Fleet Send Capacity</h1>
+  <p class="standfirst">Who is finished, who can send more today without uploading anything, and who is blocked waiting on a list.</p>
+  <p class="stamp">Read from production 2026-09-28, after the last batch closed · 23 operating subaccounts</p>
+
+  <div class="figs">
+    <div class="fig ok"><span class="n">6 of 8</span><span class="k">Sent their full amount</span></div>
+    <div class="fig"><span class="n">40,788</span><span class="k">Sendable with no new list</span></div>
+    <div class="fig warn"><span class="n">33,445</span><span class="k">Blocked, needs a list</span></div>
+    <div class="fig"><span class="n">15</span><span class="k">Accounts holding no list</span></div>
+  </div>
+
+  <hr>
+
+  <section>
+    <h2><span class="num">1</span>Finished — sent the full requested amount</h2>
+    <p class="lede">Six of the eight hit their number exactly. The two that fell short cannot be topped up from anything currently in the console.</p>
+
+    <div class="tw">
+      <table>
+        <caption>Delivered 28 September</caption>
+        <thead><tr><th>Subaccount</th><th class="n">Asked</th><th class="n">Delivered</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">cost-low-tree-service</td><td class="n">8,693</td><td class="n">8,693</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">above-the-branch-tier-2</td><td class="n">7,651</td><td class="n">7,651</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">7,508</td><td class="n">7,508</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">walkers-tree-service</td><td class="n">7,430</td><td class="n">7,430</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">xd-land-service</td><td class="n">7,245</td><td class="n">7,245</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">timber-tech</td><td class="n">5,210</td><td class="n">5,210</td><td><span class="pill ok">Complete</span></td></tr>
+          <tr><td class="acct">Alltimate Tree Care <span class="dim">· reillys-tree-and-more</span></td><td class="n">7,028</td><td class="n">6,738</td><td><span class="pill warn">290 short</span></td></tr>
+          <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">6,154</td><td class="n">6,002</td><td><span class="pill warn">152 short</span></td></tr>
+          <tr class="total"><td>Total</td><td class="n">56,919</td><td class="n">56,477</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note"><strong>Southern Stone</strong> is short because its file only ever held 6,154 usable rows against the 8,045 requested — it is fully consumed. <strong>Alltimate</strong> is short because its Volusia list is fully consumed and the remainder were genuine opt-outs. Both need new data, not a re-run.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>Can send more today, with no new list</h2>
+    <p class="lede">Rows already uploaded and never touched. These are leftovers from the same gbalo files — the send stopped at its requested cap, not at the end of the list. No upload, no data purchase: they can go now.</p>
+
+    <div class="tw">
+      <table>
+        <caption>Available without uploading anything</caption>
+        <thead><tr><th>Subaccount</th><th class="n">Sendable now</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">timber-tech</td><td class="n">10,275</td><td class="note">Leftover of the TimberTech file</td></tr>
+          <tr><td class="acct">walkers-tree-service</td><td class="n">9,489</td><td class="note">Two files, 4,211 + 5,278</td></tr>
+          <tr><td class="acct">cost-low-tree-service</td><td class="n">8,439</td><td class="note">Leftover of the CostLow file</td></tr>
+          <tr><td class="acct">xd-land-service</td><td class="n">6,669</td><td class="note">Leftover of the XD Land file</td></tr>
+          <tr><td class="acct">above-the-branch-tier-2</td><td class="n">4,984</td><td class="note">Leftover of the AboveTheBranch T2 file</td></tr>
+          <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">932</td><td class="note">Leftover of the AffordableTree file</td></tr>
+          <tr class="total"><td>Clean and ready</td><td class="n">40,788</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Two more pools exist but should not be treated as ordinary capacity:</p>
+
+    <div class="call">
+      <h3>Affordable CT — 3,513 more, but they are re-touches</h3>
+      <p>These are the contacts the 14-day rule held back, staged during the override and never needed once the account hit its number. Sending them means texting people contacted within the last two weeks. Available, but it is a second touch, not fresh reach.</p>
+    </div>
+
+    <div class="call stop">
+      <h3>Alltimate — 11,178 rows that should not be sent</h3>
+      <p>This is the original mixed file. 4,081 of its rows are Flagler Beach, outside the Volusia-only service area, and the agent refuses those with no outbound message at all. The other ~7,100 are the Edgewater contacts who were already texted today, so sending them would be a same-day duplicate.</p>
+      <p>Treat this account as needing new Volusia data, not as holding 11,178 in reserve.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>Blocked — ready to send, waiting only on a list</h2>
+    <p class="lede">These eight were in the 27 September request and received nothing, because no file ever arrived for them. Each already has the <code>High Standards Tree</code> workflow configured, so a list is the only missing piece.</p>
+
+    <div class="tw">
+      <table>
+        <caption>Workflow ready, zero contacts loaded</caption>
+        <thead><tr><th>Subaccount</th><th class="n">Was asked for</th><th class="n">In console</th><th>Needs</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">harleys-tree-service-tier-1</td><td class="n">9,740</td><td class="n">0</td><td class="note">A list</td></tr>
+          <tr><td class="acct">ranger-tree-care-tier-1</td><td class="n">7,226</td><td class="n">0</td><td class="note">A list</td></tr>
+          <tr><td class="acct">murphy-development-group-tier-1</td><td class="n">5,912</td><td class="n">0</td><td class="note">A list</td></tr>
+          <tr><td class="acct">holbrook-tree-service</td><td class="n">4,037</td><td class="n">0</td><td class="note">A list</td></tr>
+          <tr><td class="acct">taylor-stump-grinding</td><td class="n">2,681</td><td class="n">0</td><td class="note">A list</td></tr>
+          <tr><td class="acct">nature-worx</td><td class="n">1,691</td><td class="n">0</td><td class="note">A list · Central time, send at 9:00 ET</td></tr>
+          <tr><td class="acct">wades-tree-service</td><td class="n">1,163</td><td class="n">0</td><td class="note">A list</td></tr>
+          <tr><td class="acct">account-one <span class="dim">· Above The Branch T1</span></td><td class="n">995</td><td class="n">0</td><td class="note">A list</td></tr>
+          <tr class="total"><td>Total waiting on data</td><td class="n">33,445</td><td class="n">0</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Harley's alone is 9,740 — the single largest account in the whole request, and it has sent nothing.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>The other seven operating accounts</h2>
+    <p class="lede">Not in the 27 September request. None holds a list, and none has a sending workflow set, so each needs two steps rather than one.</p>
+
+    <div class="tw">
+      <table>
+        <caption>No list, no workflow configured</caption>
+        <thead><tr><th>Subaccount</th><th class="n">Never texted, in CRM</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">high-standards</td><td class="n">74,419</td><td class="note">Trial account. Deliberately excluded from the request.</td></tr>
+          <tr><td class="acct">forestry-grove</td><td class="n">12,856</td><td class="note">Deliberately set to zero. A 13,589-row file exists but was never uploaded, pending a decision.</td></tr>
+          <tr><td class="acct">goldpalm</td><td class="n">156</td><td class="note">Too small to campaign.</td></tr>
+          <tr><td class="acct">ap-property-management</td><td class="n">87</td><td class="note">Too small to campaign.</td></tr>
+          <tr><td class="acct">summit-tree-and-land</td><td class="n">29</td><td class="note">Too small to campaign.</td></tr>
+          <tr><td class="acct">anthonys-trees</td><td class="n">—</td><td class="note">Not measured.</td></tr>
+          <tr><td class="acct">mustard-seed-lawn-and-tree</td><td class="n">—</td><td class="note">Not measured.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note">The never-texted figures come from the 27 September request document and were read from each GoHighLevel location that afternoon. They have not been re-measured since, and today's sending does not affect them — none of these accounts sent anything.</p>
+  </section>
+
+  <section>
+    <h2>What this adds up to</h2>
+    <div class="call ok">
+      <h3>40,788 can go today without anyone uploading a thing</h3>
+      <p>Spread across six accounts, all of it fresh rows from files already in the console. The only decision needed is how many each account should take.</p>
+    </div>
+    <div class="call stop">
+      <h3>33,445 is stuck behind eight missing files</h3>
+      <p>Every one of those accounts is configured and ready. Nothing else is blocking them. Harley's 9,740 is the biggest single gap in the fleet.</p>
+    </div>
+    <p>Before any of the leftover rows in section 2 go out, they should be cut by county the way Alltimate's were — the console's upload route filters opt-outs but does not check a ZIP against the account's service area, and these are the same files that hid a two-county mix.</p>
+  </section>
+
+  <div class="foot">
+    <p><strong>How these numbers were read.</strong> Delivered totals come from the console's job ledger at <code>/api/manage/send</code>, summed across all 24 batches. Sendable-now figures are the per-list <code>remaining</code> counts from <code>/api/manage/lists</code>, which count rows uploaded to the platform and not yet sent. Workflow and list status come from <code>/api/manage/overview</code>. Never-texted counts are quoted from the 27 September request and were not re-measured.</p>
+    <p>Sendable-now counts what the console can enroll. Each contact is still checked against the opt-out store at the moment of sending, and against the 14-day rule, so the delivered number will always come in under the sendable one.</p>
+  </div>
+
+</div>
+</body>
+</html>
