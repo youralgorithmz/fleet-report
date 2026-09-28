@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tree Fleet Send Readiness</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+
+
+<style>
+  :root{
+    --paper:#f7f6f2; --surface:#ffffff; --ink:#1a211c; --muted:#6a726b;
+    --line:#dcdad2; --line-soft:#e9e7e0;
+    --amber:#9a6320; --amber-soft:#f3e7d5;
+    --green:#3d6b4c; --green-soft:#e0ece2;
+    --alert:#9c3a2d; --alert-soft:#f6e2de;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --paper:#131713; --surface:#1a201b; --ink:#e7e9e4; --muted:#98a098;
+      --line:#2d352e; --line-soft:#232a24;
+      --amber:#d79b52; --amber-soft:#332618;
+      --green:#7fb28d; --green-soft:#1b2a1f;
+      --alert:#d98675; --alert-soft:#32211d;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --paper:#131713; --surface:#1a201b; --ink:#e7e9e4; --muted:#98a098;
+    --line:#2d352e; --line-soft:#232a24;
+    --amber:#d79b52; --amber-soft:#332618;
+    --green:#7fb28d; --green-soft:#1b2a1f;
+    --alert:#d98675; --alert-soft:#32211d;
+  }
+
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;
+       padding-inline:16px;padding-block:0;}
+  .wrap{max-width:940px;margin:0 auto;padding-block:36px 64px;}
+
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--muted);margin:0 0 10px;}
+  h1{font-size:clamp(26px,4.6vw,38px);line-height:1.12;margin:0 0 10px;font-weight:600;
+     letter-spacing:-.02em;text-wrap:balance;}
+  .standfirst{font-size:17px;color:var(--muted);margin:0 0 6px;max-width:64ch;}
+  .stamp{font-family:var(--mono);font-size:12px;color:var(--muted);margin:14px 0 0;}
+
+  hr{border:0;border-top:1px solid var(--line);margin:32px 0;}
+
+  h2{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0 0 4px;}
+  section{margin-top:36px;}
+  p{margin:0 0 14px;max-width:68ch;}
+  .lede{margin-bottom:18px;}
+
+  .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;
+        background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:26px 0 0;}
+  .fig{background:var(--surface);padding:16px 18px;}
+  .fig .n{font-family:var(--mono);font-size:26px;font-weight:500;letter-spacing:-.02em;
+          font-variant-numeric:tabular-nums;display:block;}
+  .fig .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+          color:var(--muted);display:block;margin-top:5px;}
+  .fig.warn .n{color:var(--amber);}
+  .fig.ok .n{color:var(--green);}
+
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface);margin:18px 0;}
+  table{border-collapse:collapse;width:100%;font-size:14px;}
+  caption{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+          text-transform:uppercase;color:var(--muted);padding:12px 14px 0;}
+  th,td{padding:8px 14px;text-align:left;border-bottom:1px solid var(--line-soft);}
+  thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+           color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:0;}
+  td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  tr.total td{border-top:1px solid var(--line);font-weight:600;background:var(--line-soft);}
+  td.acct{font-family:var(--mono);font-size:13px;}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+        text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;}
+  .pill.ok{background:var(--green-soft);color:var(--green);}
+  .pill.warn{background:var(--amber-soft);color:var(--amber);}
+  .pill.stop{background:var(--alert-soft);color:var(--alert);}
+
+  .call{border-left:3px solid var(--amber);background:var(--surface);padding:14px 18px;margin:18px 0;
+        border-radius:0 3px 3px 0;}
+  .call.stop{border-left-color:var(--alert);}
+  .call.ok{border-left-color:var(--green);}
+  .call h3{font-size:15px;margin:0 0 6px;font-weight:600;}
+  .call p{margin:0;font-size:14.5px;color:var(--muted);max-width:none;}
+  .call p + p{margin-top:8px;}
+
+  ul{margin:0 0 14px;padding-left:20px;max-width:68ch;}
+  li{margin-bottom:7px;}
+  code{font-family:var(--mono);font-size:.9em;background:var(--line-soft);padding:1px 5px;border-radius:2px;}
+  strong{font-weight:600;}
+  .foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+        font-size:13px;color:var(--muted);}
+  .foot p{max-width:70ch;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <p class="eyebrow">Your Algorithm · Operations</p>
+  <h1>Tree Fleet Send Readiness</h1>
+  <p class="standfirst">What actually went out today, what is loaded for the 8:00 ET send, and the three calls still open.</p>
+  <p class="stamp">Read from production 2026-09-27, 21:41 ET · for Nile Brower · figures are live reads, not estimates</p>
+
+  <div class="figs">
+    <div class="fig"><span class="n">76</span><span class="k">Texts out today, fleet-wide</span></div>
+    <div class="fig warn"><span class="n">2</span><span class="k">Of those, on the new lists</span></div>
+    <div class="fig ok"><span class="n">58,006</span><span class="k">Loaded for 8:00 ET</span></div>
+    <div class="fig warn"><span class="n">35,336</span><span class="k">Requested but not loaded</span></div>
+  </div>
+
+  <hr>
+
+  <section>
+    <h2>No campaign has ever run from the console</h2>
+    <p class="lede">This is the first thing to fix in everyone's head, because it changes what the other numbers mean.</p>
+    <p>The management console has recorded <strong>zero batch jobs</strong> in its entire history (<code>jobs: 0</code>, <code>daily: []</code>), and <code>sentToday</code> reads <strong>0</strong> on every subaccount. Whatever anyone has sent up to now went through GoHighLevel directly, not through the console, and the console has no record of it.</p>
+    <p>That also means the 16 accounts in the plan had nothing to send from until tonight. The console enrolls contacts from lists uploaded into <em>itself</em> — it does not read CRM contacts — and until 21:20 tonight it held exactly one list, Wade's 211-row call-only sheet.</p>
+  </section>
+
+  <section>
+    <h2>Texts out today, by subaccount</h2>
+    <p class="lede">Read from the live fleet across all 38 subaccounts. 19 sent something, 19 were silent.</p>
+
+    <div class="tw">
+      <table>
+        <caption>Outbound, 2026-09-27 Eastern</caption>
+        <thead><tr><th>Subaccount</th><th class="n">Texts out</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">forestry-grove</td><td class="n">11</td></tr>
+          <tr><td class="acct">timber-tech</td><td class="n">10</td></tr>
+          <tr><td class="acct">above-the-branch-tier-2</td><td class="n">9</td></tr>
+          <tr><td class="acct">nature-worx</td><td class="n">8</td></tr>
+          <tr><td class="acct">goldpalm</td><td class="n">5</td></tr>
+          <tr><td class="acct">murphy-development-group-tier-1</td><td class="n">4</td></tr>
+          <tr><td class="acct">account-one</td><td class="n">3</td></tr>
+          <tr><td class="acct">ap-property-management</td><td class="n">3</td></tr>
+          <tr><td class="acct">reillys-tree-and-more</td><td class="n">3</td></tr>
+          <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">3</td></tr>
+          <tr><td class="acct">summit-tree-and-land</td><td class="n">3</td></tr>
+          <tr><td class="acct">wades-tree-service</td><td class="n">3</td></tr>
+          <tr><td class="acct">xd-land-service</td><td class="n">3</td></tr>
+          <tr><td class="acct">harleys-tree-service-tier-1</td><td class="n">2</td></tr>
+          <tr><td class="acct">trinity-roofing</td><td class="n">2</td></tr>
+          <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">1</td></tr>
+          <tr><td class="acct">cost-low-tree-service</td><td class="n">1</td></tr>
+          <tr><td class="acct">holbrook-tree-service</td><td class="n">1</td></tr>
+          <tr><td class="acct">ranger-tree-care-tier-1</td><td class="n">1</td></tr>
+          <tr class="total"><td>Total · 19 other accounts silent</td><td class="n">76</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>76 across the whole fleet is ordinary conversation traffic — Ethan answering homeowners — not a campaign. Nobody blasted a list today.</p>
+  </section>
+
+  <section>
+    <h2>Did today's sends hit the new lists?</h2>
+    <div class="call ok">
+      <h3>Effectively no — 2 numbers out of 119,597</h3>
+      <p>Both are on <code>reillys-tree-and-more</code> (Alltimate Tree Care). Every other account texted today has zero overlap with the ten uploaded files.</p>
+      <p>There is no double-texting problem here. The 14-day resend cooldown will catch those two at enroll time anyway.</p>
+    </div>
+    <p>The check compared every number texted today against all 119,597 distinct phone numbers across the ten CSVs, normalised to 10 digits.</p>
+  </section>
+
+  <section>
+    <h2>Loaded for the 8:00 ET send</h2>
+    <p class="lede">Eight accounts, all <code>America/New_York</code>. The <code>High Standards Tree</code> workflow is set on all sixteen accounts in the plan, using each subaccount's own published copy.</p>
+
+    <div class="tw">
+      <table>
+        <caption>Queued, against what was requested</caption>
+        <thead><tr><th>Subaccount</th><th class="n">Usable rows</th><th class="n">Will send</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">cost-low-tree-service</td><td class="n">17,168</td><td class="n">8,693</td><td><span class="pill ok">Trims to cap</span></td></tr>
+          <tr><td class="acct">reillys-tree-and-more</td><td class="n">11,179</td><td class="n">8,115</td><td><span class="pill ok">Trims to cap</span></td></tr>
+          <tr><td class="acct">above-the-branch-tier-2</td><td class="n">12,666</td><td class="n">7,651</td><td><span class="pill ok">Trims to cap</span></td></tr>
+          <tr><td class="acct">affordable-tree-care-of-ct</td><td class="n">12,536</td><td class="n">7,508</td><td><span class="pill ok">Trims to cap</span></td></tr>
+          <tr><td class="acct">walkers-tree-service</td><td class="n">16,948</td><td class="n">7,430</td><td><span class="pill ok">Two files merged</span></td></tr>
+          <tr><td class="acct">xd-land-service</td><td class="n">14,005</td><td class="n">7,245</td><td><span class="pill ok">Trims to cap</span></td></tr>
+          <tr><td class="acct">southern-stone-land-mgmt</td><td class="n">6,154</td><td class="n">6,154</td><td><span class="pill warn">Short 1,891</span></td></tr>
+          <tr><td class="acct">timber-tech</td><td class="n">15,507</td><td class="n">5,210</td><td><span class="pill ok">Trims to cap</span></td></tr>
+          <tr class="total"><td>Total</td><td class="n">106,163</td><td class="n">58,006</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Contacts were still pushing to the platform at 21:41 — <strong>42,126 landed, 64,036 pending, 1 failed</strong> — and should finish well before morning. The lists parsed with zero unusable rows and zero duplicates, and only 59 of the 119,811 rows were already suppressed.</p>
+  </section>
+
+  <section>
+    <h2>Three calls still open</h2>
+
+    <div class="call stop">
+      <h3>1 · Eight accounts have no data at all</h3>
+      <p>33,445 of the requested messages have no file behind them: Harley's 9,740 (the largest single account in the plan), Ranger 7,226, Murphy 5,912, Holbrook 4,037, Taylor Stump 2,681, Nature Worx 1,691, Wade's 1,163, account-one 995.</p>
+      <p>Is gbalo still sending these, or did the requested counts run ahead of the files?</p>
+    </div>
+
+    <div class="call">
+      <h3>2 · The 9:00 ET slot is empty</h3>
+      <p>Nature Worx is the only <code>America/Chicago</code> account in the plan, which is why it was scheduled an hour later — 9:00 ET is 8:00 its time, inside the 7am–7pm window. It is also one of the eight with no file, so unless its data lands, everything goes at 8:00 and there is nothing at 9:00.</p>
+    </div>
+
+    <div class="call stop">
+      <h3>3 · Forestry Grove is held back</h3>
+      <p>A 13,589-row file arrived for Forestry Grove, but the plan sets Forestry Grove to zero deliberately. Those two cannot both be right, so the file was not uploaded and nothing is queued for that account.</p>
+      <p>It can be uploaded in about two minutes once someone says which is correct.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>One thing to fix regardless</h2>
+    <p><code>SUPPRESSION_MIN_EXPECTED</code> is unset on the sending service. INV-8 calls for it on every service that sends, so that a shrunken or restored-empty suppression store blocks an upload instead of silently passing everyone through. The store is healthy right now — the upload route refuses outright on a store it had to create, and it did not — so tonight is safe. It should be set to roughly <code>12000</code> before this becomes routine, at a moment when a wrong value cannot block a scheduled send.</p>
+  </section>
+
+  <div class="foot">
+    <p><strong>How these numbers were read.</strong> Console figures come from <code>/api/manage/overview</code>, <code>/lists</code> and <code>/send</code> on production. Today's outbound comes from a read-only probe over <code>conversations.search</code> across all 38 subaccounts; it counts conversations whose most recent message is outbound and dated today, so a thread where the homeowner replied after us is not counted. That makes 76 a floor rather than an exact total — but a campaign blast of thousands would still show, since most of those threads get no reply.</p>
+    <p>Nothing in producing this report sent, booked, tagged or changed anything. The only writes made tonight were the nine list uploads and the workflow setting on sixteen accounts.</p>
+  </div>
+
+</div>
+</body>
+</html>
