@@ -1,0 +1,177 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>List or Resend — Oct 3</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column; summary tiles, a days-left chart, then three action groups of company cards */
+:root{
+  --bg:#f5f7f4; --surface:#ffffff; --ink:#18221c; --muted:#5b6a60; --line:#dde4de;
+  --pull:#1f5fbf; --pull-soft:#e6eefb;
+  --both:#a8650b; --both-soft:#fbf0dd;
+  --resend:#1d7a4a; --resend-soft:#e2f2e8;
+  --grid:#e7ece8;
+  --f-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111613; --surface:#18201b; --ink:#e6ede8; --muted:#9aaba0; --line:#2b362f;
+  --pull:#7aa8f0; --pull-soft:#1a2a44; --both:#e2a548; --both-soft:#3a2c12; --resend:#5cc68d; --resend-soft:#163223; --grid:#243029; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111613; --surface:#18201b; --ink:#e6ede8; --muted:#9aaba0; --line:#2b362f;
+  --pull:#7aa8f0; --pull-soft:#1a2a44; --both:#e2a548; --both-soft:#3a2c12; --resend:#5cc68d; --resend-soft:#163223; --grid:#243029; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--f-body)}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:36px 64px;display:flex;flex-direction:column;gap:36px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);max-width:68ch;margin:6px 0 0}
+.eyebrow{font:600 12px var(--f-body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:2px}
+.tile b{font:800 34px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile span{color:var(--muted);font-size:14px}
+.t-pull b{color:var(--pull)} .t-both b{color:var(--both)} .t-resend b{color:var(--resend)}
+@media (max-width:720px){.tiles{grid-template-columns:repeat(2,1fr)}}
+section{display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.chart{overflow-x:auto}
+.chart svg{display:block;min-width:560px;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.group-head{display:flex;flex-direction:column;gap:4px;border-bottom:3px solid currentColor;padding-bottom:8px}
+.group-head p{margin:0;color:var(--muted);max-width:70ch}
+.g-pull{color:var(--pull)} .g-both{color:var(--both)} .g-resend{color:var(--resend)}
+.g-pull h2,.g-both h2,.g-resend h2{font-size:24px}
+.cards{display:grid;grid-template-columns:1fr;gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.card h3{font-size:19px;font-weight:700}
+.meta{color:var(--muted);font-size:13px}
+.stats{display:flex;flex-wrap:wrap;gap:8px 22px}
+.stat{display:flex;flex-direction:column}
+.stat b{font:700 20px var(--f-display);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.pill{font:700 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.p-pull{background:var(--pull-soft);color:var(--pull)} .p-both{background:var(--both-soft);color:var(--both)} .p-resend{background:var(--resend-soft);color:var(--resend)}
+.zipbox{display:flex;flex-direction:column;gap:8px}
+.ziphead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:700;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 13px var(--f-mono);padding:3px 8px;border-radius:5px;background:var(--pull);color:var(--surface)}
+button.copy{font:600 13px var(--f-body);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:4px 10px;cursor:pointer}
+button.copy:hover{border-color:var(--pull)}
+button.copy:focus-visible{outline:2px solid var(--pull);outline-offset:2px}
+.note{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--ink)}
+.runbar{height:8px;border-radius:99px;background:var(--grid);overflow:hidden;display:flex}
+.runbar span{display:block;height:100%}
+.callout{border-left:4px solid var(--both);background:var(--both-soft);border-radius:0 8px 8px 0;padding:12px 16px;display:flex;flex-direction:column;gap:6px}
+.callout p{margin:0}
+footer{color:var(--muted);font-size:13px;max-width:80ch}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Saturday 3 Oct 2026 · live console data, 4:46 PM ET</div>
+    <h1>List or resend?</h1>
+    <p class="sub">Which companies need Gbalo to pull new ZIPs, and which can keep going on contacts we already hold. “Days left” is the contacts still unsent in the company’s own ZIPs, divided by its daily send target.</p>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2 style="font-size:22px">Days of sending left at today’s pace</h2>
+    <div class="panel chart" id="chart"></div>
+    <div class="legend">
+      <span><i style="background:var(--pull)"></i>Needs a list now (under 2 days)</span>
+      <span><i style="background:var(--both)"></i>Resend now, Gbalo fills the gaps this week (2–5 days)</span>
+      <span><i style="background:var(--resend)"></i>Resend only (5+ days)</span>
+    </div>
+  </section>
+
+  <div class="callout" id="cool"></div>
+
+  <section id="g-list"></section>
+  <section id="g-both"></section>
+  <section id="g-resend"></section>
+
+  <footer>
+    Sources: the console’s record of every contact uploaded or swept from the CRM (unique phone numbers, read 3 Oct 2026, 4:46 PM ET), each company’s Oct 2 daily target, and Joseph’s sheet “Companies and zip codes as runned” (read the same day). AP, GoldPalm and High Standards are not on that sheet, so their ZIPs come from their marketing ZIP files. “Ready now” means the console has never sent to them. Many were texted through the CRM before the console existed, which is what makes them a resend. The console skips anyone the CRM touched in the last 14 days, so a few will be skipped at send time. A ZIP counts as “no contacts” when the console holds fewer than 25 phones there. Contacts loaded straight into the CRM outside the console are not counted.
+  </footer>
+</div>
+
+<script>
+const DATA=[{"name":"Above the Branch — Tier 1","key":"account-one","last":"Sep 28","n":24,"ready":61617,"cool":27141,"off":23,"empty":[],"dry":["19031","19406","19401"],"pace":10000,"runway":6.2,"verdict":"resend","exhausted":false,"sheetRemaining":["19422","19454","19006","19426","19406","19462","19401"],"cooledBack":[["2026-10-13",4079],["2026-10-14",6733],["2026-10-15",5234],["2026-10-16",11095]]},{"name":"Above the Branch — Tier 2","key":"above-the-branch-tier-2","last":"Oct 1","n":61,"ready":28183,"cool":21044,"off":8,"empty":["19039","19073","19081","19083","19085","19086","19087","19096","19301","19310","19311","19312","19317","19320","19330","19333","19335","19341","19342","19343","19344","19345","19348","19350","19352","19355","19358","19362","19363","19365","19372","19373","19374","19375","19380","19382","19390","19425","19428","19442","19460","19465","19468","19473","19475","19477"],"dry":["19060","19063"],"pace":8000,"runway":3.5,"verdict":"both","exhausted":false,"sheetRemaining":["19073","19081","19083","19085","19086","19087","19096","19301","19310","19311","19312","19317","19320","19330","19333","19335","19341","19342","19343","19344","19345","19348","19350","19352","19355","19358","19362","19363","19365","19372","19373","19374","19375","19380","19382","19390","19425","19428","19442","19460","19465","19468","19473","19475","19477"],"cooledBack":[["2026-10-12",7671],["2026-10-13",2516],["2026-10-14",2749],["2026-10-15",104],["2026-10-16",8004]]},{"name":"Affordable Tree Service of CT","key":"affordable-tree-care-of-ct","last":"Oct 1","n":40,"ready":11193,"cool":28345,"off":408,"empty":["06039","06777","06069","06752","06763","06757","06058","06754","06753","06031","06024","06001","06070","06019","06035","06089","06092","06026","06027"],"dry":["06776","06795","06759","06098","06786","06779","06057","06787","06783","06751","06756","06798","06063","06790","06791"],"pace":10000,"runway":1.1,"verdict":"list","exhausted":false,"sheetRemaining":["06759","06098","06057","06783","06039","06068","06751","06777","06756","06069","06752","06763","06757","06063","06058","06754","06753","06031","06024","06065","06035","06026","06027"],"cooledBack":[["2026-10-12",8088],["2026-10-13",9509],["2026-10-14",4289],["2026-10-15",9613],["2026-10-16",10003]]},{"name":"Alltimate Tree Care","key":"reillys-tree-and-more","last":"Oct 1","n":30,"ready":54513,"cool":44620,"off":27418,"empty":["32114","32169","32174","32176","32180","32190","32713","32720","32738","32744","32754","32759","32763","32764"],"dry":["32136"],"pace":12000,"runway":4.5,"verdict":"both","exhausted":false,"sheetRemaining":["32169","32174","32176","32180","32190","32713","32720","32738","32744","32754","32759","32763","32764"],"cooledBack":[["2026-10-12",6102],["2026-10-13",17004],["2026-10-14",9484],["2026-10-16",12030]]},{"name":"Cost-Low Tree Service","key":"cost-low-tree-service","last":"Sep 25","n":32,"ready":110174,"cool":36033,"off":4275,"empty":["30114","30115","30189","30142","30107","30132","30141"],"dry":["30064"],"pace":15000,"runway":7.3,"verdict":"resend","exhausted":false,"sheetRemaining":["30152","30064","30144","30080","30082","30127","30102","30126","30008","30168","30188","30114","30115","30189","30142","30107","30183","30132","30141","30157","30120","30121","30137","30103","30184","30178","30145","30068"],"cooledBack":[["2026-10-12",8700],["2026-10-13",2887],["2026-10-14",9440],["2026-10-16",15006]]},{"name":"Forestry Grove Tree Service","key":"forestry-grove","last":"Oct 1","n":25,"ready":32798,"cool":22884,"off":14,"empty":["29404","29420","29426","29429","29438","29449","29450","29451","29455","29456","29458","29464","29466","29470","29482","29485","29487"],"dry":[],"pace":10000,"runway":3.3,"verdict":"both","exhausted":false,"sheetRemaining":["29420","29426","29429","29438","29449","29450","29451","29455","29456","29458","29464","29466","29470","29482","29485","29487"],"cooledBack":[["2026-10-13",7852],["2026-10-14",3294],["2026-10-15",1733],["2026-10-16",10005]]},{"name":"Harley’s Tree Service","key":"harleys-tree-service-tier-1","last":"Oct 1","n":30,"ready":62500,"cool":37383,"off":17,"empty":[],"dry":[],"pace":8000,"runway":7.8,"verdict":"resend","exhausted":false,"sheetRemaining":["34209","34208","34219","34221","34210","34228","34216","34217","34251"],"cooledBack":[["2026-10-13",5000],["2026-10-14",14332],["2026-10-15",10049],["2026-10-16",8002]]},{"name":"Holbrook Tree Services","key":"holbrook-tree-service","last":"Oct 1","n":18,"ready":74518,"cool":11874,"off":20898,"empty":["30273","30276","30290","30294","31016"],"dry":["30234"],"pace":3000,"runway":24.8,"verdict":"resend","exhausted":false,"sheetRemaining":["30273","30276","30290","30294","31016"],"cooledBack":[["2026-10-13",5000],["2026-10-14",3872],["2026-10-16",3002]]},{"name":"Murphy Development Group","key":"murphy-development-group-tier-1","last":"Sep 28","n":38,"ready":117623,"cool":19222,"off":464,"empty":[],"dry":[],"pace":12000,"runway":9.8,"verdict":"resend","exhausted":true,"sheetRemaining":["32233","32223","32258","32207","32210","32256","32217","32226","32218","32246","32221","32244","32205","32277","32220","32222","32216","32208","32219","32234","32073","31522","32034","32097","32011","32046","32009","31558","31548","31569","31565","31525","31520","31523","31527"],"cooledBack":[["2026-10-13",322],["2026-10-14",13066],["2026-10-16",5834]]},{"name":"Nature Worx","key":"nature-worx","last":"Sep 28","n":51,"ready":147335,"cool":17759,"off":2361,"empty":["55150"],"dry":[],"pace":8000,"runway":18.4,"verdict":"resend","exhausted":false,"sheetRemaining":["55347","55305","55446","55447","55311","55369","55410","55419","55416","55437","55438","55340","55359","55364","55422","55427","55388","55420","55372","55378","55379","55020","55352","56071","55123","55044","55124","55337","55150","55068","55033","55077","55317","55386","55318","55387","55315","55127","55110","55105","55116","55126","55113","55112","55119"],"cooledBack":[["2026-10-13",5000],["2026-10-14",4756],["2026-10-16",8003]]},{"name":"Ranger Tree Care","key":"ranger-tree-care-tier-1","last":"Sep 24","n":17,"ready":52113,"cool":15377,"off":12442,"empty":[],"dry":[],"pace":7000,"runway":7.4,"verdict":"resend","exhausted":false,"sheetRemaining":["32940","32955","32931","32934","32935","32953","32920","32907","32909","32905","32780"],"cooledBack":[["2026-10-13",848],["2026-10-14",5743],["2026-10-15",1775],["2026-10-16",7011]]},{"name":"Southern Stone Land Management","key":"southern-stone-land-mgmt","last":"Sep 25","n":17,"ready":27149,"cool":17879,"off":18,"empty":[],"dry":["31519","31539","31532"],"pace":15000,"runway":1.8,"verdict":"list","exhausted":true,"sheetRemaining":[],"cooledBack":[["2026-10-12",2974],["2026-10-13",2192],["2026-10-14",3594],["2026-10-16",9119]]},{"name":"Summit Tree & Land Solutions","key":"summit-tree-and-land","last":"Sep 16","n":13,"ready":31060,"cool":11692,"off":137,"empty":[],"dry":[],"pace":5161,"runway":6,"verdict":"resend","exhausted":false,"sheetRemaining":[],"cooledBack":[["2026-10-12",2889],["2026-10-13",3111],["2026-10-14",3707],["2026-10-15",1985]]},{"name":"TimberTech Land Solutions","key":"timber-tech","last":"Oct 1","n":30,"ready":24962,"cool":35030,"off":21,"empty":["32095","32137","32164","32208","32209","32210","32211","32216","32217","32218","32219","32220","32221","32222","32224","32225","32226","32234","32244","32254","32277"],"dry":["32092","32202","32204","32206"],"pace":25300,"runway":1,"verdict":"list","exhausted":false,"sheetRemaining":["32095","32137","32164","32208","32209","32210","32211","32216","32217","32218","32219","32220","32221","32222","32224","32225","32226","32234","32244","32254","32277"],"cooledBack":[["2026-10-12",5206],["2026-10-13",5023],["2026-10-14",5304],["2026-10-15",32],["2026-10-16",19465]]},{"name":"Tree Masters of Savannah","key":"tree-masters-of-savannah","last":"Sep 16","n":10,"ready":33237,"cool":29344,"off":1849,"empty":[],"dry":["31302"],"pace":10000,"runway":3.3,"verdict":"both","exhausted":false,"sheetRemaining":["31406","31405","31322","31328","31419","31302","31404","31401"],"cooledBack":[["2026-10-15",14280],["2026-10-16",10001],["2026-10-17",5063]]},{"name":"Tri-County Tree Service","key":"mustard-seed-lawn-and-tree","last":"Oct 1","n":46,"ready":0,"cool":0,"off":0,"empty":["33523","33547","33597","33801","33803","33805","33809","33810","33811","33812","33813","33815","33823","33825","33827","33830","33834","33837","33838","33839","33841","33843","33844","33849","33850","33853","33859","33860","33867","33868","33880","33881","33884","33896","33897","33898","34601","34602","34604","34606","34607","34608","34609","34613","34614","34759"],"dry":[],"pace":10000,"runway":0,"verdict":"list","exhausted":false,"sheetRemaining":["33801","33803","33805","33809","33810","33811","33812","33813","33815","33823","33825","33827","33830","33834","33837","33838","33839","33841","33843","33844","33849","33850","33853","33859","33860","33867","33868","33880","33881","33884","33896","33897","33898","34601","34602","34604","34606","34607","34608","34609","34613","34614","34759"],"cooledBack":[]},{"name":"Wade’s Tree Service","key":"wades-tree-service","last":"Sep 28","n":19,"ready":47129,"cool":35257,"off":7186,"empty":["28619","28671","28667"],"dry":[],"pace":15000,"runway":3.1,"verdict":"both","exhausted":false,"sheetRemaining":["28655","28690","28619","28637","28671","28630","28605","28645","28638","28667"],"cooledBack":[["2026-10-14",10177],["2026-10-15",10033],["2026-10-16",15047]]},{"name":"Walker’s Land Clearing & Tree","key":"walkers-tree-service","last":"Sep 29","n":15,"ready":43681,"cool":31973,"off":8160,"empty":[],"dry":["34736"],"pace":5000,"runway":8.7,"verdict":"resend","exhausted":false,"sheetRemaining":["32159","32784","34756","34711"],"cooledBack":[["2026-10-12",7433],["2026-10-13",4992],["2026-10-14",4518],["2026-10-15",10029],["2026-10-16",5001]]},{"name":"XD Land Service","key":"xd-land-service","last":"Oct 2","n":13,"ready":64194,"cool":34472,"off":13,"empty":[],"dry":[],"pace":15000,"runway":4.3,"verdict":"both","exhausted":true,"sheetRemaining":["32707","32730"],"cooledBack":[["2026-10-12",7312],["2026-10-13",5715],["2026-10-14",1596],["2026-10-15",9516],["2026-10-16",10037],["2026-10-17",296]]},{"name":"Taylor Stump Grinding","key":"taylor-stump-grinding","last":"Oct 1","n":37,"ready":20110,"cool":7718,"off":7,"empty":["32061","32071","32083","32087","32601","32603","32605","32606","32607","32608","32609","32615","32618","32622","32631","32640","32641","32643","32653","32666","32667","32669","32694"],"dry":["32038","32040"],"pace":5000,"runway":4,"verdict":"both","exhausted":false,"sheetRemaining":["32071","32083","32087","32601","32603","32605","32606","32607","32608","32609","32615","32618","32622","32631","32640","32641","32643","32653","32666","32667","32669","32694"],"cooledBack":[["2026-10-13",2656],["2026-10-14",62],["2026-10-16",5000]]},{"name":"AP Property Management","key":"ap-property-management","last":null,"n":30,"ready":59311,"cool":53084,"off":16926,"empty":[],"dry":["33579","33584","33598","33606","33618","33624","33647"],"pace":10000,"runway":5.9,"verdict":"resend","exhausted":false,"sheetRemaining":[],"cooledBack":[["2026-10-12",4753],["2026-10-13",10547],["2026-10-14",23223],["2026-10-15",4551],["2026-10-16",10010]]},{"name":"GoldPalm Solutions","key":"goldpalm","last":null,"n":30,"ready":167200,"cool":15066,"off":22732,"empty":[],"dry":[],"pace":5000,"runway":33.4,"verdict":"resend","exhausted":false,"sheetRemaining":[],"cooledBack":[["2026-10-13",10073],["2026-10-16",4993]]},{"name":"High Standards Tree","key":"high-standards","last":null,"n":6,"ready":71518,"cool":0,"off":1,"empty":[],"dry":[],"pace":10000,"runway":7.2,"verdict":"resend","exhausted":false,"sheetRemaining":[],"cooledBack":[]}];const FLAGS={"timber-tech":"Most of these Duval ZIPs (32208–32277, plus 32234) are also on Murphy’s list, and Murphy has already run 32224 and 32225. Settle who holds them, or alternate weeks, before Gbalo pulls them.","taylor-stump-grinding":"32234 is also on TimberTech’s and Murphy’s lists.","mustard-seed-lawn-and-tree":"Gbalo ran 33523, 33547 and 33597 on Oct 1, but none of those contacts reached the console, so nothing is ready to send. Starts Sunday. 33547: Polk properties only (shared with GoldPalm and AP).","reillys-tree-and-more":"32746 alternates weekly with XD Land. Alltimate’s week is Oct 5–11.","southern-stone-land-mgmt":"Gbalo has run all 17 ZIPs (Sep 25, 100K income filter). A new list means re-pulling the same ZIPs with a wider filter. Otherwise wait for the Oct 12–16 resend.","murphy-development-group-tier-1":"Its Oct 2 target stopped as “exhausted” because most of what it has sits in held batches. Name those batches on the target and it keeps sending.","xd-land-service":"Its Oct 2 target stopped as “exhausted” because the rest sits in held batches. Name them on the target.","ap-property-management":"AP and GoldPalm list the same 30 Hillsborough ZIPs. 16,926 more contacts sit outside AP’s ZIPs; check the ZIP before sending those batches.","goldpalm":"Same 30 ZIPs as AP. Only 5,000 a day goes out now, so this lasts about a month.","high-standards":"None of these contacts has been sent by the console yet.","affordable-tree-care-of-ct":"15 of the ZIPs it has data for are used up too. Sheet still marks 9 ZIPs as not run that the console already holds old contacts for."};
+const fmt=n=>n.toLocaleString('en-US');
+const k=n=>n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e5?Math.round(n/1e3)+'k':n>=1e3?(n/1e3).toFixed(1).replace(/\.0$/,'')+'k':String(n);
+const V={list:{c:'var(--pull)',p:'p-pull',t:'Needs a list'},both:{c:'var(--both)',p:'p-both',t:'Resend + pull gaps'},resend:{c:'var(--resend)',p:'p-resend',t:'Resend only'}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const by=v=>DATA.filter(o=>o.verdict===v).sort((a,b)=>a.runway-b.runway);
+const pullZips=DATA.reduce((s,o)=>s+o.empty.length,0);
+const ready=DATA.reduce((s,o)=>s+o.ready,0);
+document.getElementById('tiles').innerHTML=`
+ <div class="tile t-pull"><b>${by('list').length}</b><span>companies need a list now</span></div>
+ <div class="tile t-pull"><b>${pullZips}</b><span>ZIPs with no contacts for Gbalo to pull</span></div>
+ <div class="tile t-resend"><b>${by('resend').length}</b><span>companies can just resend</span></div>
+ <div class="tile t-resend"><b>${k(ready)}</b><span>contacts ready to send now, in the right ZIPs</span></div>`;
+
+// chart
+(()=>{
+ const rows=[...DATA].sort((a,b)=>a.runway-b.runway), W=900, L=230, R=60, rowH=26, top=26, max=20;
+ const H=top+rows.length*rowH+10, x=d=>L+(Math.min(d,max)/max)*(W-L-R);
+ let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Days of sending left per company">`;
+ for(const t of [0,5,10,15,20]){s+=`<line x1="${x(t)}" x2="${x(t)}" y1="${top-6}" y2="${H-6}" stroke="var(--grid)"/><text x="${x(t)}" y="${top-12}" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="var(--f-body)">${t}${t===20?'+ days':''}</text>`}
+ for(const [t,lab] of [[2,'2'],[5,'5']]) s+=`<line x1="${x(t)}" x2="${x(t)}" y1="${top-6}" y2="${H-6}" stroke="var(--muted)" stroke-dasharray="3 3"/>`;
+ rows.forEach((o,i)=>{const y=top+i*rowH, c=V[o.verdict].c, w=Math.max(2,x(o.runway)-L);
+  s+=`<text x="${L-10}" y="${y+16}" text-anchor="end" font-size="13" fill="var(--ink)" font-family="var(--f-body)">${esc(o.name)}</text>`;
+  s+=`<rect x="${L}" y="${y+5}" width="${w}" height="15" rx="3" fill="${c}"/>`;
+  const lab=o.runway>max?`${o.runway} days →`:`${o.runway} d`;
+  s+=`<text x="${o.runway>max?L+w-6:L+w+6}" y="${y+16.5}" text-anchor="${o.runway>max?'end':'start'}" font-size="12" font-weight="600" fill="${o.runway>max?'var(--surface)':'var(--muted)'}" font-family="var(--f-body)">${lab}</text>`;
+ });
+ document.getElementById('chart').innerHTML=s+'</svg>';
+})();
+
+// cooldown callout
+(()=>{const b={};let tot=0;for(const o of DATA)for(const [d,n] of o.cooledBack){b[d]=(b[d]||0)+n;tot+=n}
+ const days=Object.keys(b).sort();const f=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
+ document.getElementById('cool').innerHTML=`<p><b>Everyone the console has texted comes back for a resend from ${f(days[0])} to ${f(days[days.length-1])}.</b> That is ${fmt(tot)} contacts, released 14 days after their send. The console holds them back until then. Read the days-left numbers with that in mind: a company that runs dry on the 8th has a gap of only a few days.</p>
+ <p class="meta">${days.map(d=>`${f(d)}: ${k(b[d])}`).join(' · ')}</p>`})();
+
+function card(o){
+ const zips=o.empty;
+ const tot=o.ready+o.cool;
+ const bar=o.n?`<div class="runbar" title="${o.n-zips.length} of ${o.n} ZIPs have contacts">
+   <span style="flex:${o.n-zips.length};background:var(--resend)"></span><span style="flex:${zips.length};background:var(--pull)"></span></div>`:'';
+ return `<article class="card">
+  <div class="card-top"><div><h3>${esc(o.name)}</h3><div class="meta">${o.n} ZIPs on file${o.last?` · Gbalo last ran ${o.last}`:''}${o.exhausted?' · Oct 2 target stopped “exhausted”':''}</div></div>
+   <span class="pill ${V[o.verdict].p}">${V[o.verdict].t}</span></div>
+  <div class="stats">
+   <div class="stat"><b>${fmt(o.ready)}</b><span>Ready now</span></div>
+   <div class="stat"><b>${o.ready||o.cool?fmt(o.pace):'—'}</b><span>Per day</span></div>
+   <div class="stat"><b>${o.runway}</b><span>Days left</span></div>
+   <div class="stat"><b>${fmt(o.cool)}</b><span>Back Oct 12–17</span></div>
+   <div class="stat"><b>${o.n-zips.length}/${o.n}</b><span>ZIPs with contacts</span></div>
+  </div>
+  ${bar}
+  ${zips.length?`<div class="zipbox"><div class="ziphead"><span style="color:var(--pull)">▶ Gbalo: pull these ${zips.length} ZIPs</span>
+    <button class="copy" type="button" data-z="${zips.join(' ')}">Copy ZIPs</button></div>
+    <div class="chips">${zips.map(z=>`<span class="chip">${z}</span>`).join('')}</div></div>`
+   :`<div class="meta">Every ZIP on file already has contacts in the console. Nothing for Gbalo.</div>`}
+  ${FLAGS[o.key]?`<div class="note">${esc(FLAGS[o.key])}</div>`:''}
+ </article>`;
+}
+const G=[
+ ['g-list','list','g-pull','Needs a list now','Less than two days of contacts left in their own ZIPs, or none at all. Gbalo pulls these first.'],
+ ['g-both','both','g-both','Resend now, Gbalo pulls the gaps this week','Two to five days of contacts left. Keep sending what we hold and have Gbalo pull the empty ZIPs before they run out.'],
+ ['g-resend','resend','g-resend','Resend only','Five or more days of contacts already in the console. No list needed yet. Some have a few empty ZIPs Gbalo can pick up when there is time.'],
+];
+for(const [id,v,cls,h,p] of G){
+ document.getElementById(id).innerHTML=`<div class="group-head ${cls}"><h2>${h}</h2><p>${p}</p></div><div class="cards">${by(v).map(card).join('')}</div>`;
+}
+document.addEventListener('click',e=>{const b=e.target.closest('button.copy');if(!b)return;
+ const t=b.dataset.z;const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy ZIPs',1500)};
+ try{navigator.clipboard.writeText(t).then(done,()=>sel(b))}catch(_){sel(b)}});
+function sel(b){const c=b.closest('.zipbox').querySelector('.chips');const r=document.createRange();r.selectNodeContents(c);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected, press Ctrl+C'}
+</script>
+</body></html>
